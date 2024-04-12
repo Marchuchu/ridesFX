@@ -9,32 +9,31 @@ import java.util.Locale;
 
 public class ApplicationLauncher {
 
-  public static void main(String[] args) {
+    public static void main(String[] args) {
 
-    Config config = Config.getInstance();
+        Config config = Config.getInstance();
 
-    Locale.setDefault(new Locale(config.getLocale()));
-    System.out.println("Locale: " + Locale.getDefault());
+        Locale.setDefault(new Locale(config.getLocale()));
+        System.out.println("Locale: " + Locale.getDefault());
 
-    BlFacade businessLogic;
+        BlFacade businessLogic;
 
-    try {
+        try {
 
-      if (config.isBusinessLogicLocal()) {
-        businessLogic = new BlFacadeImplementation();
+            if (config.isBusinessLogicLocal()) {
+                businessLogic = new BlFacadeImplementation();
 
 
-      Driver driver=new Driver("driver3@gmail.com","Test Driver");
-      businessLogic.setCurrentDriver(driver);
+                Driver driver = new Driver("driver3@gmail.com", "Test Driver");
+                businessLogic.setCurrentDriver(driver);
 
-      new MainGUI(businessLogic);
-      }
+                new MainGUI(businessLogic);
+            }
+        } catch (Exception e) {
+            System.err.println("Error in ApplicationLauncher: " + e);
+        }
+
     }
-    catch (Exception e) {
-      System.err.println("Error in ApplicationLauncher: " + e);
-    }
-
-  }
 
 
 }

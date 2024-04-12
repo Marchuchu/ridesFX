@@ -23,46 +23,34 @@ import java.util.ResourceBundle;
 
 public class CreateRideController implements Controller {
 
+    private BlFacade businessLogic;
+    @FXML
+    private ResourceBundle resources;
+    @FXML
+    private URL location;
+    @FXML
+    private DatePicker datePicker;
+    private MainGUI mainGUI;
+    @FXML
+    private Label lblErrorMessage;
+    @FXML
+    private Label lblErrorMinBet;
+    @FXML
+    private Button btnCreateRide;
+    @FXML
+    private TextField txtArrivalCity;
+    @FXML
+    private TextField txtDepartCity;
+    @FXML
+    private TextField txtNumberOfSeats;
+    @FXML
+    private TextField txtPrice;
+    private List<LocalDate> holidays = new ArrayList<>();
+
+
     public CreateRideController(BlFacade bl) {
         this.businessLogic = bl;
     }
-
-    private BlFacade businessLogic;
-
-    @FXML
-    private ResourceBundle resources;
-
-    @FXML
-    private URL location;
-
-    @FXML
-    private DatePicker datePicker;
-
-    private MainGUI mainGUI;
-
-
-    @FXML
-    private Label lblErrorMessage;
-
-    @FXML
-    private Label lblErrorMinBet;
-
-
-    @FXML
-    private Button btnCreateRide;
-
-    @FXML
-    private TextField txtArrivalCity;
-
-    @FXML
-    private TextField txtDepartCity;
-
-    @FXML
-    private TextField txtNumberOfSeats;
-
-    @FXML
-    private TextField txtPrice;
-
 
     @FXML
     void closeClick(ActionEvent event) {
@@ -76,7 +64,6 @@ public class CreateRideController implements Controller {
         lblErrorMinBet.getStyleClass().clear();
         lblErrorMessage.getStyleClass().clear();
     }
-
 
     private String field_Errors() {
 
@@ -111,9 +98,9 @@ public class CreateRideController implements Controller {
         }
     }
 
-    void displayMessage(String message, String label){
+    void displayMessage(String message, String label) {
         lblErrorMessage.getStyleClass().clear();
-        lblErrorMessage.getStyleClass().setAll("lbl", "lbl-"+label);
+        lblErrorMessage.getStyleClass().setAll("lbl", "lbl-" + label);
         lblErrorMessage.setText(message);
     }
 
@@ -155,8 +142,6 @@ public class CreateRideController implements Controller {
     }
  */
     }
-
-    private List<LocalDate> holidays = new ArrayList<>();
 
   /*private void setEventsPrePost(int year, int month) {
     LocalDate date = LocalDate.of(year, month, 1);

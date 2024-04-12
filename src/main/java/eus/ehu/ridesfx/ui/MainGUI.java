@@ -21,14 +21,6 @@ public class MainGUI {
     private Stage stage;
     private Scene scene;
 
-    public BlFacade getBusinessLogic() {
-        return businessLogic;
-    }
-
-    public void setBusinessLogic(BlFacade afi) {
-        businessLogic = afi;
-    }
-
     public MainGUI(BlFacade bl) {
         Platform.startup(() -> {
             try {
@@ -40,10 +32,12 @@ public class MainGUI {
         });
     }
 
+    public BlFacade getBusinessLogic() {
+        return businessLogic;
+    }
 
-    class Window {
-        Controller c;
-        Parent ui;
+    public void setBusinessLogic(BlFacade afi) {
+        businessLogic = afi;
     }
 
     private Window load(String fxmlfile) throws IOException {
@@ -76,14 +70,13 @@ public class MainGUI {
 
     }
 
-//  public void start(Stage stage) throws IOException {
-//      init(stage);
-//  }
-
-
     public void showMain() {
         setupScene(mainWin.ui, "MainTitle", 320, 250);
     }
+
+//  public void start(Stage stage) throws IOException {
+//      init(stage);
+//  }
 
     public void showQueryRides() {
         setupScene(queryRidesWin.ui, "QueryRides", 1000, 500);
@@ -104,6 +97,11 @@ public class MainGUI {
         stage.setTitle(ResourceBundle.getBundle("Etiquetas", Locale.getDefault()).getString(title));
         scene.setRoot(ui);
         stage.show();
+    }
+
+    class Window {
+        Controller c;
+        Parent ui;
     }
 
 //  public static void main(String[] args) {

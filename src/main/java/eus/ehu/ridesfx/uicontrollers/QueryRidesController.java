@@ -130,8 +130,7 @@ public class QueryRidesController implements Controller {
     void initialize() {
 
         // Update DatePicker cells when ComboBox value changes
-        comboArrivalCity.valueProperty().addListener(
-                (obs, oldVal, newVal) -> updateDatePickerCellFactory(datepicker));
+        comboArrivalCity.valueProperty().addListener((obs, oldVal, newVal) -> updateDatePickerCellFactory(datepicker));
 
         ObservableList<String> departureCities = FXCollections.observableArrayList(new ArrayList<>());
         departureCities.setAll(businessLogic.getDepartCities());
