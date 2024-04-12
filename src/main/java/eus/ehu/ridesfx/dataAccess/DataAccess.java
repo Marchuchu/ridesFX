@@ -6,6 +6,7 @@ import eus.ehu.ridesfx.domain.Ride;
 import eus.ehu.ridesfx.domain.Driver;
 import eus.ehu.ridesfx.exceptions.RideAlreadyExistException;
 import eus.ehu.ridesfx.exceptions.RideMustBeLaterThanTodayException;
+import eus.ehu.ridesfx.exceptions.UnknownUser;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityManagerFactory;
 import jakarta.persistence.TypedQuery;

@@ -4,6 +4,7 @@ import eus.ehu.ridesfx.domain.Driver;
 import eus.ehu.ridesfx.domain.Ride;
 import eus.ehu.ridesfx.exceptions.RideAlreadyExistException;
 import eus.ehu.ridesfx.exceptions.RideMustBeLaterThanTodayException;
+import eus.ehu.ridesfx.exceptions.UnknownUser;
 
 import java.util.Date;
 import java.util.List;
@@ -72,5 +73,6 @@ public interface BlFacade {
 
     public void signUp(String name, String email, String password, String repeatpassword, String role);
 
-    public boolean logIn(String username, String password);
+    public boolean logIn(String username, String password) throws UnknownUser;
+
 }

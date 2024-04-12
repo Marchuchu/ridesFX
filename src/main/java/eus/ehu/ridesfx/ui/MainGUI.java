@@ -15,7 +15,8 @@ import java.util.ResourceBundle;
 
 public class MainGUI {
 
-    private Window mainWin, createRideWin, queryRidesWin;
+    //private Window mainWin, createRideWin, queryRidesWin;
+    //private Window loginWin, gradingWin;
 
     private BlFacade businessLogic;
     private Stage stage;
@@ -70,6 +71,8 @@ public class MainGUI {
 
     }
 
+
+/*
     public void showMain() {
         setupScene(mainWin.ui, "MainTitle", 320, 250);
     }

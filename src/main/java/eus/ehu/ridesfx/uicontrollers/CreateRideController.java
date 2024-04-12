@@ -52,11 +52,11 @@ public class CreateRideController implements Controller {
         this.businessLogic = bl;
     }
 
-    @FXML
-    void closeClick(ActionEvent event) {
-        clearErrorLabels();
-        mainGUI.showMain();
-    }
+//    @FXML
+//    void closeClick(ActionEvent event) {
+//        clearErrorLabels();
+//        mainGUI.showMain();
+//    }
 
     private void clearErrorLabels() {
         lblErrorMessage.setText("");

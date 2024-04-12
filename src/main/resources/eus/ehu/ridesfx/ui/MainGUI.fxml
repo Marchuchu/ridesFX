@@ -1,19 +1,36 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.VBox?>
 
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="215.0"
-            prefWidth="334.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1"
-            fx:controller="eus.ehu.ridesfx.uicontrollers.MainGUIController">
-    <children>
-        <Label fx:id="selectOptionLbl" layoutX="103.0" layoutY="37.0" text="%SelectUseCase"/>
-        <Button fx:id="queryRidesBtn" layoutX="70.0" layoutY="75.0" mnemonicParsing="false" onAction="#queryRides"
-                prefHeight="26.0" prefWidth="181.0" text="%QueryRides"/>
-        <Button fx:id="createRidesBtn" layoutX="70.0" layoutY="126.0" mnemonicParsing="false" onAction="#createRide"
-                prefHeight="26.0" prefWidth="181.0" text="%CreateRide"/>
-        <Label layoutX="131.0" layoutY="184.0" text="Driver:"/>
-        <Label fx:id="lblDriver" layoutX="198.0" layoutY="184.0" text=" "/>
-    </children>
-</AnchorPane>
+<BorderPane fx:id="mainWrapper" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="eus.ehu.ridesfx.uicontrollers.MainGUIController">
+   <left>
+      <VBox alignment="CENTER" prefHeight="400.0" prefWidth="115.0" spacing="20.0" BorderPane.alignment="CENTER">
+         <children>
+            <Label alignment="TOP_CENTER" contentDisplay="TOP" text="%SelectUseCase">
+               <VBox.margin>
+                  <Insets top="1.0" />
+               </VBox.margin>
+               <padding>
+                  <Insets bottom="50.0" />
+               </padding>
+            </Label>
+            <Button fx:id="queryRidesBtn" lineSpacing="5.0" mnemonicParsing="false" onAction="#queryRides" prefHeight="26.0" prefWidth="181.0" text="%QueryRides" textAlignment="CENTER" wrapText="true">
+               <VBox.margin>
+                  <Insets />
+               </VBox.margin>
+            </Button>
+            <Button fx:id="createRidesBtn" mnemonicParsing="false" onAction="#createRide" prefHeight="26.0" prefWidth="181.0" text="%CreateRide" />
+            <Button fx:id="logInButton" mnemonicParsing="false" onAction="#onClickLogIn" prefHeight="26.0" prefWidth="181.0" text="%LogIn" />
+            <Button fx:id="signUpButton" mnemonicParsing="false" onAction="#onClickSignUp" prefHeight="26.0" prefWidth="181.0" text="%SignUp" />
+         </children>
+      </VBox>
+   </left>
+   <center>
+      <AnchorPane prefHeight="316.0" prefWidth="485.0" BorderPane.alignment="CENTER" />
+   </center>
+</BorderPane>

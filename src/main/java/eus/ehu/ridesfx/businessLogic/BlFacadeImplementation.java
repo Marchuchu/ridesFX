@@ -6,6 +6,7 @@ import eus.ehu.ridesfx.domain.Driver;
 import eus.ehu.ridesfx.domain.Ride;
 import eus.ehu.ridesfx.exceptions.RideAlreadyExistException;
 import eus.ehu.ridesfx.exceptions.RideMustBeLaterThanTodayException;
+import eus.ehu.ridesfx.exceptions.UnknownUser;
 
 import java.util.Date;
 import java.util.List;

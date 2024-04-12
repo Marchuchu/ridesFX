@@ -8,7 +8,7 @@ import java.util.List;
 import java.util.Vector;
 
 @Entity
-public class Driver implements Serializable {
+public class Driver extends Messenger implements Serializable {
 
     /**
      *
@@ -17,17 +17,43 @@ public class Driver implements Serializable {
 
     @Id
     private String email;
-    private String name;
+
+    private String password;
+
     @OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.PERSIST)
     private List<Ride> rides = new Vector<Ride>();
 
-    public Driver() {
-        super();
+
+    public Driver(String mail, String name) {
+
+        super(name);
+
     }
 
-    public Driver(String email, String name) {
+    public Driver(String email, String name, String password) {
+        super(name);
         this.email = email;
-        this.name = name;
+        this.password = password;
+    }
+
+    public Driver() {
+
+    }
+
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
+    }
+
+    public List<Ride> getRides() {
+        return rides;
+    }
+
+    public void setRides(List<Ride> rides) {
+        this.rides = rides;
     }
 
 
@@ -39,17 +65,9 @@ public class Driver implements Serializable {
         this.email = email;
     }
 
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
 
     public String toString() {
-        return email + ";" + name + rides;
+        return email + ";" + rides;
     }
 
     /**
