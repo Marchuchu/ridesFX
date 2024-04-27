@@ -7,6 +7,7 @@ import eus.ehu.ridesfx.domain.Ride;
 import eus.ehu.ridesfx.exceptions.RideAlreadyExistException;
 import eus.ehu.ridesfx.exceptions.RideMustBeLaterThanTodayException;
 import eus.ehu.ridesfx.exceptions.UnknownUser;
+import javafx.scene.control.TableColumn;
 
 import java.util.Date;
 import java.util.List;
@@ -97,12 +98,29 @@ public class BlFacadeImplementation implements BlFacade {
 
     @Override
     public void signUp(String name, String email, String password, String repeatpassword, String role) {
+        dbManager.signUp(name, email, password,repeatpassword,  role);
+    }
+
+    @Override
+    public boolean logIn(String username, String password) throws UnknownUser{
+
+        Driver driver = dbManager.logIn(username, password);
+
+        this.currentDriver = driver;
+
+        if(driver != null) {
+            return true;
+        } else {
+            return false;
+
+        }
+
 
     }
 
     @Override
-    public boolean logIn(String username, String password) {
-        return false;
+    public void cancelAlert(TableColumn<String, Integer> alertID) {
+        dbManager.cancelAlert(alertID);
     }
 
 

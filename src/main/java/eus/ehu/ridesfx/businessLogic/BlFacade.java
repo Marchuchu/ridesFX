@@ -5,6 +5,7 @@ import eus.ehu.ridesfx.domain.Ride;
 import eus.ehu.ridesfx.exceptions.RideAlreadyExistException;
 import eus.ehu.ridesfx.exceptions.RideMustBeLaterThanTodayException;
 import eus.ehu.ridesfx.exceptions.UnknownUser;
+import javafx.scene.control.TableColumn;
 
 import java.util.Date;
 import java.util.List;
@@ -75,4 +76,5 @@ public interface BlFacade {
 
     public boolean logIn(String username, String password) throws UnknownUser;
 
+    void cancelAlert(TableColumn<String, Integer> alertID);
 }

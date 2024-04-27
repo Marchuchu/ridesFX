@@ -8,22 +8,24 @@ import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
+import javafx.event.Event;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
+import javafx.scene.Parent;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.control.skin.DatePickerSkin;
+import javafx.scene.layout.AnchorPane;
 import javafx.util.Callback;
 import eus.ehu.ridesfx.ui.MainGUI;
 import eus.ehu.ridesfx.utils.Dates;
 
+import java.io.IOException;
 import java.net.URL;
 import java.time.LocalDate;
 import java.time.YearMonth;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-import java.util.ResourceBundle;
+import java.util.*;
 
 public class QueryRidesController implements Controller {
 
@@ -54,8 +56,13 @@ public class QueryRidesController implements Controller {
     @FXML
     private ComboBox<String> comboDepartCity;
 
-//  @FXML
-//  private TableView<Event> tblEvents;
+    @FXML
+    private AnchorPane mainAncor;
+
+    private BlFacade bl;
+
+    @FXML
+    private TableView<Event> tblEvents;
 
     @FXML
     private TableView<Ride> tblRides;
@@ -126,6 +133,18 @@ public class QueryRidesController implements Controller {
         });
     }
 
+    private void showScene(String scene) {
+
+    }
+
+    @FXML
+
+    public void onClickCreateAlert(ActionEvent event) {
+
+        showScene("Log In");
+
+    }
+
     @FXML
     void initialize() {
 
@@ -194,21 +213,6 @@ public class QueryRidesController implements Controller {
 
     }
 
-
-/*
-
-  private void setupEventSelection() {
-    tblEvents.getSelectionModel().selectedItemProperty().addListener((obs, oldSelection, newSelection) -> {
-      if (newSelection != null) {
-
-        tblQuestions.getItems().clear();
-        for (Question q : tblEvents.getSelectionModel().getSelectedItem().getQuestions()) {
-          tblQuestions.getItems().add(q);
-        }
-      }
-    });
-  }
-*/
 
     @Override
     public void setMainApp(MainGUI mainGUI) {

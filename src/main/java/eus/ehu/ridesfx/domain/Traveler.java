@@ -34,7 +34,7 @@ public class Traveler extends Messenger{
         this.email = email;
     }
 
-        public String toString() {
+    public String toString() {
         return getName();
     }
 

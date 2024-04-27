@@ -2,14 +2,17 @@ package eus.ehu.ridesfx.dataAccess;
 
 import eus.ehu.ridesfx.configuration.Config;
 import eus.ehu.ridesfx.configuration.UtilDate;
+import eus.ehu.ridesfx.domain.Messenger;
 import eus.ehu.ridesfx.domain.Ride;
 import eus.ehu.ridesfx.domain.Driver;
+import eus.ehu.ridesfx.domain.Traveler;
 import eus.ehu.ridesfx.exceptions.RideAlreadyExistException;
 import eus.ehu.ridesfx.exceptions.RideMustBeLaterThanTodayException;
 import eus.ehu.ridesfx.exceptions.UnknownUser;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityManagerFactory;
 import jakarta.persistence.TypedQuery;
+import javafx.scene.control.TableColumn;
 import org.hibernate.boot.MetadataSources;
 import org.hibernate.boot.registry.StandardServiceRegistry;
 import org.hibernate.boot.registry.StandardServiceRegistryBuilder;
@@ -47,7 +50,7 @@ public class DataAccess {
         Config config = Config.getInstance();
 
         System.out.println("Opening DataAccess instance => isDatabaseLocal: " +
-                config.isDataAccessLocal() + " getDatabBaseOpenMode: " + config.getDataBaseOpenMode());
+                config.isDataAccessLocal() + " getDataBaseOpenMode: " + config.getDataBaseOpenMode());
 
         String fileName = config.getDatabaseName();
         if (initializeMode) {
@@ -72,6 +75,20 @@ public class DataAccess {
         }
     }
 
+    public Messenger login(String username, String password) throws UnknownUser {
+        Messenger user;
+        TypedQuery<Messenger> query = db.createQuery("SELECT u FROM Messenger u WHERE u.userName =?1 AND u.password =?2",
+                Messenger.class);
+        query.setParameter(1, username);
+        query.setParameter(2, password);
+        try {
+            user = query.getSingleResult();
+        } catch (Exception e) {
+            throw new UnknownUser();
+        }
+
+        return user;
+    }
 
     public void reset() {
         db.getTransaction().begin();
@@ -100,9 +117,9 @@ public class DataAccess {
 
 
             //Create drivers
-            Driver driver1 = new Driver("driver1@gmail.com", "Aitor Fernandez");
-            Driver driver2 = new Driver("driver2@gmail.com", "Ane Gaztañaga");
-            Driver driver3 = new Driver("driver3@gmail.com", "Test driver");
+            Driver driver1 = new Driver("driver1@gmail.com", "Aitor Fernandez", "12345");
+            Driver driver2 = new Driver("driver2@gmail.com", "Ane Gaztañaga", "54321");
+            Driver driver3 = new Driver("driver3@gmail.com", "Test driver", "12345");
 
 
             //Create rides
@@ -275,6 +292,8 @@ public class DataAccess {
 
     private void generateTestingData() {
         // create domain entities and persist them
+
+
     }
 
 
@@ -283,4 +302,58 @@ public class DataAccess {
         System.out.println("DataBase is closed");
     }
 
+    public void signUp(String name, String email, String password, String repeatePassword, String role) {
+
+        if (role.equals("Driver")) {
+
+            if (email.contains("@")) {
+
+                if (password.equals(repeatePassword)) {
+
+                    db.getTransaction().begin();
+                    Driver driver = new Driver(email, name);
+                    db.persist(driver);
+                    db.getTransaction().commit();
+                }
+            }
+        } else if(role.equals("Traveler")) {
+
+            if (email.contains("@")) {
+
+                if (password.equals(repeatePassword)) {
+
+                    db.getTransaction().begin();
+                    Traveler traveler = new Traveler(email, name);
+                    db.persist(traveler);
+                    db.getTransaction().commit();
+
+                }
+
+            }
+
+        }
+
+    }
+
+    public Driver logIn(String username, String password) throws UnknownUser {
+        Driver driver;
+        TypedQuery<Driver> query = db.createQuery("SELECT d FROM Driver d WHERE d.email =?1 AND d.password =?2",
+                Driver.class);
+        query.setParameter(1, username);
+        query.setParameter(2, password);
+        try {
+            driver = query.getSingleResult();
+        } catch (Exception e) {
+            throw new UnknownUser();
+        }
+        return driver;
+
+
+    }
+
+    public void cancelAlert(TableColumn<String, Integer> alertID) {
+
+
+
+    }
 }

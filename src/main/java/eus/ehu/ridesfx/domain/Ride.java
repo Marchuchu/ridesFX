@@ -1,6 +1,7 @@
 package eus.ehu.ridesfx.domain;
 
 import jakarta.persistence.*;
+import javafx.scene.control.DatePicker;
 
 import java.io.Serializable;
 import java.util.Date;
@@ -25,7 +26,7 @@ public class Ride implements Serializable {
         super();
     }
 
-    public Ride(Integer rideNumber, String from, String to, Date date, int numPlaces, float price, Driver driver) {
+    public Ride(Integer rideNumber,  Date date, String from, int numPlaces, float price, String to, Driver driver) {
         super();
         this.rideNumber = rideNumber;
         this.fromLocation = from;
@@ -45,6 +46,13 @@ public class Ride implements Serializable {
         this.date = date;
         this.price = price;
         this.driver = driver;
+    }
+
+    public Ride(Integer rideNumber, String from, String to, Date date) {
+        super();
+        this.fromLocation = from;
+        this.toLocation = to;
+        this.date = date;
     }
 
     /**

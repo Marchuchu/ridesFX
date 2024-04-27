@@ -10,15 +10,13 @@ import java.util.Vector;
 @Entity
 public class Driver extends Messenger implements Serializable {
 
-    /**
-     *
-     */
     private static final long serialVersionUID = 1L;
 
     @Id
     private String email;
-
     private String password;
+
+
 
     @OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.PERSIST)
     private List<Ride> rides = new Vector<Ride>();
@@ -27,6 +25,8 @@ public class Driver extends Messenger implements Serializable {
     public Driver(String mail, String name) {
 
         super(name);
+        this.email = mail;
+
 
     }
 

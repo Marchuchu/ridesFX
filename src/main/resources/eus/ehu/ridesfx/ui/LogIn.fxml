@@ -11,28 +11,33 @@
 <AnchorPane fx:id="mainWrapper" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="eus.ehu.ridesfx.uicontrollers.LoginController">
 
     <children>
-      <TextField fx:id="email" layoutX="238.0" layoutY="136.0" />
-      <Text layoutX="178.0" layoutY="157.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Email:">
-         <font>
-            <Font size="20.0" />
-         </font>
-      </Text>
-      <Text layoutX="142.0" layoutY="207.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Password:">
-         <font>
-            <Font size="20.0" />
-         </font>
-      </Text>
-      <Button fx:id="logInButt" layoutX="269.0" layoutY="293.0" mnemonicParsing="false" onAction="#onClickLogIn" text="Log In">
-         <font>
-            <Font size="15.0" />
-         </font>
-      </Button>
-      <Label fx:id="hasLogin" layoutX="204.0" layoutY="315.0" prefHeight="31.0" prefWidth="192.0" />
-      <Label layoutX="179.0" layoutY="55.0" text="CARPOOLING">
-         <font>
-            <Font name="Wingdings 2" size="40.0" />
-         </font>
-      </Label>
-      <PasswordField fx:id="password" layoutX="238.0" layoutY="186.0" />
-   </children>
+        <TextField fx:id="email" layoutX="238.0" layoutY="136.0" />
+        <Text layoutX="178.0" layoutY="157.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Email:">
+            <font>
+                <Font size="20.0" />
+            </font>
+        </Text>
+        <Text layoutX="142.0" layoutY="207.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Password:">
+            <font>
+                <Font size="20.0" />
+            </font>
+        </Text>
+        <Button fx:id="logInButt" layoutX="207.0" layoutY="285.0" mnemonicParsing="false" onAction="#onClickLogIn" text="Log In">
+            <font>
+                <Font size="15.0" />
+            </font>
+        </Button>
+        <Label fx:id="hasLogin" layoutX="204.0" layoutY="315.0" prefHeight="31.0" prefWidth="192.0" />
+        <Label layoutX="179.0" layoutY="55.0" text="CARPOOLING">
+            <font>
+                <Font name="Wingdings 2" size="40.0" />
+            </font>
+        </Label>
+        <PasswordField fx:id="password" layoutX="238.0" layoutY="186.0" />
+        <Button fx:id="logInCreateAl" layoutX="313.0" layoutY="285.0" mnemonicParsing="false" onAction="#onClickLogInCreateAlert" text="Log In and Create Alert">
+            <font>
+                <Font size="15.0" />
+            </font>
+        </Button>
+    </children>
 </AnchorPane>
