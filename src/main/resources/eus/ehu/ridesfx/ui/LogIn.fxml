@@ -22,7 +22,7 @@
                 <Font size="20.0" />
             </font>
         </Text>
-        <Button fx:id="logInButt" layoutX="207.0" layoutY="285.0" mnemonicParsing="false" onAction="#onClickLogIn" text="Log In">
+        <Button fx:id="logInButt" layoutX="281.0" layoutY="254.0" mnemonicParsing="false" onAction="#onClickLogIn" text="Log In">
             <font>
                 <Font size="15.0" />
             </font>
@@ -34,10 +34,5 @@
             </font>
         </Label>
         <PasswordField fx:id="password" layoutX="238.0" layoutY="186.0" />
-        <Button fx:id="logInCreateAl" layoutX="313.0" layoutY="285.0" mnemonicParsing="false" onAction="#onClickLogInCreateAlert" text="Log In and Create Alert">
-            <font>
-                <Font size="15.0" />
-            </font>
-        </Button>
     </children>
 </AnchorPane>

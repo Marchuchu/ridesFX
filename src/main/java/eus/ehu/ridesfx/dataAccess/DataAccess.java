@@ -52,32 +52,35 @@ public class DataAccess {
         System.out.println("Opening DataAccess instance => isDatabaseLocal: " +
                 config.isDataAccessLocal() + " getDataBaseOpenMode: " + config.getDataBaseOpenMode());
 
-        String fileName = config.getDatabaseName();
-        if (initializeMode) {
-            fileName = fileName + ";drop";
-            System.out.println("Deleting the DataBase");
-        }
-
         if (config.isDataAccessLocal()) {
             final StandardServiceRegistry registry = new StandardServiceRegistryBuilder()
                     .configure() // configures settings from hibernate.cfg.xml
                     .build();
             try {
                 emf = new MetadataSources(registry).buildMetadata().buildSessionFactory();
+                System.out.println("EntityManagerFactory created successfully.");
             } catch (Exception e) {
                 // The registry would be destroyed by the SessionFactory, but we had trouble building the SessionFactory
                 // so destroy it manually.
                 StandardServiceRegistryBuilder.destroy(registry);
+                System.err.println("Error creating EntityManagerFactory: " + e.getMessage());
+                e.printStackTrace();
             }
 
-            db = emf.createEntityManager();
-            System.out.println("DataBase opened");
+            if (emf != null) {
+                db = emf.createEntityManager();
+                System.out.println("EntityManager created successfully.");
+            } else {
+                System.err.println("EntityManagerFactory is null. Cannot create EntityManager.");
+            }
+        } else {
+            System.err.println("DataAccess is not configured for local access.");
         }
     }
 
     public Messenger login(String username, String password) throws UnknownUser {
         Messenger user;
-        TypedQuery<Messenger> query = db.createQuery("SELECT u FROM Messenger u WHERE u.userName =?1 AND u.password =?2",
+        TypedQuery<Messenger> query = db.createQuery("SELECT u FROM Messenger u WHERE u.name =?1 AND u.password =?2",
                 Messenger.class);
         query.setParameter(1, username);
         query.setParameter(2, password);
@@ -92,7 +95,6 @@ public class DataAccess {
 
     public void reset() {
         db.getTransaction().begin();
-        db.createNativeQuery("DELETE FROM DRIVER_RIDE").executeUpdate();
         db.createQuery("DELETE FROM Ride ").executeUpdate();
         db.createQuery("DELETE FROM Driver ").executeUpdate();
         db.getTransaction().commit();
@@ -117,9 +119,13 @@ public class DataAccess {
 
 
             //Create drivers
-            Driver driver1 = new Driver("driver1@gmail.com", "Aitor Fernandez", "12345");
-            Driver driver2 = new Driver("driver2@gmail.com", "Ane Gaztañaga", "54321");
-            Driver driver3 = new Driver("driver3@gmail.com", "Test driver", "12345");
+            Driver driver1 = new Driver("driver1@gmail.com", "Aitor Fernandez", "12345","12345");
+            Driver driver2 = new Driver("driver2@gmail.com", "Ane Gaztañaga", "54321","54321");
+            Driver driver3 = new Driver("driver3@gmail.com", "Test driver", "12345","12345");
+
+            //Create travelers
+            Traveler traveler1 = new Traveler("traveler1@gmail.com", "Jose Antonio", "amorch1", "amorch");
+            Traveler traveler2 = new Traveler("traveler2@gmail.com", "Lius Fernando", "54321","54321");
 
 
             //Create rides
@@ -142,6 +148,8 @@ public class DataAccess {
             db.persist(driver2);
             db.persist(driver3);
 
+            db.persist(traveler1);
+            db.persist(traveler2);
 
             db.getTransaction().commit();
             System.out.println("Db initialized");
@@ -302,7 +310,7 @@ public class DataAccess {
         System.out.println("DataBase is closed");
     }
 
-    public void signUp(String name, String email, String password, String repeatePassword, String role) {
+    public boolean signUp(String name, String email, String password, String repeatePassword, String role) {
 
         if (role.equals("Driver")) {
 
@@ -311,21 +319,25 @@ public class DataAccess {
                 if (password.equals(repeatePassword)) {
 
                     db.getTransaction().begin();
-                    Driver driver = new Driver(email, name);
+                    Driver driver = new Driver(email, name, password, repeatePassword);
                     db.persist(driver);
                     db.getTransaction().commit();
+
+                    return true;
                 }
             }
-        } else if(role.equals("Traveler")) {
+
+        } else if (role.equals("Traveler")) {
 
             if (email.contains("@")) {
 
                 if (password.equals(repeatePassword)) {
 
                     db.getTransaction().begin();
-                    Traveler traveler = new Traveler(email, name);
+                    Traveler traveler = new Traveler(email, name, password, repeatePassword);
                     db.persist(traveler);
                     db.getTransaction().commit();
+                    return true;
 
                 }
 
@@ -333,14 +345,17 @@ public class DataAccess {
 
         }
 
+        return false;
+
     }
 
-    public Driver logIn(String username, String password) throws UnknownUser {
-        Driver driver;
-        TypedQuery<Driver> query = db.createQuery("SELECT d FROM Driver d WHERE d.email =?1 AND d.password =?2",
+    public Messenger logIn(String email, String password) throws UnknownUser {
+        Messenger driver;
+        TypedQuery<Driver> query = db.createQuery("SELECT d FROM Messenger d WHERE d.email =?1 AND d.password =?2",
                 Driver.class);
-        query.setParameter(1, username);
+        query.setParameter(1, email);
         query.setParameter(2, password);
+
         try {
             driver = query.getSingleResult();
         } catch (Exception e) {
@@ -352,7 +367,6 @@ public class DataAccess {
     }
 
     public void cancelAlert(TableColumn<String, Integer> alertID) {
-
 
 
     }

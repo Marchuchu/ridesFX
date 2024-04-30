@@ -12,33 +12,39 @@ public class Driver extends Messenger implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
-    @Id
-    private String email;
     private String password;
-
+    private String repPassword;
 
 
     @OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.PERSIST)
     private List<Ride> rides = new Vector<Ride>();
 
 
-    public Driver(String mail, String name) {
+    public Driver(String email, String name) {
 
         super(name);
-        this.email = mail;
+        super.email = email;
 
 
     }
 
     public Driver(String email, String name, String password) {
         super(name);
-        this.email = email;
         this.password = password;
+        super.email = email;
+
+    }
+
+    public Driver(String email, String name, String password, String repeatePassword) {
+        super(email, name, password);
+        this.repPassword = repeatePassword;
+
     }
 
     public Driver() {
 
     }
+
 
     public String getPassword() {
         return password;
@@ -57,18 +63,8 @@ public class Driver extends Messenger implements Serializable {
     }
 
 
-    public String getEmail() {
-        return email;
-    }
 
-    public void setEmail(String email) {
-        this.email = email;
-    }
-
-
-    public String toString() {
-        return email + ";" + rides;
-    }
+    //public String toString() {        return email + ";" + rides;    }
 
     /**
      * This method creates a new ride for the driver
@@ -108,25 +104,46 @@ public class Driver extends Messenger implements Serializable {
         if (getClass() != obj.getClass())
             return false;
         Driver other = (Driver) obj;
-        if (email != other.email)
+        if (!(super.email.equals(other.email)))
             return false;
         return true;
     }
+
+//    public Ride removeRide(String from, String to, Date date) {
+//        boolean found = false;
+//        int index = 0;
+//        Ride r = null;
+//        while (!found && index <= rides.size()) {
+//            r = rides.get(++index);
+//            if ((java.util.Objects.equals(r.getFromLocation(), from)) && (java.util.Objects.equals(r.getToLocation(), to)) && (java.util.Objects.equals(r.getDate(), date)))
+//                found = true;
+//        }
+//
+//        if (found) {
+//            rides.remove(index);
+//            return r;
+//        } else return null;
+//    }
 
     public Ride removeRide(String from, String to, Date date) {
         boolean found = false;
         int index = 0;
         Ride r = null;
-        while (!found && index <= rides.size()) {
-            r = rides.get(++index);
+        while (!found && index < rides.size()) {
+            r = rides.get(index);
             if ((java.util.Objects.equals(r.getFromLocation(), from)) && (java.util.Objects.equals(r.getToLocation(), to)) && (java.util.Objects.equals(r.getDate(), date)))
                 found = true;
+            else
+                index++;
         }
 
         if (found) {
             rides.remove(index);
             return r;
-        } else return null;
+        } else
+            return null;
     }
+
+
 
 }

@@ -30,16 +30,13 @@ import java.util.*;
 public class QueryRidesController implements Controller {
 
     @FXML
-    private ResourceBundle resources;
-
-    @FXML
-    private URL location;
-
-    @FXML
     private Button btnClose;
 
     @FXML
     private DatePicker datepicker;
+
+    @FXML
+    private Button bookButtn;
 
     @FXML
     private TableColumn<Ride, String> qc1;
@@ -66,6 +63,12 @@ public class QueryRidesController implements Controller {
 
     @FXML
     private TableView<Ride> tblRides;
+
+    @FXML
+    private Button createAlertBut;
+
+    @FXML
+    private Label reservationMessage;
 
 
     private MainGUI mainGUI;
@@ -141,10 +144,25 @@ public class QueryRidesController implements Controller {
 
     public void onClickCreateAlert(ActionEvent event) {
 
-        showScene("Log In");
+
 
     }
 
+    @FXML
+
+    public void onClickBook(ActionEvent event) {
+        Ride ride = tblRides.getSelectionModel().getSelectedItem();
+        if (ride != null) {
+
+            reservationMessage.setText("Reserva hecha con éxito");
+
+
+        } else {
+
+            reservationMessage.setText("Seleccione un viaje para reservar");
+
+        }
+    }
     @FXML
     void initialize() {
 
@@ -212,6 +230,7 @@ public class QueryRidesController implements Controller {
         qc3.setCellValueFactory(new PropertyValueFactory<>("price"));
 
     }
+
 
 
     @Override

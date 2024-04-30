@@ -101,30 +101,32 @@ public class AlertTableController implements Controller {
     }
 
     private AlertTableController.Window load(String fxml) {
+//
+//        try {
+//
+//            FXMLLoader loader = new FXMLLoader(MainGUI.class.getResource(fxml), ResourceBundle.getBundle("Etiquetas", Locale.getDefault()));
+//            loader.setControllerFactory(controllerClass -> {
+//                try {
+//                    return controllerClass
+//                            .getConstructor(BlFacade.class)
+//                            .newInstance(bl);
+//                } catch (Exception e) {
+//                    throw new RuntimeException(e);
+//                }
+//            });
+//            Parent ui = loader.load();
+//            Controller controller = loader.getController();
+//
+//            AlertTableController.Window window = new AlertTableController.Window();
+//            window.controller = controller;
+//            window.ui = ui;
+//            return window;
+//        } catch (IOException e) {
+//            throw new RuntimeException(e);
+//
+//        }
 
-        try {
-
-            FXMLLoader loader = new FXMLLoader(MainGUI.class.getResource(fxml), ResourceBundle.getBundle("Etiquetas", Locale.getDefault()));
-            loader.setControllerFactory(controllerClass -> {
-                try {
-                    return controllerClass
-                            .getConstructor(BlFacade.class)
-                            .newInstance(bl);
-                } catch (Exception e) {
-                    throw new RuntimeException(e);
-                }
-            });
-            Parent ui = loader.load();
-            Controller controller = loader.getController();
-
-            AlertTableController.Window window = new AlertTableController.Window();
-            window.controller = controller;
-            window.ui = ui;
-            return window;
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-
-        }
+        return null;
 
     }
 

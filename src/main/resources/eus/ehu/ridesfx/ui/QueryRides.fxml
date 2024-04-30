@@ -29,6 +29,8 @@
         <Label layoutX="39.0" layoutY="106.0" text="%ArrivalCity" />
         <ComboBox fx:id="comboDepartCity" layoutX="126.0" layoutY="54.0" prefWidth="150.0" />
         <ComboBox fx:id="comboArrivalCity" layoutX="126.0" layoutY="101.0" prefWidth="150.0" />
-        <Button fx:id="createAlertBut" layoutX="577.0" layoutY="310.0" mnemonicParsing="false" onAction="#onClickCreateAlert" text="Create Alert" />
+        <Button fx:id="createAlertBut" layoutX="464.0" layoutY="310.0" mnemonicParsing="false" onAction="#onClickCreateAlert" text="Create Alert" />
+      <Button fx:id="bookButtn" layoutX="698.0" layoutY="310.0" mnemonicParsing="false" onAction="#onClickBook" text="Book" />
+      <Label fx:id="reservationMessage" layoutX="603.0" layoutY="284.0" />
     </children>
 </AnchorPane>

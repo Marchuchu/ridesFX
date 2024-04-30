@@ -1,6 +1,7 @@
 package eus.ehu.ridesfx.ui;
 
 import eus.ehu.ridesfx.businessLogic.BlFacade;
+import eus.ehu.ridesfx.domain.Ride;
 import javafx.application.Platform;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -22,6 +23,12 @@ public class MainGUI {
     private Stage stage;
     private Scene scene;
 
+    class Window {
+        Controller c;
+        Parent ui;
+    }
+
+
     public MainGUI(BlFacade bl) {
         Platform.startup(() -> {
             try {
@@ -42,8 +49,33 @@ public class MainGUI {
     }
 
     private Window load(String fxmlfile) throws IOException {
-        Window window = new Window();
-        FXMLLoader loader = new FXMLLoader(MainGUI.class.getResource(fxmlfile), ResourceBundle.getBundle("Etiquetas", Locale.getDefault()));
+//        Window window = new Window();
+//        FXMLLoader loader = new FXMLLoader(MainGUI.class.getResource(fxmlfile), ResourceBundle.getBundle("Etiquetas", Locale.getDefault()));
+//        loader.setControllerFactory(controllerClass -> {
+//            try {
+//                return controllerClass
+//                        .getConstructor(BlFacade.class)
+//                        .newInstance(businessLogic);
+//            } catch (Exception e) {
+//                throw new RuntimeException(e);
+//            }
+//        });
+//        window.ui = loader.load();
+//        ((Controller) loader.getController()).setMainApp(this);
+//        window.c = loader.getController();
+//        return window;
+
+        return null;
+
+    }
+
+
+
+    public void init(Stage stage) throws IOException {
+
+        this.stage = stage;
+
+        FXMLLoader loader = new FXMLLoader(MainGUI.class.getResource("MainGUI.fxml"), ResourceBundle.getBundle("Etiquetas", Locale.getDefault()));
         loader.setControllerFactory(controllerClass -> {
             try {
                 return controllerClass
@@ -53,21 +85,13 @@ public class MainGUI {
                 throw new RuntimeException(e);
             }
         });
-        window.ui = loader.load();
-        ((Controller) loader.getController()).setMainApp(this);
-        window.c = loader.getController();
-        return window;
-    }
 
-    public void init(Stage stage) throws IOException {
-
-        this.stage = stage;
-
-        mainWin = load("MainGUI.fxml");
-        queryRidesWin = load("QueryRides.fxml");
-        createRideWin = load("CreateRide.fxml");
-
-        showMain();
+        Scene scene = new Scene(loader.load());
+        stage.setTitle("ShareTrip BorderLayout");
+        stage.setScene(scene);
+        stage.setHeight(700);
+        stage.setWidth(1100);
+        stage.show();
 
     }
 
@@ -101,11 +125,8 @@ public class MainGUI {
         scene.setRoot(ui);
         stage.show();
     }
+*/
 
-    class Window {
-        Controller c;
-        Parent ui;
-    }
 
 //  public static void main(String[] args) {
 //    launch();

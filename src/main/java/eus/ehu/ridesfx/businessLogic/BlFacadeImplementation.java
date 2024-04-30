@@ -3,7 +3,9 @@ package eus.ehu.ridesfx.businessLogic;
 import eus.ehu.ridesfx.configuration.Config;
 import eus.ehu.ridesfx.dataAccess.DataAccess;
 import eus.ehu.ridesfx.domain.Driver;
+import eus.ehu.ridesfx.domain.Messenger;
 import eus.ehu.ridesfx.domain.Ride;
+import eus.ehu.ridesfx.domain.Traveler;
 import eus.ehu.ridesfx.exceptions.RideAlreadyExistException;
 import eus.ehu.ridesfx.exceptions.RideMustBeLaterThanTodayException;
 import eus.ehu.ridesfx.exceptions.UnknownUser;
@@ -22,6 +24,8 @@ public class BlFacadeImplementation implements BlFacade {
     DataAccess dbManager;
     Config config = Config.getInstance();
     private Driver currentDriver;
+    private Traveler currentTraveler;
+    private Messenger currentUser;
 
     public BlFacadeImplementation() {
         System.out.println("Creating BlFacadeImplementation instance");
@@ -72,6 +76,11 @@ public class BlFacadeImplementation implements BlFacade {
     }
 
     @Override
+    public Traveler getCurrentTraveler() {
+        return this.currentTraveler;
+    }
+
+    @Override
     public void setCurrentDriver(Driver driver) {
         this.currentDriver = driver;
     }
@@ -97,18 +106,19 @@ public class BlFacadeImplementation implements BlFacade {
     }
 
     @Override
-    public void signUp(String name, String email, String password, String repeatpassword, String role) {
-        dbManager.signUp(name, email, password,repeatpassword,  role);
+    public boolean signUp(String name, String email, String password, String repeatpassword, String role) {
+        return dbManager.signUp(name, email, password, repeatpassword, role);
     }
 
+
     @Override
-    public boolean logIn(String username, String password) throws UnknownUser{
+    public boolean logIn(String email, String password) throws UnknownUser {
 
-        Driver driver = dbManager.logIn(username, password);
+        Messenger driver = dbManager.logIn(email, password);
 
-        this.currentDriver = driver;
+        this.currentUser = driver;
 
-        if(driver != null) {
+        if ((driver != null)) {
             return true;
         } else {
             return false;
