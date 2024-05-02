@@ -2,10 +2,14 @@ package eus.ehu.ridesfx.ui;
 
 import eus.ehu.ridesfx.businessLogic.BlFacade;
 import eus.ehu.ridesfx.domain.Ride;
+import eus.ehu.ridesfx.uicontrollers.LoginController;
+import eus.ehu.ridesfx.uicontrollers.MainGUIController;
+import eus.ehu.ridesfx.uicontrollers.SignUpController;
 import javafx.application.Platform;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.layout.BorderPane;
 import javafx.stage.Stage;
 import org.kordamp.bootstrapfx.BootstrapFX;
 import eus.ehu.ridesfx.uicontrollers.Controller;
@@ -16,18 +20,35 @@ import java.util.ResourceBundle;
 
 public class MainGUI {
 
-    //private Window mainWin, createRideWin, queryRidesWin;
-    //private Window loginWin, gradingWin;
-
     private BlFacade businessLogic;
+
+    private Window createRideWin, queryRideWin, loginWin, signUWin;
+
+    private MainGUIController mGUIC;
+
+
     private Stage stage;
     private Scene scene;
 
-    class Window {
-        Controller c;
-        Parent ui;
+    public static class Window {
+
+        public Controller controller;
+        public Parent ui;
+
     }
 
+    public MainGUI(BlFacade bl, MainGUIController mGUIC) {
+        this.mGUIC = mGUIC;
+        Platform.startup(() -> {
+            try {
+                setBusinessLogic(bl);
+                init(new Stage());
+                mGUIC.setMainWrapper(new BorderPane());
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        });
+    }
 
     public MainGUI(BlFacade bl) {
         Platform.startup(() -> {
@@ -48,36 +69,17 @@ public class MainGUI {
         businessLogic = afi;
     }
 
-    private Window load(String fxmlfile) throws IOException {
-//        Window window = new Window();
-//        FXMLLoader loader = new FXMLLoader(MainGUI.class.getResource(fxmlfile), ResourceBundle.getBundle("Etiquetas", Locale.getDefault()));
-//        loader.setControllerFactory(controllerClass -> {
-//            try {
-//                return controllerClass
-//                        .getConstructor(BlFacade.class)
-//                        .newInstance(businessLogic);
-//            } catch (Exception e) {
-//                throw new RuntimeException(e);
-//            }
-//        });
-//        window.ui = loader.load();
-//        ((Controller) loader.getController()).setMainApp(this);
-//        window.c = loader.getController();
-//        return window;
 
-        return null;
-
-    }
-
-
-
-    public void init(Stage stage) throws IOException {
-
-        this.stage = stage;
-
-        FXMLLoader loader = new FXMLLoader(MainGUI.class.getResource("MainGUI.fxml"), ResourceBundle.getBundle("Etiquetas", Locale.getDefault()));
+    public Window load(String file) throws IOException {
+        Window window = new Window();
+        FXMLLoader loader = new FXMLLoader(MainGUI.class.getResource(file), ResourceBundle.getBundle("Etiquetas", Locale.getDefault()));
         loader.setControllerFactory(controllerClass -> {
             try {
+                if (controllerClass == SignUpController.class || controllerClass == LoginController.class) {
+                    return controllerClass
+                            .getConstructor(BlFacade.class, MainGUI.class)
+                            .newInstance(businessLogic, this);
+                }
                 return controllerClass
                         .getConstructor(BlFacade.class)
                         .newInstance(businessLogic);
@@ -85,6 +87,46 @@ public class MainGUI {
                 throw new RuntimeException(e);
             }
         });
+        window.ui = loader.load();
+        ((Controller) loader.getController()).setMainApp(this);
+        window.controller = loader.getController();
+        return window;
+    }
+
+
+    public void showScene(String scene) throws IOException {
+
+        switch (scene) {
+
+            case "Query Rides" -> mGUIC.getMainWrapper().setCenter(queryRideWin.ui);
+            case "Create Ride" -> mGUIC.getMainWrapper().setCenter(createRideWin.ui);
+            case "Sign Up" -> mGUIC.getMainWrapper().setCenter(signUWin.ui);
+            case "Log In" ->    mGUIC.getMainWrapper().setCenter(loginWin.ui);
+
+        }
+    }
+    public void init(Stage stage) throws IOException {
+
+        this.stage= stage;
+
+        mGUIC = new MainGUIController(businessLogic);
+        mGUIC.setMainWrapper(new BorderPane());
+
+        FXMLLoader loader = new FXMLLoader(MainGUI.class.getResource("MainGUI.fxml"), ResourceBundle.getBundle("Etiquetas", Locale.getDefault()));
+        loader.setControllerFactory(controllerClass -> {
+            try {
+                MainGUIController controller = new MainGUIController(businessLogic);
+                controller.setMainApp(this);
+                return controller;
+            } catch (Exception e) {
+                throw new RuntimeException(e);
+            }
+        });
+
+        queryRideWin = load("QueryRides.fxml");
+        createRideWin = load("CreateRide.fxml");
+        signUWin = load("SignUp.fxml");
+        loginWin = load("LogIn.fxml");
 
         Scene scene = new Scene(loader.load());
         stage.setTitle("ShareTrip BorderLayout");
@@ -92,43 +134,5 @@ public class MainGUI {
         stage.setHeight(700);
         stage.setWidth(1100);
         stage.show();
-
     }
-
-
-/*
-    public void showMain() {
-        setupScene(mainWin.ui, "MainTitle", 320, 250);
-    }
-
-//  public void start(Stage stage) throws IOException {
-//      init(stage);
-//  }
-
-    public void showQueryRides() {
-        setupScene(queryRidesWin.ui, "QueryRides", 1000, 500);
-    }
-
-    public void showCreateRide() {
-        setupScene(createRideWin.ui, "CreateRide", 550, 400);
-    }
-
-    private void setupScene(Parent ui, String title, int width, int height) {
-        if (scene == null) {
-            scene = new Scene(ui, width, height);
-            scene.getStylesheets().add(BootstrapFX.bootstrapFXStylesheet());
-            stage.setScene(scene);
-        }
-        stage.setWidth(width);
-        stage.setHeight(height);
-        stage.setTitle(ResourceBundle.getBundle("Etiquetas", Locale.getDefault()).getString(title));
-        scene.setRoot(ui);
-        stage.show();
-    }
-*/
-
-
-//  public static void main(String[] args) {
-//    launch();
-//  }
 }

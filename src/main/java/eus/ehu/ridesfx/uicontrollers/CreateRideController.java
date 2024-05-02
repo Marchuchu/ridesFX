@@ -23,6 +23,11 @@ import java.util.ResourceBundle;
 
 public class CreateRideController implements Controller {
 
+    public CreateRideController(BlFacade bl, MainGUI mGUI) {
+        this.businessLogic = bl;
+        this.mainGUI = mGUI;
+    }
+
     public CreateRideController(BlFacade bl) {
         this.businessLogic = bl;
     }

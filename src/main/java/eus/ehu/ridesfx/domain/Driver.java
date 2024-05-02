@@ -8,7 +8,7 @@ import java.util.List;
 import java.util.Vector;
 
 @Entity
-public class Driver extends Messenger implements Serializable {
+public class Driver extends User implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
@@ -22,16 +22,13 @@ public class Driver extends Messenger implements Serializable {
 
     public Driver(String email, String name) {
 
-        super(name);
-        super.email = email;
-
-
+        super(name, email);
+        
     }
 
     public Driver(String email, String name, String password) {
-        super(name);
+        super(name, email);
         this.password = password;
-        super.email = email;
 
     }
 
@@ -61,7 +58,6 @@ public class Driver extends Messenger implements Serializable {
     public void setRides(List<Ride> rides) {
         this.rides = rides;
     }
-
 
 
     //public String toString() {        return email + ";" + rides;    }
@@ -143,7 +139,6 @@ public class Driver extends Messenger implements Serializable {
         } else
             return null;
     }
-
 
 
 }

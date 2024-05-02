@@ -3,7 +3,6 @@ package eus.ehu.ridesfx.uicontrollers;
 import eus.ehu.ridesfx.businessLogic.BlFacade;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
@@ -12,10 +11,8 @@ import eus.ehu.ridesfx.ui.MainGUI;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
-import org.kordamp.bootstrapfx.BootstrapFX;
 
 import java.io.IOException;
-import java.util.Locale;
 import java.util.ResourceBundle;
 
 public class MainGUIController implements Controller {
@@ -38,23 +35,22 @@ public class MainGUIController implements Controller {
     @FXML
     private Text userNames;
 
-    private MainGUI mainGUI;
-
-    private BlFacade businessLogic;
+      private BlFacade businessLogic;
 
     @FXML
     private BorderPane mainWrapper;
 
-    private Window createRideWin, queryRideWin, loginWin, signUWin;
+    MainGUI mGUI;
 
-    private LoginController lIController;
-    private SignUpController sUController;
-    private QueryRidesController qRController;
-    private CreateRideController cRController;
+    MainGUI.Window createRideWin, queryRideWin, loginWin, signUWin;
+
 
     private Stage stage;
     private Scene scene;
 
+    public void setMainWrapper(BorderPane mainWrapper) {
+        this.mainWrapper = mainWrapper;
+    }
 
     public MainGUIController() {
     }
@@ -63,47 +59,45 @@ public class MainGUIController implements Controller {
         businessLogic = blFacade;
     }
 
+    public MainGUIController(BlFacade blFacade, MainGUI mGUI) {
+        this.mGUI = mGUI;
+        businessLogic = blFacade;
+    }
+
     public BlFacade getBusinessLogic() {
         return businessLogic;
     }
 
-    Window load(String fxml) {
+//    Window load(String fxml) {
+//
+//        try {
+//
+//            FXMLLoader loader = new FXMLLoader(MainGUI.class.getResource(fxml), ResourceBundle.getBundle("Etiquetas", Locale.getDefault()));
+//            loader.setControllerFactory(controllerClass -> {
+//                try {
+//                    return controllerClass
+//                            .getConstructor(BlFacade.class)
+//                            .newInstance(businessLogic);
+//                } catch (Exception e) {
+//                    throw new RuntimeException(e);
+//                }
+//            });
+//
+//            Parent ui = loader.load();
+//            Controller controller = loader.getController();
+//
+//            Window window = new Window();
+//            window.controller = controller;
+//            window.ui = ui;
+//            return window;
+//        } catch (IOException e) {
+//            throw new RuntimeException(e);
+//
+//        }
+//
+//    }
 
-        try {
 
-            FXMLLoader loader = new FXMLLoader(MainGUI.class.getResource(fxml), ResourceBundle.getBundle("Etiquetas", Locale.getDefault()));
-            loader.setControllerFactory(controllerClass -> {
-                try {
-                    return controllerClass
-                            .getConstructor(BlFacade.class)
-                            .newInstance(businessLogic);
-                } catch (Exception e) {
-                    throw new RuntimeException(e);
-                }
-            });
-
-            Parent ui = loader.load();
-            Controller controller = loader.getController();
-
-            Window window = new Window();
-            window.controller = controller;
-            window.ui = ui;
-            return window;
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-
-        }
-
-    }
-
-    void showScene(String scene) {
-        switch (scene) {
-            case "Query Rides" -> mainWrapper.setCenter(queryRideWin.ui);
-            case "Create Ride" -> mainWrapper.setCenter(createRideWin.ui);
-            case "Log In" -> mainWrapper.setCenter(loginWin.ui);
-            case "Sign Up" -> mainWrapper.setCenter(signUWin.ui);
-        }
-    }
 
     void showName(String role) {
 
@@ -119,52 +113,80 @@ public class MainGUIController implements Controller {
 
     }
 
+    public BorderPane getMainWrapper() {
+        return mainWrapper;
+    }
+
     @FXML
-    void onClickSignUp(ActionEvent event) {
-        showScene("Sign Up");
+    void onClickSignUp(ActionEvent event) throws IOException {
+        mGUI.showScene("Sign Up");
         showName(rolName.getText());
     }
 
 
     @FXML
-    void onClickLogIn(ActionEvent event) {
-        showScene("Log In");
+    void onClickLogIn(ActionEvent event) throws IOException {
+        mGUI.showScene("Log In");
         showName(rolName.getText());
 
     }
 
     @FXML
-    void queryRides(ActionEvent event) {
+    void queryRides(ActionEvent event) throws IOException {
 
-        //mainGUI.showQueryRides();
-        showScene("Query Rides");
+        mGUI.showScene("Query Rides");
     }
 
     @FXML
-    void createRide(ActionEvent event) {
+    void createRide(ActionEvent event) throws IOException {
 
-        //mainGUI.showCreateRide();
-        showScene("Create Ride");
+        mGUI.showScene("Create Ride");
     }
 
     @FXML
-    void initialize() {
+    public void initialize() throws IOException {
 
-        queryRideWin = load("QueryRides.fxml");
-        createRideWin = load("CreateRide.fxml");
-        signUWin = load("SignUp.fxml");
-        loginWin = load("LogIn.fxml");
+        mainWrapper = new BorderPane();
 
-        showScene("Query Rides");
+        queryRideWin = mGUI.load("QueryRides.fxml");
+        createRideWin = mGUI.load("CreateRide.fxml");
+        signUWin = mGUI.load("SignUp.fxml");
+        loginWin = mGUI.load("LogIn.fxml");
 
+        mGUI.showScene("Query Rides");
+
+        //mGUI = new MainGUI(businessLogic);
+
+//        queryRideWin = mGUI.load("QueryRides.fxml");
+//        createRideWin = mGUI.load("CreateRide.fxml");
+//        loginWin = mGUI.load("LogIn.fxml");
+//        signUWin = mGUI.load("SignUp.fxml");
+//
+//        queryRideWin.controller = new QueryRidesController(businessLogic);
+//        createRideWin.controller = new CreateRideController(businessLogic);
+//        loginWin.controller = new LoginController(businessLogic);
+//        signUWin.controller = new SignUpController(businessLogic);
     }
+
 
     @Override
     public void setMainApp(MainGUI mainGUI) {
-        this.mainGUI = mainGUI;
+        this.mGUI = mainGUI;
     }
 
-    public class Window {
+//    public void showScene(String scene) throws IOException {
+//
+//        switch (scene) {
+//            case "Query Rides" -> mainWrapper.setCenter(queryRideWin.ui);
+//            case "Create Ride" -> mainWrapper.setCenter(createRideWin.ui);
+//            case "Log In" -> mainWrapper.setCenter(loginWin.ui);
+//            case "Sign Up" -> mainWrapper.setCenter(signUWin.ui);
+//
+//        }
+//
+//    }
+
+    public static class Window {
         private Controller controller;
         private Parent ui;
 

@@ -3,7 +3,7 @@ package eus.ehu.ridesfx.domain;
 import jakarta.persistence.*;
 
 @Entity
-public class Traveler extends Messenger {
+public class Traveler extends User {
 
 
     private String repPassword;

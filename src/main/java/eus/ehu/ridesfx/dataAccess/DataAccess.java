@@ -2,10 +2,7 @@ package eus.ehu.ridesfx.dataAccess;
 
 import eus.ehu.ridesfx.configuration.Config;
 import eus.ehu.ridesfx.configuration.UtilDate;
-import eus.ehu.ridesfx.domain.Messenger;
-import eus.ehu.ridesfx.domain.Ride;
-import eus.ehu.ridesfx.domain.Driver;
-import eus.ehu.ridesfx.domain.Traveler;
+import eus.ehu.ridesfx.domain.*;
 import eus.ehu.ridesfx.exceptions.RideAlreadyExistException;
 import eus.ehu.ridesfx.exceptions.RideMustBeLaterThanTodayException;
 import eus.ehu.ridesfx.exceptions.UnknownUser;
@@ -78,10 +75,10 @@ public class DataAccess {
         }
     }
 
-    public Messenger login(String username, String password) throws UnknownUser {
-        Messenger user;
-        TypedQuery<Messenger> query = db.createQuery("SELECT u FROM Messenger u WHERE u.name =?1 AND u.password =?2",
-                Messenger.class);
+    public User login(String username, String password) throws UnknownUser {
+        User user;
+        TypedQuery<User> query = db.createQuery("SELECT u FROM User u WHERE u.name =?1 AND u.password =?2",
+                User.class);
         query.setParameter(1, username);
         query.setParameter(2, password);
         try {
@@ -349,10 +346,10 @@ public class DataAccess {
 
     }
 
-    public Messenger logIn(String email, String password) throws UnknownUser {
-        Messenger driver;
-        TypedQuery<Driver> query = db.createQuery("SELECT d FROM Messenger d WHERE d.email =?1 AND d.password =?2",
-                Driver.class);
+    public User logIn(String email, String password) throws UnknownUser {
+        User driver;
+        TypedQuery<User> query = db.createQuery("SELECT d FROM User d WHERE d.email =?1 AND d.password =?2",
+                User.class);
         query.setParameter(1, email);
         query.setParameter(2, password);
 

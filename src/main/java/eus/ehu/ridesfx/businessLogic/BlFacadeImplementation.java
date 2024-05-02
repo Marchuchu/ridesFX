@@ -2,10 +2,7 @@ package eus.ehu.ridesfx.businessLogic;
 
 import eus.ehu.ridesfx.configuration.Config;
 import eus.ehu.ridesfx.dataAccess.DataAccess;
-import eus.ehu.ridesfx.domain.Driver;
-import eus.ehu.ridesfx.domain.Messenger;
-import eus.ehu.ridesfx.domain.Ride;
-import eus.ehu.ridesfx.domain.Traveler;
+import eus.ehu.ridesfx.domain.*;
 import eus.ehu.ridesfx.exceptions.RideAlreadyExistException;
 import eus.ehu.ridesfx.exceptions.RideMustBeLaterThanTodayException;
 import eus.ehu.ridesfx.exceptions.UnknownUser;
@@ -25,7 +22,7 @@ public class BlFacadeImplementation implements BlFacade {
     Config config = Config.getInstance();
     private Driver currentDriver;
     private Traveler currentTraveler;
-    private Messenger currentUser;
+    private User currentUser;
 
     public BlFacadeImplementation() {
         System.out.println("Creating BlFacadeImplementation instance");
@@ -114,7 +111,7 @@ public class BlFacadeImplementation implements BlFacade {
     @Override
     public boolean logIn(String email, String password) throws UnknownUser {
 
-        Messenger driver = dbManager.logIn(email, password);
+        User driver = dbManager.logIn(email, password);
 
         this.currentUser = driver;
 

@@ -81,11 +81,13 @@ public class QueryRidesController implements Controller {
         businessLogic = bl;
     }
 
+    public QueryRidesController(BlFacade bl, MainGUI mGUI) {
+        businessLogic = bl;
+        this.mainGUI = mGUI;
+    }
 
-//    @FXML
-//    void closeClick(ActionEvent event) {
-//        mainGUI.showMain();
-//    }
+
+
 
     private void setEvents(int year, int month) {
         Date date = Dates.toDate(year, month);
