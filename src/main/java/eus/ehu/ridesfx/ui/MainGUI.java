@@ -15,6 +15,7 @@ import org.kordamp.bootstrapfx.BootstrapFX;
 import eus.ehu.ridesfx.uicontrollers.Controller;
 
 import java.io.IOException;
+import java.lang.reflect.Constructor;
 import java.util.Locale;
 import java.util.ResourceBundle;
 
@@ -22,7 +23,7 @@ public class MainGUI {
 
     private BlFacade businessLogic;
 
-    private Window createRideWin, queryRideWin, loginWin, signUWin;
+    private Window createRideWin, queryRideWin, loginWin, signUWin, mainWin;
 
     private MainGUIController mGUIC;
 
@@ -37,18 +38,6 @@ public class MainGUI {
 
     }
 
-    public MainGUI(BlFacade bl, MainGUIController mGUIC) {
-        this.mGUIC = mGUIC;
-        Platform.startup(() -> {
-            try {
-                setBusinessLogic(bl);
-                init(new Stage());
-                mGUIC.setMainWrapper(new BorderPane());
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-        });
-    }
 
     public MainGUI(BlFacade bl) {
         Platform.startup(() -> {
@@ -109,26 +98,15 @@ public class MainGUI {
 
         this.stage= stage;
 
-        mGUIC = new MainGUIController(businessLogic);
-        mGUIC.setMainWrapper(new BorderPane());
-
-        FXMLLoader loader = new FXMLLoader(MainGUI.class.getResource("MainGUI.fxml"), ResourceBundle.getBundle("Etiquetas", Locale.getDefault()));
-        loader.setControllerFactory(controllerClass -> {
-            try {
-                MainGUIController controller = new MainGUIController(businessLogic);
-                controller.setMainApp(this);
-                return controller;
-            } catch (Exception e) {
-                throw new RuntimeException(e);
-            }
-        });
+        mainWin = load("MainGUI.fxml");
+        mGUIC = (MainGUIController) mainWin.controller;
 
         queryRideWin = load("QueryRides.fxml");
         createRideWin = load("CreateRide.fxml");
         signUWin = load("SignUp.fxml");
         loginWin = load("LogIn.fxml");
 
-        Scene scene = new Scene(loader.load());
+        Scene scene = new Scene(mainWin.ui);
         stage.setTitle("ShareTrip BorderLayout");
         stage.setScene(scene);
         stage.setHeight(700);

@@ -40,17 +40,7 @@ public class MainGUIController implements Controller {
     @FXML
     private BorderPane mainWrapper;
 
-    MainGUI mGUI;
-
-    MainGUI.Window createRideWin, queryRideWin, loginWin, signUWin;
-
-
-    private Stage stage;
-    private Scene scene;
-
-    public void setMainWrapper(BorderPane mainWrapper) {
-        this.mainWrapper = mainWrapper;
-    }
+    private MainGUI mGUI;
 
     public MainGUIController() {
     }
@@ -59,45 +49,9 @@ public class MainGUIController implements Controller {
         businessLogic = blFacade;
     }
 
-    public MainGUIController(BlFacade blFacade, MainGUI mGUI) {
-        this.mGUI = mGUI;
-        businessLogic = blFacade;
-    }
-
     public BlFacade getBusinessLogic() {
         return businessLogic;
     }
-
-//    Window load(String fxml) {
-//
-//        try {
-//
-//            FXMLLoader loader = new FXMLLoader(MainGUI.class.getResource(fxml), ResourceBundle.getBundle("Etiquetas", Locale.getDefault()));
-//            loader.setControllerFactory(controllerClass -> {
-//                try {
-//                    return controllerClass
-//                            .getConstructor(BlFacade.class)
-//                            .newInstance(businessLogic);
-//                } catch (Exception e) {
-//                    throw new RuntimeException(e);
-//                }
-//            });
-//
-//            Parent ui = loader.load();
-//            Controller controller = loader.getController();
-//
-//            Window window = new Window();
-//            window.controller = controller;
-//            window.ui = ui;
-//            return window;
-//        } catch (IOException e) {
-//            throw new RuntimeException(e);
-//
-//        }
-//
-//    }
-
-
 
     void showName(String role) {
 
@@ -146,26 +100,6 @@ public class MainGUIController implements Controller {
     @FXML
     public void initialize() throws IOException {
 
-        mainWrapper = new BorderPane();
-
-        queryRideWin = mGUI.load("QueryRides.fxml");
-        createRideWin = mGUI.load("CreateRide.fxml");
-        signUWin = mGUI.load("SignUp.fxml");
-        loginWin = mGUI.load("LogIn.fxml");
-
-        mGUI.showScene("Query Rides");
-
-        //mGUI = new MainGUI(businessLogic);
-
-//        queryRideWin = mGUI.load("QueryRides.fxml");
-//        createRideWin = mGUI.load("CreateRide.fxml");
-//        loginWin = mGUI.load("LogIn.fxml");
-//        signUWin = mGUI.load("SignUp.fxml");
-//
-//        queryRideWin.controller = new QueryRidesController(businessLogic);
-//        createRideWin.controller = new CreateRideController(businessLogic);
-//        loginWin.controller = new LoginController(businessLogic);
-//        signUWin.controller = new SignUpController(businessLogic);
     }
 
 
@@ -174,21 +108,4 @@ public class MainGUIController implements Controller {
         this.mGUI = mainGUI;
     }
 
-//    public void showScene(String scene) throws IOException {
-//
-//        switch (scene) {
-//            case "Query Rides" -> mainWrapper.setCenter(queryRideWin.ui);
-//            case "Create Ride" -> mainWrapper.setCenter(createRideWin.ui);
-//            case "Log In" -> mainWrapper.setCenter(loginWin.ui);
-//            case "Sign Up" -> mainWrapper.setCenter(signUWin.ui);
-//
-//        }
-//
-//    }
-
-    public static class Window {
-        private Controller controller;
-        private Parent ui;
-
-    }
 }
