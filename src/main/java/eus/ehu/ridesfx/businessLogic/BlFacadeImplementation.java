@@ -88,7 +88,6 @@ public class BlFacadeImplementation implements BlFacade {
         departLocations.add(c);
         dbManager.addCitie(c);
 
-
     }
 
     public void addUser(User u){
@@ -149,6 +148,15 @@ public class BlFacadeImplementation implements BlFacade {
         return dbManager.getD(u);
 
     }
+
+    @Override
+
+    public boolean containsUser(User u){
+
+        return dbManager.containsUser(u);
+
+    }
+
 
     @Override
     public void cancelAlert(TableColumn<String, Integer> alertID) {

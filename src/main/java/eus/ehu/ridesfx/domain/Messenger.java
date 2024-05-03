@@ -4,7 +4,7 @@ import jakarta.persistence.*;
 
 public class Messenger extends User{
 
-    public Messenger(String name, String email) {
+    public Messenger(String email, String name) {
         super(email, name);
     }
 

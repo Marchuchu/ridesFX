@@ -183,6 +183,15 @@ public class DataAccess {
         return res;
     }
 
+    public boolean containsUser(User u) {
+
+        TypedQuery<User> query = db.createQuery("SELECT u FROM User u WHERE u.email =?1",
+                User.class);
+        query.setParameter(1, u.getEmail());
+
+        return !(query.getResultList().isEmpty());
+
+    }
 
     public ArrayList<User> getCurrentUser() {
 
@@ -332,43 +341,53 @@ public class DataAccess {
 
     public boolean signUp(String name, String email, String password, String repeatePassword, String role) {
 
-        if (role.equals("Driver")) {
+        User u = new User(email, name, password);
 
-            if (email.contains("@")) {
+        if(!containsUser(u)){
 
-                if (password.equals(repeatePassword)) {
+            if (role.equals("Driver")) {
 
-                    db.getTransaction().begin();
-                    Driver driver = new Driver(email, name, password, repeatePassword);
-                    db.persist(driver);
-                    db.getTransaction().commit();
+                if (email.contains("@")) {
 
-                    return true;
-                }
-            }
-        } else if (role.equals("Traveler")) {
+                    if (password.equals(repeatePassword)) {
 
-            if (email.contains("@")) {
+                        db.getTransaction().begin();
+                        Driver driver = new Driver(email, name, password, repeatePassword);
+                        db.persist(driver);
+                        db.getTransaction().commit();
 
-                if (password.equals(repeatePassword)) {
+                        return true;
+                    }
+                } else {
 
-                    db.getTransaction().begin();
-                    Traveler traveler = new Traveler(email, name, password, repeatePassword);
-                    db.persist(traveler);
-                    db.getTransaction().commit();
-                    return true;
+                    System.out.println("Incorrect format of mail");
+                    return false;
 
                 }
+            } else if (role.equals("Traveler")) {
 
-            } else {
+                if (email.contains("@")) {
 
-                System.out.println("Incorrect format of mail");
-                return false;
+                    if (password.equals(repeatePassword)) {
+
+                        db.getTransaction().begin();
+                        Traveler traveler = new Traveler(email, name, password, repeatePassword);
+                        db.persist(traveler);
+                        db.getTransaction().commit();
+                        return true;
+
+                    }
+
+                } else {
+
+                    System.out.println("Incorrect format of mail");
+                    return false;
+
+                }
 
             }
 
         }
-
         return false;
 
     }
@@ -400,7 +419,7 @@ public class DataAccess {
 
     }
 
-    public User getD(User u){
+    public User getD(User u) {
         return db.find(User.class, u.getEmail());
     }
 

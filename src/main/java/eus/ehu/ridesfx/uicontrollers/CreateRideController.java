@@ -1,11 +1,7 @@
 package eus.ehu.ridesfx.uicontrollers;
 
 import eus.ehu.ridesfx.businessLogic.BlFacade;
-import eus.ehu.ridesfx.domain.Driver;
-import eus.ehu.ridesfx.domain.Ride;
 import eus.ehu.ridesfx.domain.User;
-import eus.ehu.ridesfx.exceptions.RideAlreadyExistException;
-import eus.ehu.ridesfx.exceptions.RideMustBeLaterThanTodayException;
 import eus.ehu.ridesfx.ui.MainGUI;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -36,23 +32,15 @@ public class CreateRideController implements Controller {
     private BlFacade businessLogic;
 
     @FXML
-    private ResourceBundle resources;
-
-    @FXML
-    private URL location;
-
-    @FXML
     private DatePicker datePicker;
 
     private MainGUI mainGUI;
-
 
     @FXML
     private Label lblErrorMessage;
 
     @FXML
     private Label lblErrorMinBet;
-
 
     @FXML
     private Button btnCreateRide;
@@ -123,6 +111,30 @@ public class CreateRideController implements Controller {
         lblErrorMessage.setText(message);
     }
 
+    boolean addC(String c){
+
+        String from = txtDepartCity.getText();
+        String to = txtArrivalCity.getText();
+        boolean a, b = false;
+        a = false;
+
+        List<String> deptCities = businessLogic.getDepartCities();
+        List<String> destCities = businessLogic.getDestinationCities(from);
+
+        if(!deptCities.contains(from) ){
+            businessLogic.addCitie(from);
+            a = true;
+        }
+
+        if(!destCities.contains(to)){
+            businessLogic.addCitie(to);
+            b = true;
+        }
+
+        return (a && b);
+
+    }
+
     @FXML
     void createRideClick(ActionEvent e) {
 
@@ -134,27 +146,15 @@ public class CreateRideController implements Controller {
         int numPlaces = Integer.parseInt(txtNumberOfSeats.getText());
         float price = Float.parseFloat(txtPrice.getText());
 
-
-
         //Ride ride = new Ride(from, to, Dates.convertToDate(date), numPlaces, price);
 
-        User user = businessLogic.getDriver(businessLogic.getCurrentUser());
+        User user = businessLogic.getCurrentUser();
 
-        //businessLogic.createRide(from, to, Dates.convertToDate(date), numPlaces, price, user.getEmail());
         businessLogic.createRideClick(from, to, Dates.convertToDate(date), numPlaces, price, user.getEmail()  );
         displayMessage(ResourceBundle.getBundle("Etiquetas").getString("CreateRideGUI.RideCreated"), "success");
 
         List<String> deptCities = businessLogic.getDepartCities();
         List<String> destCities = businessLogic.getDestinationCities(from);
-
-        if(!deptCities.contains(from)){
-            businessLogic.addCitie(from);
-        }
-
-        if(!destCities.contains(to)){
-            businessLogic.addCitie(to);
-        }
-
 
 
 //

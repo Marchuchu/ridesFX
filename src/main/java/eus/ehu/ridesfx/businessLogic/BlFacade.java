@@ -55,6 +55,8 @@ public interface BlFacade {
 
     public User getCurrentUser();
 
+    public boolean containsUser(User u);
+
 
     void setCurrentUser(User user);
 

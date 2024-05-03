@@ -69,15 +69,15 @@ public class SignUpController implements Controller {
         //businessLogic.addUser(user);
 
         if (name.getText() == null || email.getText() == null || password.getText() == null || repPas.getText() == null || role.getValue() == null) {
-            return;
+            hasLogin.setText("Please fill all the fields");
         } else {
 
-            User user = new User(email.getText(), name.getText(), password.getText());
+            User user = new User(email.getText(), name.getText(),password.getText());
 
             if (role.getValue().equals("Driver")) {
-                user = new Driver(name.getText(), email.getText(), password.getText());
-            } else if (role.getValue().equals("Traveller")) {
-                user = new Traveler(name.getText(), email.getText(), password.getText(), repPas.getText());
+                user = new Driver(email.getText(), name.getText(), password.getText(), repPas.getText());
+            } else if (role.getValue().equals("Traveler")) {
+                user = new Traveler(email.getText(),name.getText(), password.getText(), repPas.getText());
             }
 
             if (password.getText().equals(repPas.getText())) {
@@ -85,6 +85,9 @@ public class SignUpController implements Controller {
                 if (businessLogic.signUp(name.getText(), email.getText(), password.getText(), repPas.getText(), r)) {
 
                     if (mainGUI != null) {
+
+                        mainGUI.mGUIC.setRolName(user.getName());
+                        businessLogic.setCurrentUser(user);
 
                         if (user.getClass().equals(Traveler.class)) {
                             mainGUI.showScene("Query Rides");
@@ -97,26 +100,21 @@ public class SignUpController implements Controller {
                             mainGUI.mGUIC.getCreateRidesBtn().setVisible(true);
                         }
 
-                        mainGUI.mGUIC.setRolName(user.getName());
                     }
 
 
                 } else {
 
-                    hasLogin.setText("Incorrect format of mail");
+                    hasLogin.setText("User already exists");
 
                 }
-
-                //businessLogic.signUp(name.getText(), email.getText(), password.getText(), repPas.getText(), r);
-                //hasLogin.setText("Sign up successful");
-
 
             } else {
                 hasLogin.setText("Passwords doesn't match");
             }
+
+
         }
-
-
     }
 
     @FXML
@@ -126,7 +124,7 @@ public class SignUpController implements Controller {
             r = newValue;
         });
 
-        role.setItems(FXCollections.observableArrayList("Driver", "Traveller"));
+        role.setItems(FXCollections.observableArrayList("Driver", "Traveler"));
 
 
     }
