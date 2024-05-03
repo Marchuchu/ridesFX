@@ -5,6 +5,9 @@ import java.net.URL;
 import java.util.ResourceBundle;
 
 import eus.ehu.ridesfx.businessLogic.BlFacade;
+import eus.ehu.ridesfx.domain.Driver;
+import eus.ehu.ridesfx.domain.Traveler;
+import eus.ehu.ridesfx.domain.User;
 import eus.ehu.ridesfx.exceptions.UnknownUser;
 import eus.ehu.ridesfx.ui.MainGUI;
 import javafx.collections.FXCollections;
@@ -45,59 +48,76 @@ public class SignUpController implements Controller {
 
     private MainGUI.Window queryRideWin;
 
-    @Override
-    public void setMainApp(MainGUI mainGUI) {
-        this.mainGUI = mainGUI;
-    }
-
-
-    public class Window {
-        private Controller controller;
-        private Parent ui;
-    }
-
-
     public SignUpController(BlFacade bl) {
         this.businessLogic = bl;
     }
+
 
     public SignUpController(BlFacade bl, MainGUI mainGUI) {
         this.businessLogic = bl;
         this.mainGUI = mainGUI;
     }
 
+    @Override
+    public void setMainApp(MainGUI mainGUI) {
+        this.mainGUI = mainGUI;
+    }
+
     @FXML
     void onClickSignUp(ActionEvent event) throws IOException {
+
+        //businessLogic.addUser(user);
+
         if (name.getText() == null || email.getText() == null || password.getText() == null || repPas.getText() == null || role.getValue() == null) {
             return;
         } else {
+
+            User user = new User(email.getText(), name.getText(), password.getText());
+
+            if (role.getValue().equals("Driver")) {
+                user = new Driver(name.getText(), email.getText(), password.getText());
+            } else if (role.getValue().equals("Traveller")) {
+                user = new Traveler(name.getText(), email.getText(), password.getText(), repPas.getText());
+            }
+
             if (password.getText().equals(repPas.getText())) {
-                businessLogic.signUp(name.getText(), email.getText(), password.getText(), repPas.getText(), r);
-                hasLogin.setText("Sign up successful");
-                if (mainGUI != null) {
-                    mainGUI.showScene("Query Rides");
+
+                if (businessLogic.signUp(name.getText(), email.getText(), password.getText(), repPas.getText(), r)) {
+
+                    if (mainGUI != null) {
+
+                        if (user.getClass().equals(Traveler.class)) {
+                            mainGUI.showScene("Query Rides");
+                            mainGUI.mGUIC.getCreateRidesBtn().setVisible(false);
+                            mainGUI.mGUIC.getQueryRidesBtn().setVisible(true);
+
+                        } else {
+                            mainGUI.showScene("Create Ride");
+                            mainGUI.mGUIC.getQueryRidesBtn().setVisible(false);
+                            mainGUI.mGUIC.getCreateRidesBtn().setVisible(true);
+                        }
+
+                        mainGUI.mGUIC.setRolName(user.getName());
+                    }
+
+
+                } else {
+
+                    hasLogin.setText("Incorrect format of mail");
+
                 }
+
+                //businessLogic.signUp(name.getText(), email.getText(), password.getText(), repPas.getText(), r);
+                //hasLogin.setText("Sign up successful");
+
+
             } else {
-                hasLogin.setText("Passwords do not match");
+                hasLogin.setText("Passwords doesn't match");
             }
         }
-    }
 
-//    void onClickSignUp(ActionEvent event) {
-//
-//        if(name.getText() == null || email.getText() == null || password.getText() == null || repPas.getText() == null || role.getValue() == null) {
-//            return;
-//        } else {
-//            if (password.getText().equals(repPas.getText())) {
-//                businessLogic.signUp(name.getText(), email.getText(), password.getText(), repPas.getText(), r);
-//                hasLogin.setText("Sign up successful");
-//                //mGUIC.showScene("Query Rides");
-//            } else {
-//                hasLogin.setText("Passwords do not match");
-//            }
-//        }
-//
-//    }
+
+    }
 
     @FXML
     void initialize() throws IOException {
@@ -108,6 +128,12 @@ public class SignUpController implements Controller {
 
         role.setItems(FXCollections.observableArrayList("Driver", "Traveller"));
 
+
+    }
+
+    public class Window {
+        private Controller controller;
+        private Parent ui;
     }
 
 }

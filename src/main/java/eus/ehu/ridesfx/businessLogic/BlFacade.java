@@ -3,11 +3,13 @@ package eus.ehu.ridesfx.businessLogic;
 import eus.ehu.ridesfx.domain.Driver;
 import eus.ehu.ridesfx.domain.Ride;
 import eus.ehu.ridesfx.domain.Traveler;
+import eus.ehu.ridesfx.domain.User;
 import eus.ehu.ridesfx.exceptions.RideAlreadyExistException;
 import eus.ehu.ridesfx.exceptions.RideMustBeLaterThanTodayException;
 import eus.ehu.ridesfx.exceptions.UnknownUser;
 import javafx.scene.control.TableColumn;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Vector;
@@ -37,6 +39,7 @@ public interface BlFacade {
      */
     public List<Date> getThisMonthDatesWithRides(String from, String to, Date date);
 
+    public void addUser(User user);
 
     /**
      * This method retrieves from the database the dates in a month for which there are events
@@ -46,9 +49,14 @@ public interface BlFacade {
      */
     public Vector<Date> getEventsMonth(Date date);
 
-    Driver getCurrentDriver();
+    //ArrayList<User> getCurrentUser();
 
-    Traveler getCurrentTraveler();
+    //ArrayList<User> getCurrentUser(User u);
+
+    public User getCurrentUser();
+
+
+    void setCurrentUser(User user);
 
     void setCurrentDriver(Driver driver);
 
@@ -81,5 +89,9 @@ public interface BlFacade {
 
     void cancelAlert(TableColumn<String, Integer> alertID);
 
+    void createRideClick(String from, String to, Date date, int nPlaces, float price, String driverEmail);
 
+    User getDriver(User u);
+
+    void addCitie(String from);
 }

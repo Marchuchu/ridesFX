@@ -3,6 +3,9 @@ package eus.ehu.ridesfx.uicontrollers;
 import eus.ehu.ridesfx.businessLogic.BlFacade;
 import eus.ehu.ridesfx.domain.Driver;
 import eus.ehu.ridesfx.domain.Ride;
+import eus.ehu.ridesfx.domain.Traveler;
+import eus.ehu.ridesfx.domain.User;
+import javafx.animation.PauseTransition;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
@@ -20,12 +23,14 @@ import javafx.scene.layout.AnchorPane;
 import javafx.util.Callback;
 import eus.ehu.ridesfx.ui.MainGUI;
 import eus.ehu.ridesfx.utils.Dates;
+import javafx.util.Duration;
 
 import java.io.IOException;
 import java.net.URL;
 import java.time.LocalDate;
 import java.time.YearMonth;
 import java.util.*;
+
 
 public class QueryRidesController implements Controller {
 
@@ -69,12 +74,8 @@ public class QueryRidesController implements Controller {
 
     @FXML
     private Label reservationMessage;
-
-
     private MainGUI mainGUI;
-
     private List<LocalDate> datesWithBooking = new ArrayList<>();
-
     private BlFacade businessLogic;
 
     public QueryRidesController(BlFacade bl) {
@@ -86,8 +87,31 @@ public class QueryRidesController implements Controller {
         this.mainGUI = mGUI;
     }
 
+    @Override
+    public void setMainApp(MainGUI mainGUI) {
+        this.mainGUI = mainGUI;
+    }
+
+    public ComboBox<String> getComboArrivalCity() {
+        return comboArrivalCity;
+    }
+
+    public ComboBox<String> getComboDepartCity() {
+        return comboDepartCity;
+    }
 
 
+    public void addArrivalCity(String c){
+
+        comboArrivalCity.getItems().add(c);
+
+    }
+
+    public void addDepartCity(String c){
+
+        comboDepartCity.getItems().add(c);
+
+    }
 
     private void setEvents(int year, int month) {
         Date date = Dates.toDate(year, month);
@@ -147,26 +171,12 @@ public class QueryRidesController implements Controller {
     public void onClickCreateAlert(ActionEvent event) {
 
 
-
     }
 
-    @FXML
 
-    public void onClickBook(ActionEvent event) {
-        Ride ride = tblRides.getSelectionModel().getSelectedItem();
-        if (ride != null) {
-
-            reservationMessage.setText("Reserva hecha con éxito");
-
-
-        } else {
-
-            reservationMessage.setText("Seleccione un viaje para reservar");
-
-        }
-    }
     @FXML
     void initialize() {
+
 
         // Update DatePicker cells when ComboBox value changes
         comboArrivalCity.valueProperty().addListener((obs, oldVal, newVal) -> updateDatePickerCellFactory(datepicker));
@@ -233,10 +243,45 @@ public class QueryRidesController implements Controller {
 
     }
 
+    @FXML
+
+    public void onClickBook(ActionEvent event) {
+
+        Ride ride = tblRides.getSelectionModel().getSelectedItem();
+        User user = mainGUI.getBusinessLogic().getCurrentUser();
+
+        if (user.getClass().equals(Traveler.class)) {
+
+            if (ride != null) {
+
+                reservationMessage.setText("Booking succesful!");
+
+                PauseTransition pause = new PauseTransition(Duration.seconds(1));
+                pause.setOnFinished(e -> {
+                    reservationMessage.setText("");
+                });
+                pause.play();
+
+                //decrementar el nrSeats del viaje seleccionado
+                ride.setNumPlaces(ride.getNumPlaces() - 1);
+
+            } else {
+
+                reservationMessage.setText("Please select a ride to book");
+
+            }
+
+        } else if(user.getClass().equals(Driver.class)){
+
+            reservationMessage.setText("You need to be a traveler to book a ride");
+
+        } else{
+
+            reservationMessage.setText("Please log in or sign up to book a ride");
 
 
-    @Override
-    public void setMainApp(MainGUI mainGUI) {
-        this.mainGUI = mainGUI;
+        }
+
+
     }
 }

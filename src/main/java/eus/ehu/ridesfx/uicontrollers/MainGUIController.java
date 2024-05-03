@@ -1,6 +1,10 @@
 package eus.ehu.ridesfx.uicontrollers;
 
 import eus.ehu.ridesfx.businessLogic.BlFacade;
+import eus.ehu.ridesfx.domain.Driver;
+import eus.ehu.ridesfx.domain.Traveler;
+import eus.ehu.ridesfx.domain.User;
+import eus.ehu.ridesfx.exceptions.UnknownUser;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.Parent;
@@ -33,14 +37,27 @@ public class MainGUIController implements Controller {
     private Button signUpButton;
 
     @FXML
+    private Button logOutButtn;
+
+    @FXML
+    private Button createRidesBtn;
+
+    @FXML
+    private Button queryRidesBtn;
+
+    @FXML
+    private Button logInButton;
+
+    @FXML
     private Text userNames;
 
-      private BlFacade businessLogic;
+    private BlFacade businessLogic;
 
     @FXML
     private BorderPane mainWrapper;
 
     private MainGUI mGUI;
+
 
     public MainGUIController() {
     }
@@ -53,35 +70,109 @@ public class MainGUIController implements Controller {
         return businessLogic;
     }
 
-    void showName(String role) {
+//    void showName(String role) {
+//
+//        if (businessLogic.getCurrentUser().getClass().equals(Driver.class) || businessLogic.getCurrentUser().getClass().equals(Traveler.class)) {
+//            rolName.setText(businessLogic.getCurrentUser().getName());
+//        } else {
+//            rolName.setText("Anonymous");
+//        }
+//
+//    }
 
-        if (role.equals("Driver")) {
-            rolName.setText(businessLogic.getCurrentDriver().getName());
-        } else if (role.equals("Traveler")) {
-            rolName.setText(businessLogic.getCurrentTraveler().getName());
-        } else {
-
-            rolName.setText("Anonymous");
-
-        }
-
+    public Label getRolName() {
+        return rolName;
     }
+
+    public void setRolName(String name) {
+        this.rolName.setText(name);
+    }
+
+    public Button getSignUpButton() {
+        return signUpButton;
+    }
+
+    public Button getLogOutButtn() {
+        return logOutButtn;
+    }
+
+    public Button getCreateRidesBtn() {
+        return createRidesBtn;
+    }
+
+    public Button getQueryRidesBtn() {
+        return queryRidesBtn;
+    }
+
+    public Button getLogInButton() {
+        return logInButton;
+    }
+
 
     public BorderPane getMainWrapper() {
         return mainWrapper;
     }
 
+
+    @FXML
+    void onClickLogOut(ActionEvent event) throws IOException {
+
+        mGUI.showScene("Log Out");
+        signUpButton.setVisible(true);
+        logInButton.setVisible(true);
+        queryRidesBtn.setVisible(true);
+        logOutButtn.setVisible(false);
+        createRidesBtn.setVisible(false);
+
+        businessLogic.setCurrentUser(new User());
+        rolName.setText("Guest");
+
+
+    }
+
     @FXML
     void onClickSignUp(ActionEvent event) throws IOException {
         mGUI.showScene("Sign Up");
-        showName(rolName.getText());
+
+        signUpButton.setVisible(false);
+        logInButton.setVisible(false);
+        queryRidesBtn.setVisible(true);
+        logOutButtn.setVisible(true);
+
+        if (businessLogic.getCurrentUser().getClass().equals(Traveler.class) || businessLogic.getCurrentUser().getClass().equals(Driver.class)) {
+
+            rolName.setText(businessLogic.getCurrentUser().getName());
+
+        } else {
+
+            rolName.setText("Guest");
+
+        }
+
+
     }
 
 
     @FXML
     void onClickLogIn(ActionEvent event) throws IOException {
+
         mGUI.showScene("Log In");
-        showName(rolName.getText());
+
+        createRidesBtn.setVisible(false);
+        logInButton.setVisible(false);
+        signUpButton.setVisible(false);
+        logOutButtn.setVisible(true);
+
+        if (businessLogic.getCurrentUser().getClass().equals(Traveler.class) || businessLogic.getCurrentUser().getClass().equals(Driver.class)) {
+
+            rolName.setText(businessLogic.getCurrentUser().getName());
+
+        } else {
+
+            rolName.setText("Guest");
+
+        }
+
 
     }
 
@@ -89,16 +180,29 @@ public class MainGUIController implements Controller {
     void queryRides(ActionEvent event) throws IOException {
 
         mGUI.showScene("Query Rides");
+        logOutButtn.setVisible(false);
+        createRidesBtn.setVisible(false);
     }
 
     @FXML
     void createRide(ActionEvent event) throws IOException {
 
         mGUI.showScene("Create Ride");
+        queryRidesBtn.setVisible(false);
+        logOutButtn.setVisible(true);
+        logInButton.setVisible(false);
+        signUpButton.setVisible(false);
+
     }
 
     @FXML
     public void initialize() throws IOException {
+
+        createRidesBtn.setVisible(false);
+        logOutButtn.setVisible(false);
+        businessLogic.setCurrentUser(new User());
+        rolName.setText("Guest");
+
 
     }
 

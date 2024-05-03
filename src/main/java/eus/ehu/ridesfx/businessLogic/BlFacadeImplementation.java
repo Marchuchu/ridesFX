@@ -8,6 +8,7 @@ import eus.ehu.ridesfx.exceptions.RideMustBeLaterThanTodayException;
 import eus.ehu.ridesfx.exceptions.UnknownUser;
 import javafx.scene.control.TableColumn;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Vector;
@@ -20,9 +21,7 @@ public class BlFacadeImplementation implements BlFacade {
 
     DataAccess dbManager;
     Config config = Config.getInstance();
-    private Driver currentDriver;
-    private Traveler currentTraveler;
-    private User currentUser;
+    User currentUser;
 
     public BlFacadeImplementation() {
         System.out.println("Creating BlFacadeImplementation instance");
@@ -68,18 +67,32 @@ public class BlFacadeImplementation implements BlFacade {
     }
 
     @Override
-    public Driver getCurrentDriver() {
-        return this.currentDriver;
+    public User getCurrentUser() {
+        return this.currentUser;
     }
 
+
+
     @Override
-    public Traveler getCurrentTraveler() {
-        return this.currentTraveler;
+    public void setCurrentUser(User user) {
+        this.currentUser = user;
     }
 
     @Override
     public void setCurrentDriver(Driver driver) {
-        this.currentDriver = driver;
+        this.currentUser = driver;
+    }
+
+    public void addCitie(String c){
+        List<String> departLocations = dbManager.getDepartCities();
+        departLocations.add(c);
+        dbManager.addCitie(c);
+
+
+    }
+
+    public void addUser(User u){
+        dbManager.addUser(u);
     }
 
     public List<String> getDepartCities() {
@@ -122,6 +135,18 @@ public class BlFacadeImplementation implements BlFacade {
 
         }
 
+
+    }
+
+    @Override
+    public void createRideClick(String from, String to, Date date, int nPlaces, float price, String driverEmail) {
+        dbManager.createRideClick(from, to, date, nPlaces, price, driverEmail);
+    }
+
+    @Override
+    public User getDriver(User u){
+
+        return dbManager.getD(u);
 
     }
 

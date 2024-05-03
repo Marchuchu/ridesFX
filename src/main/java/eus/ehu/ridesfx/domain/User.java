@@ -8,7 +8,7 @@ import jakarta.persistence.*;
 @DiscriminatorColumn(name = "USER_TYPE", discriminatorType = DiscriminatorType.STRING)
 
 
-public abstract class User {
+public class User {
     
     @Id
     String email;

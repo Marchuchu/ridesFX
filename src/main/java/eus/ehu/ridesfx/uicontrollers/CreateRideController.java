@@ -3,6 +3,7 @@ package eus.ehu.ridesfx.uicontrollers;
 import eus.ehu.ridesfx.businessLogic.BlFacade;
 import eus.ehu.ridesfx.domain.Driver;
 import eus.ehu.ridesfx.domain.Ride;
+import eus.ehu.ridesfx.domain.User;
 import eus.ehu.ridesfx.exceptions.RideAlreadyExistException;
 import eus.ehu.ridesfx.exceptions.RideMustBeLaterThanTodayException;
 import eus.ehu.ridesfx.ui.MainGUI;
@@ -127,29 +128,61 @@ public class CreateRideController implements Controller {
 
         clearErrorLabels();
 
-        //  Event event = comboEvents.getSelectionModel().getSelectedItem();
-        String errors = field_Errors();
-
-        if (errors != null) {
-            // businessLogic.createQuestion(event, inputQuestion, inputPrice);
-            displayMessage(errors, "danger");
-
-        } else {
-            try {
-
-                int inputSeats = Integer.parseInt(txtNumberOfSeats.getText());
-                float price = Float.parseFloat(txtPrice.getText());
-                Driver driver = businessLogic.getCurrentDriver();
-                Ride r = businessLogic.createRide(txtDepartCity.getText(), txtArrivalCity.getText(), Dates.convertToDate(datePicker.getValue()), inputSeats, price, driver.getEmail());
-                displayMessage(ResourceBundle.getBundle("Etiquetas").getString("CreateRideGUI.RideCreated"), "success");
+        String from = txtDepartCity.getText();
+        String to = txtArrivalCity.getText();
+        LocalDate date = datePicker.getValue();
+        int numPlaces = Integer.parseInt(txtNumberOfSeats.getText());
+        float price = Float.parseFloat(txtPrice.getText());
 
 
-            } catch (RideMustBeLaterThanTodayException e1) {
-                displayMessage(e1.getMessage(), "danger");
-            } catch (RideAlreadyExistException e1) {
-                displayMessage(e1.getMessage(), "danger");
-            }
+
+        //Ride ride = new Ride(from, to, Dates.convertToDate(date), numPlaces, price);
+
+        User user = businessLogic.getDriver(businessLogic.getCurrentUser());
+
+        //businessLogic.createRide(from, to, Dates.convertToDate(date), numPlaces, price, user.getEmail());
+        businessLogic.createRideClick(from, to, Dates.convertToDate(date), numPlaces, price, user.getEmail()  );
+        displayMessage(ResourceBundle.getBundle("Etiquetas").getString("CreateRideGUI.RideCreated"), "success");
+
+        List<String> deptCities = businessLogic.getDepartCities();
+        List<String> destCities = businessLogic.getDestinationCities(from);
+
+        if(!deptCities.contains(from)){
+            businessLogic.addCitie(from);
         }
+
+        if(!destCities.contains(to)){
+            businessLogic.addCitie(to);
+        }
+
+
+
+//
+//        clearErrorLabels();
+//
+//        //  Event event = comboEvents.getSelectionModel().getSelectedItem();
+//        String errors = field_Errors();
+//
+//        if (errors != null) {
+//            // businessLogic.createQuestion(event, inputQuestion, inputPrice);
+//            displayMessage(errors, "danger");
+//
+//        } else {
+//            try {
+//
+//                int inputSeats = Integer.parseInt(txtNumberOfSeats.getText());
+//                float price = Float.parseFloat(txtPrice.getText());
+//                User user = businessLogic.getCurrentUser();
+//                Ride r = businessLogic.createRide(txtDepartCity.getText(), txtArrivalCity.getText(), Dates.convertToDate(datePicker.getValue()), inputSeats, price, user.getEmail());
+//                displayMessage(ResourceBundle.getBundle("Etiquetas").getString("CreateRideGUI.RideCreated"), "success");
+//
+//
+//            } catch (RideMustBeLaterThanTodayException e1) {
+//                displayMessage(e1.getMessage(), "danger");
+//            } catch (RideAlreadyExistException e1) {
+//                displayMessage(e1.getMessage(), "danger");
+//            }
+//        }
 
 /*
     if (lblErrorMinBet.getText().length() > 0 && showErrors) {

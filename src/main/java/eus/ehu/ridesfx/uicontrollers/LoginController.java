@@ -5,6 +5,7 @@ import java.net.URL;
 import java.util.ResourceBundle;
 
 import eus.ehu.ridesfx.businessLogic.BlFacade;
+import eus.ehu.ridesfx.domain.Traveler;
 import eus.ehu.ridesfx.exceptions.UnknownUser;
 import eus.ehu.ridesfx.ui.MainGUI;
 import javafx.event.ActionEvent;
@@ -46,47 +47,49 @@ public class LoginController implements Controller {
     @FXML
     void onClickLogIn(ActionEvent event) throws UnknownUser, IOException {
 
-        if (logInButt.getText() == null
-                || password.getText() == null) {
+        if (logInButt.getText() == null || password.getText() == null) {
             return;
         } else {
+
+            try {
 
                 if ((businessLogic.logIn(email.getText(), password.getText()))) {
 
                     hasLogin.setText("Login successful");
-
-                    //mGUI = new MainGUI(businessLogic);
                     mGUI.showScene("Query Rides");
+                    mGUI.mGUIC.setRolName(businessLogic.getCurrentUser().getName());
 
-                } else {
+                    if (businessLogic.getCurrentUser().getClass().equals(Traveler.class)) {
 
-                    hasLogin.setText("Incorrect credentials");
+                        mGUI.mGUIC.getCreateRidesBtn().setVisible(false);
+                        mGUI.mGUIC.getQueryRidesBtn().setVisible(true);
+                        mGUI.showScene("Query Rides");
+
+
+                    } else {
+
+                        mGUI.mGUIC.getQueryRidesBtn().setVisible(false);
+                        mGUI.mGUIC.getCreateRidesBtn().setVisible(true);
+                        mGUI.showScene("Create Ride");
+
+                    }
 
                 }
 
+
+            } catch (UnknownUser unknownUser) {
+                System.out.println("Unknown user");
+                hasLogin.setText("Incorrect credentials");
+            }
+
         }
 
-        try {
-            businessLogic.logIn(logInButt.getText(), password.getText());
-
-        } catch (UnknownUser unknownUser) {
-            System.out.println("Unknown user");
-        }
 
     }
 
-//     private void showScene(String scene) {
-//        switch (scene) {
-//            case "Query Rides" -> mGUI.showScene("Query Rides");
-//            case "Create Ride" -> mGUI.showScene("Create Ride");
-//            case "Log In" -> mGUI.showScene("Log In");
-//            case "Sign Up" -> mGUI.showScene("Sign Up");
-//
-//        }
-//    }
 
     @FXML
-    void initialize()  {
+    void initialize() {
 
     }
 

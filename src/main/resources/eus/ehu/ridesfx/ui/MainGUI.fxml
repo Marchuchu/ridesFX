@@ -21,15 +21,16 @@
                </padding>
             </Label>
             <Button fx:id="queryRidesBtn" lineSpacing="5.0" mnemonicParsing="false" onAction="#queryRides" prefHeight="26.0" prefWidth="181.0" text="%QueryRides" textAlignment="CENTER" wrapText="true">
-               <VBox.margin>
-                  <Insets />
-               </VBox.margin>
+<!--               <VBox.margin>-->
+<!--                  <Insets />-->
+<!--               </VBox.margin>-->
             </Button>
             <Button fx:id="createRidesBtn" mnemonicParsing="false" onAction="#createRide" prefHeight="26.0" prefWidth="181.0" text="%CreateRide" />
             <Button fx:id="logInButton" mnemonicParsing="false" onAction="#onClickLogIn" prefHeight="26.0" prefWidth="181.0" text="%LogIn" />
             <Button fx:id="signUpButton" mnemonicParsing="false" onAction="#onClickSignUp" prefHeight="26.0" prefWidth="181.0" text="%SignUp" />
+            <Button fx:id="logOutButtn" mnemonicParsing="false" onAction="#onClickLogOut" prefHeight="26.0" prefWidth="181.0" text="%LogOut" />
             <Text fx:id="userNames" strokeType="OUTSIDE" strokeWidth="0.0" text="Name:" />
-            <Label fx:id="rolName" prefHeight="17.0" prefWidth="66.0" text="Anonymous" />
+            <Label fx:id="rolName" prefHeight="17.0" prefWidth="66.0" />
             <AnchorPane prefHeight="316.0" prefWidth="485.0" />
          </children>
       </VBox>

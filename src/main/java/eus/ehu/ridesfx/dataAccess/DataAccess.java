@@ -116,13 +116,13 @@ public class DataAccess {
 
 
             //Create drivers
-            Driver driver1 = new Driver("driver1@gmail.com", "Aitor Fernandez", "12345","12345");
-            Driver driver2 = new Driver("driver2@gmail.com", "Ane Gaztañaga", "54321","54321");
-            Driver driver3 = new Driver("driver3@gmail.com", "Test driver", "12345","12345");
+            Driver driver1 = new Driver("driver1@gmail.com", "Aitor Fernandez", "12345", "12345");
+            Driver driver2 = new Driver("driver2@gmail.com", "Ane Gaztañaga", "54321", "54321");
+            Driver driver3 = new Driver("driver3@gmail.com", "Test driver", "12345", "12345");
 
             //Create travelers
             Traveler traveler1 = new Traveler("traveler1@gmail.com", "Jose Antonio", "amorch1", "amorch");
-            Traveler traveler2 = new Traveler("traveler2@gmail.com", "Lius Fernando", "54321","54321");
+            Traveler traveler2 = new Traveler("traveler2@gmail.com", "Lius Fernando", "54321", "54321");
 
 
             //Create rides
@@ -184,6 +184,19 @@ public class DataAccess {
     }
 
 
+    public ArrayList<User> getCurrentUser() {
+
+        ArrayList<User> users = new ArrayList<User>();
+
+        TypedQuery<User> query = db.createQuery("SELECT u FROM User u", User.class);
+        users.addAll(query.getResultList());
+
+
+        return users;
+
+    }
+
+
     public Ride createRide(String from, String to, Date date, int nPlaces, float price, String driverEmail) throws RideAlreadyExistException, RideMustBeLaterThanTodayException {
         System.out.println(">> DataAccess: createRide=> from= " + from + " to= " + to + " driver=" + driverEmail + " date " + date);
         try {
@@ -193,9 +206,19 @@ public class DataAccess {
             db.getTransaction().begin();
 
             Driver driver = db.find(Driver.class, driverEmail);
+
             if (driver.doesRideExists(from, to, date)) {
                 db.getTransaction().commit();
                 throw new RideAlreadyExistException(ResourceBundle.getBundle("Etiquetas").getString("DataAccess.RideAlreadyExist"));
+            } else {
+
+                //create new ride
+
+                Ride ride = driver.addRide(from, to, date, nPlaces, price);
+                db.persist(ride);
+                db.getTransaction().commit();
+
+
             }
             Ride ride = driver.addRide(from, to, date, nPlaces, price);
             //next instruction can be obviated
@@ -323,7 +346,6 @@ public class DataAccess {
                     return true;
                 }
             }
-
         } else if (role.equals("Traveler")) {
 
             if (email.contains("@")) {
@@ -337,6 +359,11 @@ public class DataAccess {
                     return true;
 
                 }
+
+            } else {
+
+                System.out.println("Incorrect format of mail");
+                return false;
 
             }
 
@@ -360,6 +387,47 @@ public class DataAccess {
         }
         return driver;
 
+
+    }
+
+    public void createRideClick(String from, String to, Date date, int nPlaces, float price, String driverEmail) {
+        db.getTransaction().begin();
+        Driver driver = db.find(Driver.class, driverEmail);
+        Ride ride = driver.addRide(from, to, date, nPlaces, price);
+        db.persist(ride);
+        db.getTransaction().commit();
+
+
+    }
+
+    public User getD(User u){
+        return db.find(User.class, u.getEmail());
+    }
+
+    public boolean addCitie(String c) {
+
+        if (c != null) {
+
+            List<String> departLocations = getDepartCities();
+            departLocations.add(c);
+            db.getTransaction().begin();
+            db.persist(c);
+            db.getTransaction().commit();
+            return true;
+
+        }
+
+        return false;
+
+
+    }
+
+    public void addUser(User user) {
+
+        db.getTransaction().begin();
+
+        db.persist(user);
+        db.getTransaction().commit();
 
     }
 
