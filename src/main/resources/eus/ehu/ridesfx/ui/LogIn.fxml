@@ -27,7 +27,7 @@
                 <Font size="15.0" />
             </font>
         </Button>
-        <Label fx:id="hasLogin" layoutX="204.0" layoutY="315.0" prefHeight="31.0" prefWidth="192.0" />
+        <Label fx:id="hasLogin" layoutX="240.0" layoutY="222.0" prefHeight="25.0" prefWidth="149.0" textAlignment="CENTER" />
         <Label layoutX="179.0" layoutY="55.0" text="CARPOOLING">
             <font>
                 <Font name="Wingdings 2" size="40.0" />

@@ -13,9 +13,7 @@ import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.event.Event;
 import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
-import javafx.scene.Parent;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.control.skin.DatePickerSkin;
@@ -25,10 +23,10 @@ import eus.ehu.ridesfx.ui.MainGUI;
 import eus.ehu.ridesfx.utils.Dates;
 import javafx.util.Duration;
 
-import java.io.IOException;
-import java.net.URL;
+import java.time.Instant;
 import java.time.LocalDate;
 import java.time.YearMonth;
+import java.time.format.DateTimeFormatter;
 import java.util.*;
 
 
@@ -58,6 +56,7 @@ public class QueryRidesController implements Controller {
     @FXML
     private ComboBox<String> comboDepartCity;
 
+
     @FXML
     private AnchorPane mainAncor;
 
@@ -71,6 +70,9 @@ public class QueryRidesController implements Controller {
 
     @FXML
     private Button createAlertBut;
+
+    @FXML
+    private Label rideDate;
 
     @FXML
     private Label reservationMessage;
@@ -166,6 +168,12 @@ public class QueryRidesController implements Controller {
 
     }
 
+//    private void updateComboBox(String city){
+//
+//        businessLogic.checkComboBox(city);
+//
+//    }
+
     @FXML
 
     public void onClickCreateAlert(ActionEvent event) {
@@ -177,6 +185,15 @@ public class QueryRidesController implements Controller {
     @FXML
     void initialize() {
 
+        bookButtn.setStyle("-fx-background-color: #f85774");
+        createAlertBut.setStyle("-fx-background-color: #f85774");
+
+        LocalDate lD = LocalDate.now();
+
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+        String formattedDate = lD.format(formatter);
+
+        rideDate.setText(formattedDate);
 
         // Update DatePicker cells when ComboBox value changes
         comboArrivalCity.valueProperty().addListener((obs, oldVal, newVal) -> updateDatePickerCellFactory(datepicker));
@@ -255,29 +272,37 @@ public class QueryRidesController implements Controller {
             if (ride != null) {
 
                 reservationMessage.setText("Booking succesful!");
+                reservationMessage.setStyle("-fx-text-fill: #188a2e");
 
-                PauseTransition pause = new PauseTransition(Duration.seconds(1));
+                PauseTransition pause = new PauseTransition(Duration.seconds(3));
                 pause.setOnFinished(e -> {
                     reservationMessage.setText("");
                 });
                 pause.play();
 
-                //decrementar el nrSeats del viaje seleccionado
                 ride.setNumPlaces(ride.getNumPlaces() - 1);
 
             } else {
 
                 reservationMessage.setText("Please select a ride to book");
+                reservationMessage.setStyle("-fx-text-fill: #d54242");
+                PauseTransition pause = new PauseTransition(Duration.seconds(5));
+                pause.setOnFinished(e -> {
+                    reservationMessage.setText("");
+                });
+                pause.play();
 
             }
-
-        } else if(user.getClass().equals(Driver.class)){
-
-            reservationMessage.setText("You need to be a traveler to book a ride");
 
         } else{
 
             reservationMessage.setText("Please log in or sign up to book a ride");
+            reservationMessage.setStyle("-fx-text-fill: #d54242");
+            PauseTransition pause = new PauseTransition(Duration.seconds(7));
+            pause.setOnFinished(e -> {
+                reservationMessage.setText("");
+            });
+            pause.play();
 
 
         }

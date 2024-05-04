@@ -183,27 +183,62 @@ public class DataAccess {
         return res;
     }
 
+
+    //metodo que devuelve si user esta en la base de datos o no
+
     public boolean containsUser(User u) {
 
         TypedQuery<User> query = db.createQuery("SELECT u FROM User u WHERE u.email =?1",
                 User.class);
         query.setParameter(1, u.getEmail());
-
-        return !(query.getResultList().isEmpty());
-
-    }
-
-    public ArrayList<User> getCurrentUser() {
-
-        ArrayList<User> users = new ArrayList<User>();
-
-        TypedQuery<User> query = db.createQuery("SELECT u FROM User u", User.class);
-        users.addAll(query.getResultList());
-
-
-        return users;
+        List<User> users = query.getResultList();
+        if (users.size() > 0) {
+            return true;
+        } else {
+            return false;
+        }
 
     }
+
+    public boolean checkComboBox(String city) {
+
+        TypedQuery<String> query = db.createQuery("SELECT DISTINCT r.toLocation FROM Ride r WHERE r.fromLocation=?1 OR r.toLocation=?1 ORDER BY r.toLocation", String.class);
+        query.setParameter(1, city);
+        List<String> cities = query.getResultList();
+
+        return cities.isEmpty();
+    }
+//
+//    public void updateComboBox(String city) {
+//        if (checkComboBox(city)) {
+//            db.getTransaction().begin();
+//            db.persist(city);
+//            db.getTransaction().commit();
+//        }
+//    }
+
+
+//    public boolean containsUser(User u) {
+//
+//        TypedQuery<User> query = db.createQuery("SELECT u FROM User u WHERE u.email =?1",
+//                User.class);
+//        query.setParameter(1, u.getEmail());
+//
+//
+//
+//    }
+
+//    public ArrayList<User> getCurrentUser() {
+//
+//        ArrayList<User> users = new ArrayList<User>();
+//
+//        TypedQuery<User> query = db.createQuery("SELECT u FROM User u", User.class);
+//        users.addAll(query.getResultList());
+//
+//
+//        return users;
+//
+//    }
 
 
     public Ride createRide(String from, String to, Date date, int nPlaces, float price, String driverEmail) throws RideAlreadyExistException, RideMustBeLaterThanTodayException {
@@ -212,6 +247,7 @@ public class DataAccess {
             if (new Date().compareTo(date) > 0) {
                 throw new RideMustBeLaterThanTodayException(ResourceBundle.getBundle("Etiquetas").getString("CreateRideGUI.ErrorRideMustBeLaterThanToday"));
             }
+
             db.getTransaction().begin();
 
             Driver driver = db.find(Driver.class, driverEmail);
@@ -226,6 +262,11 @@ public class DataAccess {
                 Ride ride = driver.addRide(from, to, date, nPlaces, price);
                 db.persist(ride);
                 db.getTransaction().commit();
+
+                ////
+
+                //quiero añadir la nueva cioudad al combo box de la clase QueryRidesController
+
 
 
             }
@@ -343,7 +384,7 @@ public class DataAccess {
 
         User u = new User(email, name, password);
 
-        if(!containsUser(u)){
+        if (!containsUser(u)) {
 
             if (role.equals("Driver")) {
 
@@ -358,11 +399,6 @@ public class DataAccess {
 
                         return true;
                     }
-                } else {
-
-                    System.out.println("Incorrect format of mail");
-                    return false;
-
                 }
             } else if (role.equals("Traveler")) {
 
@@ -378,16 +414,12 @@ public class DataAccess {
 
                     }
 
-                } else {
-
-                    System.out.println("Incorrect format of mail");
-                    return false;
-
                 }
 
             }
 
         }
+
         return false;
 
     }

@@ -11,7 +11,6 @@ import javafx.scene.control.skin.DatePickerSkin;
 import javafx.util.Callback;
 import eus.ehu.ridesfx.utils.Dates;
 
-import java.net.URL;
 import java.time.LocalDate;
 import java.time.YearMonth;
 import java.util.ArrayList;
@@ -143,18 +142,42 @@ public class CreateRideController implements Controller {
         String from = txtDepartCity.getText();
         String to = txtArrivalCity.getText();
         LocalDate date = datePicker.getValue();
-        int numPlaces = Integer.parseInt(txtNumberOfSeats.getText());
-        float price = Float.parseFloat(txtPrice.getText());
 
         //Ride ride = new Ride(from, to, Dates.convertToDate(date), numPlaces, price);
 
-        User user = businessLogic.getCurrentUser();
 
-        businessLogic.createRideClick(from, to, Dates.convertToDate(date), numPlaces, price, user.getEmail()  );
-        displayMessage(ResourceBundle.getBundle("Etiquetas").getString("CreateRideGUI.RideCreated"), "success");
+        if(from != null && to != null && date != null){
 
-        List<String> deptCities = businessLogic.getDepartCities();
-        List<String> destCities = businessLogic.getDestinationCities(from);
+            int numPlaces = Integer.parseInt(txtNumberOfSeats.getText());
+            float price = Float.parseFloat(txtPrice.getText());
+
+            if(numPlaces >= 4){
+
+                lblErrorMessage.setText("The number of seats must be less than 4");
+                lblErrorMessage.setStyle("-fx-text-fill: #d54242");
+
+
+            } else {
+
+                User user = businessLogic.getCurrentUser();
+
+                businessLogic.createRideClick(from, to, Dates.convertToDate(date), numPlaces, price, user.getEmail());
+                displayMessage(ResourceBundle.getBundle("Etiquetas").getString("CreateRideGUI.RideCreated"), "success");
+
+                List<String> deptCities = businessLogic.getDepartCities();
+                List<String> destCities = businessLogic.getDestinationCities(from);
+
+            }
+
+        } else {
+
+            lblErrorMinBet.setText("Please fill all the fields");
+            lblErrorMessage.setStyle("-fx-text-fill: #d54242");
+            lblErrorMinBet.getStyleClass().setAll("lbl", "lbl-danger");
+
+        }
+
+
 
 
 //
@@ -215,10 +238,8 @@ public class CreateRideController implements Controller {
     @FXML
     void initialize() {
 
+        btnCreateRide.setStyle("-fx-background-color: #f85774");
 
-        // btnCreateRide.setDisable(true);
-
-        // only show the text of the event in the combobox (without the id)
 /*
     Callback<ListView<Event>, ListCell<Event>> factory = lv -> new ListCell<>() {
       @Override
@@ -236,7 +257,6 @@ public class CreateRideController implements Controller {
 
 
         // setEventsPrePost(LocalDate.now().getYear(), LocalDate.now().getMonth().getValue());
-
 
         // get a reference to datepicker inner content
         // attach a listener to the  << and >> buttons
@@ -267,7 +287,7 @@ public class CreateRideController implements Controller {
 
                         if (!empty && item != null) {
                             if (holidays.contains(item)) {
-                                this.setStyle("-fx-background-color: pink");
+                                this.setStyle("-fx-background-color: #f85774");
                             }
                         }
                     }

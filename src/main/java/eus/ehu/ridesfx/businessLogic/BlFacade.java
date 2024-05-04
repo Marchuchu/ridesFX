@@ -2,14 +2,12 @@ package eus.ehu.ridesfx.businessLogic;
 
 import eus.ehu.ridesfx.domain.Driver;
 import eus.ehu.ridesfx.domain.Ride;
-import eus.ehu.ridesfx.domain.Traveler;
 import eus.ehu.ridesfx.domain.User;
 import eus.ehu.ridesfx.exceptions.RideAlreadyExistException;
 import eus.ehu.ridesfx.exceptions.RideMustBeLaterThanTodayException;
 import eus.ehu.ridesfx.exceptions.UnknownUser;
 import javafx.scene.control.TableColumn;
 
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Vector;
@@ -96,4 +94,8 @@ public interface BlFacade {
     User getDriver(User u);
 
     void addCitie(String from);
+
+    boolean checkComboBox(String city);
+
+    void updateComboBox(String city);
 }

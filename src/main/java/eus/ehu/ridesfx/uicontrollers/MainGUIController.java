@@ -182,6 +182,9 @@ public class MainGUIController implements Controller {
         mGUI.showScene("Query Rides");
         logOutButtn.setVisible(false);
         createRidesBtn.setVisible(false);
+        logInButton.setVisible(true);
+        signUpButton.setVisible(true);
+
     }
 
     @FXML
@@ -199,7 +202,16 @@ public class MainGUIController implements Controller {
     public void initialize() throws IOException {
 
         createRidesBtn.setVisible(false);
+
         logOutButtn.setVisible(false);
+
+        logOutButtn.setStyle("-fx-background-color: #f85774");
+        logInButton.setStyle("-fx-background-color: #f85774");
+        signUpButton.setStyle("-fx-background-color: #f85774");
+        queryRidesBtn.setStyle("-fx-background-color: #f85774");
+        createRidesBtn.setStyle("-fx-background-color: #f85774");
+
+
         businessLogic.setCurrentUser(new User());
         rolName.setText("Guest");
 

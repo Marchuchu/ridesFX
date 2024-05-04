@@ -10,6 +10,7 @@ import eus.ehu.ridesfx.domain.Traveler;
 import eus.ehu.ridesfx.domain.User;
 import eus.ehu.ridesfx.exceptions.UnknownUser;
 import eus.ehu.ridesfx.ui.MainGUI;
+import javafx.animation.PauseTransition;
 import javafx.collections.FXCollections;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -19,6 +20,7 @@ import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.AnchorPane;
+import javafx.util.Duration;
 
 public class SignUpController implements Controller {
 
@@ -72,12 +74,12 @@ public class SignUpController implements Controller {
             hasLogin.setText("Please fill all the fields");
         } else {
 
-            User user = new User(email.getText(), name.getText(),password.getText());
+            User user = new User(email.getText(), name.getText(), password.getText());
 
             if (role.getValue().equals("Driver")) {
                 user = new Driver(email.getText(), name.getText(), password.getText(), repPas.getText());
             } else if (role.getValue().equals("Traveler")) {
-                user = new Traveler(email.getText(),name.getText(), password.getText(), repPas.getText());
+                user = new Traveler(email.getText(), name.getText(), password.getText(), repPas.getText());
             }
 
             if (password.getText().equals(repPas.getText())) {
@@ -100,19 +102,49 @@ public class SignUpController implements Controller {
                             mainGUI.mGUIC.getCreateRidesBtn().setVisible(true);
                         }
 
+                        name.setText("");
+                        email.setText("");
+                        password.setText("");
+                        repPas.setText("");
+                        role.setValue(null);
+
                     }
 
 
-                } else {
+                } else if (!email.getText().contains("@")) {
 
+                    hasLogin.setText("Introduce a valid email");
+                    hasLogin.setStyle("-fx-text-fill: #d54242");
+
+                    PauseTransition pause = new PauseTransition(Duration.seconds(3));
+                    pause.setOnFinished(e -> {
+                        hasLogin.setText("");
+                    });
+                    pause.play();
+
+                } else {
                     hasLogin.setText("User already exists");
+                    hasLogin.setStyle("-fx-text-fill: #d54242");
+
+                    PauseTransition pause = new PauseTransition(Duration.seconds(3));
+                    pause.setOnFinished(e -> {
+                        hasLogin.setText("");
+                    });
+                    pause.play();
 
                 }
 
             } else {
                 hasLogin.setText("Passwords doesn't match");
-            }
+                hasLogin.setStyle("-fx-text-fill: #d54242");
 
+                PauseTransition pause = new PauseTransition(Duration.seconds(3));
+                pause.setOnFinished(e -> {
+                    hasLogin.setText("");
+                });
+                pause.play();
+
+            }
 
         }
     }
@@ -125,6 +157,8 @@ public class SignUpController implements Controller {
         });
 
         role.setItems(FXCollections.observableArrayList("Driver", "Traveler"));
+
+        signUpButt.setStyle("-fx-background-color: #f85774");
 
 
     }

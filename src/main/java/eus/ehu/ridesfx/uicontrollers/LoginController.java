@@ -8,12 +8,14 @@ import eus.ehu.ridesfx.businessLogic.BlFacade;
 import eus.ehu.ridesfx.domain.Traveler;
 import eus.ehu.ridesfx.exceptions.UnknownUser;
 import eus.ehu.ridesfx.ui.MainGUI;
+import javafx.animation.PauseTransition;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.BorderPane;
+import javafx.util.Duration;
 
 public class LoginController implements Controller {
 
@@ -47,6 +49,7 @@ public class LoginController implements Controller {
     @FXML
     void onClickLogIn(ActionEvent event) throws UnknownUser, IOException {
 
+
         if (logInButt.getText() == null || password.getText() == null) {
             return;
         } else {
@@ -55,7 +58,11 @@ public class LoginController implements Controller {
 
                 if ((businessLogic.logIn(email.getText(), password.getText()))) {
 
-                    hasLogin.setText("Login successful");
+                    //hasLogin.setText("Login successful");
+
+                    email.setText("");
+                    password.setText("");
+
                     mGUI.showScene("Query Rides");
                     mGUI.mGUIC.setRolName(businessLogic.getCurrentUser().getName());
 
@@ -78,8 +85,14 @@ public class LoginController implements Controller {
 
 
             } catch (UnknownUser unknownUser) {
-                System.out.println("Unknown user");
-                hasLogin.setText("Incorrect credentials");
+                hasLogin.setText("Login failed");
+                hasLogin.setStyle("-fx-text-fill: #d54242");
+                PauseTransition pause = new PauseTransition(Duration.seconds(3));
+                pause.setOnFinished(e -> {
+                    hasLogin.setText("");
+                });
+                pause.play();
+
             }
 
         }
@@ -90,6 +103,8 @@ public class LoginController implements Controller {
 
     @FXML
     void initialize() {
+
+        logInButt.setStyle("-fx-background-color: #f85774;");
 
     }
 

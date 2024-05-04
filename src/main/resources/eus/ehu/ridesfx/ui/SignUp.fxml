@@ -22,12 +22,12 @@
             <Font size="20.0" />
          </font>
       </Text>
-      <Button fx:id="signUpButt" layoutX="264.0" layoutY="310.0" mnemonicParsing="false" onAction="#onClickSignUp" text="Sign Up">
+      <Button fx:id="signUpButt" layoutX="277.0" layoutY="310.0" mnemonicParsing="false" onAction="#onClickSignUp" text="Sign Up">
          <font>
             <Font size="15.0" />
          </font>
       </Button>
-      <Label fx:id="hasLogin" layoutX="205.0" layoutY="355.0" prefHeight="31.0" prefWidth="192.0" />
+      <Label fx:id="hasLogin" layoutX="217.0" layoutY="347.0" prefHeight="31.0" prefWidth="192.0" stylesheets="@bootstrapfx.css" />
       <Label layoutX="179.0" layoutY="14.0" text="CARPOOLING">
          <font>
             <Font name="Wingdings 2" size="40.0" />

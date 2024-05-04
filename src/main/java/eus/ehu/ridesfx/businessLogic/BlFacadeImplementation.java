@@ -8,7 +8,6 @@ import eus.ehu.ridesfx.exceptions.RideMustBeLaterThanTodayException;
 import eus.ehu.ridesfx.exceptions.UnknownUser;
 import javafx.scene.control.TableColumn;
 
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Vector;
@@ -133,6 +132,19 @@ public class BlFacadeImplementation implements BlFacade {
             return false;
 
         }
+
+
+    }
+
+    @Override
+    public boolean checkComboBox(String city){
+
+        return dbManager.checkComboBox(city);
+
+    }
+
+    @Override
+    public void updateComboBox(String city) {
 
 
     }
