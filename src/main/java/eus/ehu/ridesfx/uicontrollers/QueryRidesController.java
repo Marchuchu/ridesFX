@@ -1,10 +1,7 @@
 package eus.ehu.ridesfx.uicontrollers;
 
 import eus.ehu.ridesfx.businessLogic.BlFacade;
-import eus.ehu.ridesfx.domain.Driver;
-import eus.ehu.ridesfx.domain.Ride;
-import eus.ehu.ridesfx.domain.Traveler;
-import eus.ehu.ridesfx.domain.User;
+import eus.ehu.ridesfx.domain.*;
 import javafx.animation.PauseTransition;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.value.ObservableValue;
@@ -23,6 +20,7 @@ import eus.ehu.ridesfx.ui.MainGUI;
 import eus.ehu.ridesfx.utils.Dates;
 import javafx.util.Duration;
 
+import java.io.IOException;
 import java.time.Instant;
 import java.time.LocalDate;
 import java.time.YearMonth;
@@ -176,8 +174,13 @@ public class QueryRidesController implements Controller {
 
     @FXML
 
-    public void onClickCreateAlert(ActionEvent event) {
+    public void onClickCreateAlert(ActionEvent event) throws IOException {
 
+        if(businessLogic.getCurrentUser().getClass().equals(Traveler.class)){
+
+            businessLogic.createAlert(comboDepartCity.getValue(), comboArrivalCity.getValue(), Dates.convertToDate(datepicker.getValue()), businessLogic.getCurrentUser().getEmail());
+
+        }
 
     }
 
@@ -266,6 +269,8 @@ public class QueryRidesController implements Controller {
 
         Ride ride = tblRides.getSelectionModel().getSelectedItem();
         User user = mainGUI.getBusinessLogic().getCurrentUser();
+
+        mainGUI.mGUIC.getSeeAlertsBttn().setVisible(true);
 
         if (user.getClass().equals(Traveler.class)) {
 

@@ -1,81 +1,94 @@
 package eus.ehu.ridesfx.uicontrollers;
 
-import eus.ehu.ridesfx.businessLogic.BlFacade;
-import eus.ehu.ridesfx.domain.Ride;
-import eus.ehu.ridesfx.ui.MainGUI;
-import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
-import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
-import javafx.scene.Parent;
-import java.io.IOException;
-import java.time.LocalDate;
-import java.util.Date;
-import java.util.Locale;
-import java.util.ResourceBundle;
 import java.net.URL;
+import java.util.Date;
+import java.util.ResourceBundle;
+
+import eus.ehu.ridesfx.businessLogic.BlFacade;
+import eus.ehu.ridesfx.domain.Driver;
+import eus.ehu.ridesfx.domain.Ride;
+import eus.ehu.ridesfx.domain.Traveler;
+import eus.ehu.ridesfx.domain.User;
+import eus.ehu.ridesfx.ui.MainGUI;
 import javafx.event.ActionEvent;
-import javafx.scene.control.ComboBox;
-import javafx.scene.control.DatePicker;
-import javafx.scene.control.TableColumn;
-import javafx.scene.control.TableView;
-import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.fxml.FXML;
+import javafx.scene.control.*;
+import javafx.scene.layout.AnchorPane;
 
-import static java.lang.Integer.parseInt;
-
-public class AlertTableController implements Controller {
+public class AlertTableController implements Controller{
 
     @FXML
-    private ResourceBundle resources;
+    private TableColumn<Ride, Date> date;
 
     @FXML
-    private URL location;
+    private TableColumn<Ride, String> from;
 
     @FXML
-    private TableColumn<Ride, Integer> alertID;
+    private TableColumn<Ride, String> to;
 
     @FXML
-    private TableColumn<Ride, Ride> alertRide;
+    private TableColumn<Ride, User> user;
 
     @FXML
-    private DatePicker datePicker;
+    private Button cancelAlertBttn;
 
     @FXML
-    private ComboBox<String> destinationComboBox;
+    private AnchorPane mainWrapper;
 
     @FXML
-    private ComboBox<String> originComboBox;
+    private Label message;
+
+    @FXML
+    private Button takeRideBttn;
 
     @FXML
     private TableView<Ride> tblAlerts;
 
-    private ObservableList<Ride> ride;
+    @FXML
+    private TextField price;
+
+    private MainGUI mGUI;
+    private BlFacade businessLogic;
 
     @FXML
     void onClickCancelAlert(ActionEvent event) {
 
-        ride.remove(tblAlerts.getSelectionModel().getSelectedItem());
-        tblAlerts.setItems(ride);
+        Ride r = tblAlerts.getSelectionModel().getSelectedItem();
+
+        if(businessLogic.getCurrentUser().getClass().equals(Traveler.class) && r != null){
+
+            businessLogic.cancelAlert(r);
+
+        } else {
+
+            message.setText("You must select an alert to cancel");
+
+        }
+
+        takeRideBttn.setVisible(false);
+        cancelAlertBttn.setStyle("-fx-background-color: #f85774");
+        message.setText("Choose the alert you want to cancel");
 
     }
 
     @FXML
-    void onClickCreateAlert(ActionEvent event) {
+    void onClickTakeRide(ActionEvent event) {
 
-        alertID.setCellValueFactory(new PropertyValueFactory<>("id"));
-        alertRide.setCellValueFactory(new PropertyValueFactory<>("ride"));
+        Ride r = tblAlerts.getSelectionModel().getSelectedItem();
 
-        int day = datePicker.getValue().getDayOfMonth();
-        int month = datePicker.getValue().getMonthValue();
-        int year = datePicker.getValue().getYear();
+        if(businessLogic.getCurrentUser().getClass().equals(Driver.class) && r != null){
 
-        Date date = new Date(year, month, day);
+            businessLogic.takeRide(r, 1, Integer.parseInt(price.getText()));
 
-        ride = FXCollections.observableArrayList();
-        ride.add(new Ride(parseInt(alertID.getText()), originComboBox.getValue(), destinationComboBox.getValue(), date));
+        } else {
 
-        tblAlerts.setItems(ride);
-        setUpAlertsSelection();
+            message.setText("You must select a ride to take");
+
+        }
+
+        cancelAlertBttn.setVisible(false);
+        takeRideBttn.setStyle("-fx-background-color: #f85774");
+        message.setText("Choose the ride you want to take");
 
     }
 
@@ -85,61 +98,21 @@ public class AlertTableController implements Controller {
             if (newSelection != null) {
                 System.out.println("Selected alert: " + newSelection);
             }
+
         });
 
     }
 
-
-    private BlFacade bl;
-    private MainGUI mainGUI;
-    private Window aTC;
-
-
     @Override
     public void setMainApp(MainGUI mainGUI) {
 
-    }
-
-    private AlertTableController.Window load(String fxml) {
-//
-//        try {
-//
-//            FXMLLoader loader = new FXMLLoader(MainGUI.class.getResource(fxml), ResourceBundle.getBundle("Etiquetas", Locale.getDefault()));
-//            loader.setControllerFactory(controllerClass -> {
-//                try {
-//                    return controllerClass
-//                            .getConstructor(BlFacade.class)
-//                            .newInstance(bl);
-//                } catch (Exception e) {
-//                    throw new RuntimeException(e);
-//                }
-//            });
-//            Parent ui = loader.load();
-//            Controller controller = loader.getController();
-//
-//            AlertTableController.Window window = new AlertTableController.Window();
-//            window.controller = controller;
-//            window.ui = ui;
-//            return window;
-//        } catch (IOException e) {
-//            throw new RuntimeException(e);
-//
-//        }
-
-        return null;
+        this.mGUI = mainGUI;
 
     }
 
     @FXML
     void initialize() {
 
-        aTC = load("alertTable.fxml");
-
-    }
-
-    public class Window {
-        private Controller controller;
-        private Parent ui;
     }
 
 }

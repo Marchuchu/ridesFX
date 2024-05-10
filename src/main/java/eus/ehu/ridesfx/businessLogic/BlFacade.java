@@ -1,12 +1,12 @@
 package eus.ehu.ridesfx.businessLogic;
 
 import eus.ehu.ridesfx.domain.Driver;
+import eus.ehu.ridesfx.domain.MyAlert;
 import eus.ehu.ridesfx.domain.Ride;
 import eus.ehu.ridesfx.domain.User;
 import eus.ehu.ridesfx.exceptions.RideAlreadyExistException;
 import eus.ehu.ridesfx.exceptions.RideMustBeLaterThanTodayException;
 import eus.ehu.ridesfx.exceptions.UnknownUser;
-import javafx.scene.control.TableColumn;
 
 import java.util.Date;
 import java.util.List;
@@ -38,6 +38,8 @@ public interface BlFacade {
     public List<Date> getThisMonthDatesWithRides(String from, String to, Date date);
 
     public void addUser(User user);
+
+    public MyAlert createAlert(String from, String to, Date date, String email);
 
     /**
      * This method retrieves from the database the dates in a month for which there are events
@@ -87,7 +89,10 @@ public interface BlFacade {
 
     public boolean logIn(String username, String password) throws UnknownUser;
 
-    void cancelAlert(TableColumn<String, Integer> alertID);
+    //void cancelAlert(TableColumn<String, Integer> alertID);
+    void cancelAlert(Ride ride);
+
+
 
     void createRideClick(String from, String to, Date date, int nPlaces, float price, String driverEmail);
 
@@ -98,4 +103,7 @@ public interface BlFacade {
     boolean checkComboBox(String city);
 
     void updateComboBox(String city);
+
+    public void takeRide(Ride selectedItem, int nP, float p);
+
 }

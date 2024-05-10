@@ -75,6 +75,8 @@ public class Driver extends User implements Serializable {
         return ride;
     }
 
+
+
     /**
      * This method checks if the ride already exists for that driver
      *

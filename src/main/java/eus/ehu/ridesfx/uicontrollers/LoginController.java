@@ -49,6 +49,7 @@ public class LoginController implements Controller {
     @FXML
     void onClickLogIn(ActionEvent event) throws UnknownUser, IOException {
 
+        mGUI.mGUIC.getSeeAlertsBttn().setVisible(true);
 
         if (logInButt.getText() == null || password.getText() == null) {
             return;

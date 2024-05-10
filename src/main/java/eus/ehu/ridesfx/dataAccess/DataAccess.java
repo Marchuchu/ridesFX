@@ -124,6 +124,10 @@ public class DataAccess {
             Traveler traveler1 = new Traveler("traveler1@gmail.com", "Jose Antonio", "amorch1", "amorch");
             Traveler traveler2 = new Traveler("traveler2@gmail.com", "Lius Fernando", "54321", "54321");
 
+            //Create Alerts
+            MyAlert alert1 = new MyAlert("Donostia", "Bilbo", UtilDate.newDate(year, month, 15), traveler1.getEmail());
+            MyAlert alert2 = new MyAlert("Donostia", "Vitoria", UtilDate.newDate(year, month + 1, 15), traveler2.getEmail());
+
 
             //Create rides
             driver1.addRide("Donostia", "Bilbo", UtilDate.newDate(year, month, 15), 4, 7);
@@ -147,6 +151,9 @@ public class DataAccess {
 
             db.persist(traveler1);
             db.persist(traveler2);
+
+            db.persist(alert1);
+            db.persist(alert2);
 
             db.getTransaction().commit();
             System.out.println("Db initialized");
@@ -240,6 +247,30 @@ public class DataAccess {
 //
 //    }
 
+    public MyAlert addAlert(String from, String to, Date date, String email) {
+
+        if(new Date().compareTo(date) > 0){
+            return null;
+        } else {
+
+            db.getTransaction().begin();
+
+            MyAlert alert = new MyAlert(from, to, date, email);
+
+            if(alert != null){
+
+                Ride r = new Ride(from, to, date);
+
+                db.persist(r);
+                db.getTransaction().commit();
+                return alert;
+            }
+
+        }
+
+        return null;
+
+    }
 
     public Ride createRide(String from, String to, Date date, int nPlaces, float price, String driverEmail) throws RideAlreadyExistException, RideMustBeLaterThanTodayException {
         System.out.println(">> DataAccess: createRide=> from= " + from + " to= " + to + " driver=" + driverEmail + " date " + date);
@@ -482,7 +513,20 @@ public class DataAccess {
 
     }
 
-    public void cancelAlert(TableColumn<String, Integer> alertID) {
+    public void cancelAlert(Ride r) {
+
+        db.getTransaction().begin();
+        db.remove(r);
+        db.getTransaction().commit();
+
+    }
+
+    public void takeRide(Ride r, int nP, float p) {
+
+        db.getTransaction().begin();
+        Driver driver = db.find(Driver.class, r.getDriver().getEmail());
+        driver.addRide(r.getFromLocation(), r.getToLocation(), r.getDate(), nP, p);
+
 
 
     }

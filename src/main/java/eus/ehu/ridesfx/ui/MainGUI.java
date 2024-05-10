@@ -1,10 +1,10 @@
 package eus.ehu.ridesfx.ui;
 
 import eus.ehu.ridesfx.businessLogic.BlFacade;
-import eus.ehu.ridesfx.domain.Ride;
 import eus.ehu.ridesfx.uicontrollers.LoginController;
 import eus.ehu.ridesfx.uicontrollers.MainGUIController;
 import eus.ehu.ridesfx.uicontrollers.SignUpController;
+import eus.ehu.ridesfx.uicontrollers.AlertTableController;
 import eus.ehu.ridesfx.uicontrollers.LogOutController;
 import javafx.application.Platform;
 import javafx.fxml.FXMLLoader;
@@ -24,7 +24,7 @@ public class MainGUI {
 
     private BlFacade businessLogic;
 
-    private Window createRideWin, queryRideWin, loginWin, signUWin, mainWin, logoutWin;
+    private Window createRideWin, queryRideWin, loginWin, signUWin, mainWin, logoutWin, alertWin;
 
     public MainGUIController mGUIC;
 
@@ -93,6 +93,7 @@ public class MainGUI {
             case "Sign Up" -> mGUIC.getMainWrapper().setCenter(signUWin.ui);
             case "Log In" ->    mGUIC.getMainWrapper().setCenter(loginWin.ui);
             case "Log Out" -> mGUIC.getMainWrapper().setCenter(logoutWin.ui);
+            case "See Alerts" -> mGUIC.getMainWrapper().setCenter(alertWin.ui);
 
         }
     }
@@ -108,12 +109,13 @@ public class MainGUI {
         signUWin = load("SignUp.fxml");
         loginWin = load("LogIn.fxml");
         logoutWin = load("LogOut.fxml");
+        alertWin = load("AlertTable.fxml");
 
         Scene scene = new Scene(mainWin.ui);
         stage.setTitle("ShareTrip BorderLayout");
         stage.setScene(scene);
-        stage.setHeight(700);
-        stage.setWidth(1100);
+        stage.setWidth(1000);
+        stage.setHeight(800);
         stage.show();
     }
 }

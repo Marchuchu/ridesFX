@@ -27,20 +27,33 @@
                   <Image url="@/KarKrash.png" />
                </image>
             </ImageView>
-            <Button fx:id="queryRidesBtn" lineSpacing="5.0" mnemonicParsing="false" onAction="#queryRides" prefHeight="26.0" prefWidth="181.0" text="%QueryRides" textAlignment="CENTER" wrapText="true">
-<!--               <VBox.margin>-->
-<!--                  <Insets />-->
-<!--               </VBox.margin>-->
-            </Button>
-            <Button fx:id="createRidesBtn" mnemonicParsing="false" onAction="#createRide" prefHeight="26.0" prefWidth="181.0" text="%CreateRide" />
-            <Button fx:id="logInButton" mnemonicParsing="false" onAction="#onClickLogIn" prefHeight="26.0" prefWidth="181.0" text="%LogIn" />
-            <Button fx:id="signUpButton" mnemonicParsing="false" onAction="#onClickSignUp" prefHeight="26.0" prefWidth="181.0" text="%SignUp" />
-            <Button fx:id="logOutButtn" mnemonicParsing="false" onAction="#onClickLogOut" prefHeight="26.0" prefWidth="181.0" text="%LogOut" />
+            <Button fx:id="logInButton" mnemonicParsing="false" onAction="#onClickLogIn" prefHeight="26.0" prefWidth="181.0" text="%LogIn" textAlignment="CENTER" />
+            <Button fx:id="signUpButton" mnemonicParsing="false" onAction="#onClickSignUp" prefHeight="26.0" prefWidth="181.0" text="%SignUp" textAlignment="CENTER">
+               <VBox.margin>
+                  <Insets />
+               </VBox.margin></Button>
+            <Button fx:id="logOutButtn" mnemonicParsing="false" onAction="#onClickLogOut" prefHeight="26.0" prefWidth="181.0" text="%LogOut" textAlignment="CENTER" />
             <Text fx:id="userNames" strokeType="OUTSIDE" strokeWidth="0.0" text="Name:" />
             <Label fx:id="rolName" prefHeight="17.0" prefWidth="89.0" textAlignment="CENTER" />
             <AnchorPane prefHeight="316.0" prefWidth="485.0" />
          </children>
       </VBox>
    </left>
+   <right>
+      <VBox alignment="CENTER" prefHeight="400.0" prefWidth="115.0" spacing="20.0" BorderPane.alignment="CENTER">
+         <children>
+            <Button fx:id="queryRidesBtn" lineSpacing="5.0" mnemonicParsing="false" onAction="#queryRides" prefHeight="26.0" prefWidth="190.0" text="%QueryRides" textAlignment="CENTER">
+               <VBox.margin>
+                  <Insets />
+               </VBox.margin>
+            </Button>
+            <Button fx:id="createRidesBtn" mnemonicParsing="false" onAction="#createRide" prefHeight="26.0" prefWidth="181.0" text="%CreateRide" textAlignment="CENTER">
+               <VBox.margin>
+                  <Insets />
+               </VBox.margin></Button>
+            <Button fx:id="seeAlertsBttn" mnemonicParsing="false" onAction="#seeAlerts" prefHeight="26.0" prefWidth="181.0" text="%SeeAlerts" textAlignment="CENTER" />
+         </children>
+      </VBox>
+   </right>
 
 </BorderPane>

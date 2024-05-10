@@ -64,6 +64,13 @@ public class Ride implements Serializable {
         this.date = date;
     }
 
+    public Ride(String from, String to, Date date) {
+        super();
+        this.fromLocation = from;
+        this.toLocation = to;
+        this.date = date;
+    }
+
     /**
      * Get the  number of the ride
      *
@@ -201,4 +208,9 @@ public class Ride implements Serializable {
     }
 
 
+    public int getAvailableSeats() {
+
+        return this.numPlaces;
+
+    }
 }

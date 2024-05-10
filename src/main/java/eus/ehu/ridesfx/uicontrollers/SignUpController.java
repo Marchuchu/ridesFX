@@ -68,7 +68,7 @@ public class SignUpController implements Controller {
     @FXML
     void onClickSignUp(ActionEvent event) throws IOException {
 
-        //businessLogic.addUser(user);
+        mainGUI.mGUIC.getSeeAlertsBttn().setVisible(true);
 
         if (name.getText() == null || email.getText() == null || password.getText() == null || repPas.getText() == null || role.getValue() == null) {
             hasLogin.setText("Please fill all the fields");

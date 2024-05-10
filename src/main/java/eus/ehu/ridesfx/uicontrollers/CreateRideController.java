@@ -143,12 +143,26 @@ public class CreateRideController implements Controller {
         String to = txtArrivalCity.getText();
         LocalDate date = datePicker.getValue();
 
-        //Ride ride = new Ride(from, to, Dates.convertToDate(date), numPlaces, price);
-
+        mainGUI.mGUIC.getSeeAlertsBttn().setVisible(true);
 
         if(from != null && to != null && date != null){
 
+            try{
+                int numPlaces = Integer.parseInt(txtNumberOfSeats.getText());
+            } catch (NumberFormatException e1){
+                lblErrorMessage.setText("The number of seats must be a number");
+                lblErrorMessage.setStyle("-fx-text-fill: #d54242");
+            }
+
             int numPlaces = Integer.parseInt(txtNumberOfSeats.getText());
+
+            try{
+                float price = Float.parseFloat(txtPrice.getText());
+            } catch (NumberFormatException e1){
+                lblErrorMessage.setText("The price must be a number");
+                lblErrorMessage.setStyle("-fx-text-fill: #d54242");
+            }
+
             float price = Float.parseFloat(txtPrice.getText());
 
             if(numPlaces >= 4){

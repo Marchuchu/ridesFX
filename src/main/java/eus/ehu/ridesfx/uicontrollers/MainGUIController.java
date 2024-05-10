@@ -49,6 +49,9 @@ public class MainGUIController implements Controller {
     private Button logInButton;
 
     @FXML
+    private Button seeAlertsBttn;
+
+    @FXML
     private Text userNames;
 
     private BlFacade businessLogic;
@@ -108,6 +111,9 @@ public class MainGUIController implements Controller {
         return logInButton;
     }
 
+    public Button getSeeAlertsBttn() {
+        return seeAlertsBttn;
+    }
 
     public BorderPane getMainWrapper() {
         return mainWrapper;
@@ -123,6 +129,8 @@ public class MainGUIController implements Controller {
         queryRidesBtn.setVisible(true);
         logOutButtn.setVisible(false);
         createRidesBtn.setVisible(false);
+        seeAlertsBttn.setVisible(false);
+        seeAlertsBttn.setVisible(false);
 
         businessLogic.setCurrentUser(new User());
         rolName.setText("Guest");
@@ -199,17 +207,32 @@ public class MainGUIController implements Controller {
     }
 
     @FXML
+
+    void seeAlerts(ActionEvent event) throws IOException {
+        mGUI.showScene("See Alerts");
+
+        if(mGUI.getBusinessLogic().getCurrentUser().getClass().equals(Driver.class)){
+            queryRidesBtn.setVisible(false);
+        } else if(mGUI.getBusinessLogic().getCurrentUser().getClass().equals(Traveler.class)) {
+            createRidesBtn.setVisible(false);
+        }
+    }
+
+    @FXML
     public void initialize() throws IOException {
 
         createRidesBtn.setVisible(false);
 
         logOutButtn.setVisible(false);
+        seeAlertsBttn.setVisible(false);
+
 
         logOutButtn.setStyle("-fx-background-color: #f85774");
         logInButton.setStyle("-fx-background-color: #f85774");
         signUpButton.setStyle("-fx-background-color: #f85774");
         queryRidesBtn.setStyle("-fx-background-color: #f85774");
         createRidesBtn.setStyle("-fx-background-color: #f85774");
+        seeAlertsBttn.setStyle("-fx-background-color: #f85774");
 
 
         businessLogic.setCurrentUser(new User());
