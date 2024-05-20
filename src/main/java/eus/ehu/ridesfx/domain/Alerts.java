@@ -9,8 +9,16 @@ import java.util.Date;
 
 public class Alerts {
 
+    @Column(name = "alert_from")
     private String from;
+
+    @Column(name = "alert_to")
     private String to;
+
+    // JPA date is a keyword, name it something else
+    // change column name
+    @Temporal(TemporalType.DATE)
+    @Column(name = "alert_date")
     private Date date;
 
     @ManyToOne
