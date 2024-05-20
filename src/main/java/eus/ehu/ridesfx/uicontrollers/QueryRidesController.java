@@ -101,6 +101,7 @@ public class QueryRidesController implements Controller {
         this.mainGUI = mainGUI;
     }
 
+
     public ComboBox<String> getComboArrivalCity() {
         return comboArrivalCity;
     }
@@ -373,8 +374,15 @@ public class QueryRidesController implements Controller {
 
         }
 
-
     }
 
 
+    @Override
+    public void changeLanguage(ResourceBundle resources) {
+        bookButtn.setText(resources.getString("Book"));
+        createAlertBut.setText(resources.getString("CreateAlert"));
+        DepartCity.setText(resources.getString("DepartCity"));
+        ArrivalCity.setText(resources.getString("ArrivalCity"));
+        EventDate.setText(resources.getString("EventDate"));
+    }
 }

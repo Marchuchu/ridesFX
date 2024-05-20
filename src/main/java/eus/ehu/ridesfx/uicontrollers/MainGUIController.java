@@ -289,14 +289,8 @@ public class MainGUIController implements Controller {
         this.mGUI = mainGUI;
     }
 
-    @FXML
-    public void changeLanguage(ActionEvent event) {
-
-        Button b = (Button) event.getSource();
-        Locale loc = new Locale(b.getId());
-
-        ResourceBundle resources = ResourceBundle.getBundle("Etiquetas", loc);
-
+    @Override
+    public void changeLanguage(ResourceBundle resources) {
         signUpButton.setText(resources.getString("SignUp"));
         exitBttn.setText(resources.getString("LogIn"));
         createRidesBtn.setText(resources.getString("CreateRide"));
@@ -306,6 +300,18 @@ public class MainGUIController implements Controller {
         exitBttn.setText(resources.getString("Exit"));
         rolName.setText(resources.getString("Guest"));
 
+
+
+    }
+
+    @FXML
+    public void changeLanguage(ActionEvent event) {
+
+        Button b = (Button) event.getSource();
+        Locale loc = new Locale(b.getId());
+        ResourceBundle resources = ResourceBundle.getBundle("Etiquetas", loc);
+
+        this.mGUI.changeLanguage(resources);
     }
 
 }

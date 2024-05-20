@@ -115,5 +115,10 @@ public class LoginController implements Controller {
         this.mGUI = mainGUI;
     }
 
+    @Override
+    public void changeLanguage(ResourceBundle resources) {
+
+    }
+
 
 }

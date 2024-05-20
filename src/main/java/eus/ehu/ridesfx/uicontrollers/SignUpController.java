@@ -65,6 +65,11 @@ public class SignUpController implements Controller {
         this.mainGUI = mainGUI;
     }
 
+    @Override
+    public void changeLanguage(ResourceBundle resources) {
+
+    }
+
     @FXML
     void onClickSignUp(ActionEvent event){
 

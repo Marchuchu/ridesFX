@@ -1,6 +1,7 @@
 package eus.ehu.ridesfx.uicontrollers;
 
 import java.util.Date;
+import java.util.ResourceBundle;
 
 import eus.ehu.ridesfx.businessLogic.BlFacade;
 import eus.ehu.ridesfx.domain.*;
@@ -131,6 +132,11 @@ public class AlertTableController implements Controller{
     public void setMainApp(MainGUI mainGUI) {
 
         this.mGUI = mainGUI;
+
+    }
+
+    @Override
+    public void changeLanguage(ResourceBundle resources) {
 
     }
 

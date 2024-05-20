@@ -99,6 +99,11 @@ public class MainGUI {
         stage.show();
     }
 
+    public void changeLanguage(ResourceBundle resources) {
+        mainWin.controller.changeLanguage(resources);
+        queryRideWin.controller.changeLanguage(resources);
+    }
+
     public static class Window {
 
         public Controller controller;

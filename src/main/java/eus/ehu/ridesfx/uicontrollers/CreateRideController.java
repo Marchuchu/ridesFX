@@ -416,4 +416,9 @@ public class CreateRideController implements Controller {
     public void setMainApp(MainGUI mainGUI) {
         this.mainGUI = mainGUI;
     }
+
+    @Override
+    public void changeLanguage(ResourceBundle resources) {
+
+    }
 }
