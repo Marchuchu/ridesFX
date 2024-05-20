@@ -9,7 +9,6 @@ import eus.ehu.ridesfx.exceptions.UnknownUser;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityManagerFactory;
 import jakarta.persistence.TypedQuery;
-import javafx.scene.control.TableColumn;
 import org.hibernate.boot.MetadataSources;
 import org.hibernate.boot.registry.StandardServiceRegistry;
 import org.hibernate.boot.registry.StandardServiceRegistryBuilder;
@@ -125,25 +124,27 @@ public class DataAccess {
             Traveler traveler2 = new Traveler("traveler2@gmail.com", "Lius Fernando", "54321", "54321");
 
             //Create Alerts
-            MyAlert alert1 = new MyAlert("Donostia", "Bilbo", UtilDate.newDate(year, month, 15), traveler1.getEmail());
-            MyAlert alert2 = new MyAlert("Donostia", "Vitoria", UtilDate.newDate(year, month + 1, 15), traveler2.getEmail());
+            Alerts alert1 = new Alerts("Donostia", "Bilbo", UtilDate.newDate(year, month, 15), traveler1.getEmail());
+            Alerts alert2 = new Alerts("Donostia", "Vitoria", UtilDate.newDate(year, month + 1, 15), traveler2.getEmail());
 
 
             //Create rides
-            driver1.addRide("Donostia", "Bilbo", UtilDate.newDate(year, month, 15), 4, 7);
+            driver1.addRide("Donostia", "Bilbo", UtilDate.newDate(year, month  + 1, 15), 4, 7);
             driver1.addRide("Donostia", "Bilbo", UtilDate.newDate(year, month + 1, 15), 4, 7);
 
-            driver1.addRide("Donostia", "Gasteiz", UtilDate.newDate(year, month, 6), 4, 8);
-            driver1.addRide("Bilbo", "Donostia", UtilDate.newDate(year, month, 25), 4, 4);
+            driver1.addRide("Donostia", "Gasteiz", UtilDate.newDate(year, month + 1, 6), 4, 8);
+            driver1.addRide("Bilbo", "Donostia", UtilDate.newDate(year, month + 1, 25), 4, 4);
 
-            driver1.addRide("Donostia", "Iruña", UtilDate.newDate(year, month, 7), 4, 8);
+            driver1.addRide("Donostia", "Iruña", UtilDate.newDate(year, month + 1, 7), 4, 8);
 
-            driver2.addRide("Donostia", "Bilbo", UtilDate.newDate(year, month, 15), 3, 3);
-            driver2.addRide("Bilbo", "Donostia", UtilDate.newDate(year, month, 25), 2, 5);
-            driver2.addRide("Eibar", "Gasteiz", UtilDate.newDate(year, month, 6), 2, 5);
+            driver2.addRide("Donostia", "Bilbo", UtilDate.newDate(year, month + 1, 15), 3, 3);
+            driver2.addRide("Bilbo", "Donostia", UtilDate.newDate(year, month + 1, 25), 2, 5);
+            driver2.addRide("Eibar", "Gasteiz", UtilDate.newDate(year, month + 1, 6), 2, 5);
 
-            driver3.addRide("Bilbo", "Donostia", UtilDate.newDate(year, month, 14), 1, 3);
+            driver3.addRide("Bilbo", "Donostia", UtilDate.newDate(year, month + 1, 14), 1, 3);
 
+            traveler2.setAlertsList(Arrays.asList(alert2));
+            traveler1.setAlertsList(Arrays.asList(alert1));
 
             db.persist(driver1);
             db.persist(driver2);
@@ -152,10 +153,11 @@ public class DataAccess {
             db.persist(traveler1);
             db.persist(traveler2);
 
-            db.persist(alert1);
-            db.persist(alert2);
+            //db.persist(alert1);
+            //db.persist(alert2);
 
             db.getTransaction().commit();
+
             System.out.println("Db initialized");
         } catch (Exception e) {
             e.printStackTrace();
@@ -247,7 +249,7 @@ public class DataAccess {
 //
 //    }
 
-    public MyAlert addAlert(String from, String to, Date date, String email) {
+    public Alerts addAlert(String from, String to, Date date, String email) {
 
         if(new Date().compareTo(date) > 0){
             return null;
@@ -255,7 +257,7 @@ public class DataAccess {
 
             db.getTransaction().begin();
 
-            MyAlert alert = new MyAlert(from, to, date, email);
+            Alerts alert = new Alerts(from, to, date, email);
 
             if(alert != null){
 
@@ -265,6 +267,8 @@ public class DataAccess {
                 db.getTransaction().commit();
                 return alert;
             }
+
+            db.getTransaction().commit();
 
         }
 
@@ -354,6 +358,7 @@ public class DataAccess {
         return arrivingCities;
 
     }
+
 
     /**
      * This method retrieves from the database the dates a month for which there are events
@@ -479,7 +484,6 @@ public class DataAccess {
         db.persist(ride);
         db.getTransaction().commit();
 
-
     }
 
     public User getD(User u) {
@@ -526,8 +530,10 @@ public class DataAccess {
         db.getTransaction().begin();
         Driver driver = db.find(Driver.class, r.getDriver().getEmail());
         driver.addRide(r.getFromLocation(), r.getToLocation(), r.getDate(), nP, p);
-
+        db.persist(r);
+        db.getTransaction().commit();
 
 
     }
+
 }

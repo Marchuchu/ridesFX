@@ -7,6 +7,7 @@
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Text?>
 
@@ -32,7 +33,7 @@
                <VBox.margin>
                   <Insets />
                </VBox.margin></Button>
-            <Button fx:id="logOutButtn" mnemonicParsing="false" onAction="#onClickLogOut" prefHeight="26.0" prefWidth="181.0" text="%LogOut" textAlignment="CENTER" />
+            <Button fx:id="exitBttn" mnemonicParsing="false" onAction="#onClickExit" prefHeight="26.0" prefWidth="181.0" text="%Exit" textAlignment="CENTER" />
             <Text fx:id="userNames" strokeType="OUTSIDE" strokeWidth="0.0" text="Name:" />
             <Label fx:id="rolName" prefHeight="17.0" prefWidth="89.0" textAlignment="CENTER" />
             <AnchorPane prefHeight="316.0" prefWidth="485.0" />
@@ -55,5 +56,24 @@
          </children>
       </VBox>
    </right>
+   <bottom>
+      <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0" BorderPane.alignment="CENTER">
+         <children>
+            <Button fx:id="eus" alignment="CENTER" contentDisplay="CENTER" mnemonicParsing="false" onAction="#changeLanguage" stylesheets="@bootstrapfx.css" text="eus" textAlignment="CENTER" />
+            <Button fx:id="es" contentDisplay="CENTER" lineSpacing="15.0" mnemonicParsing="false" onAction="#changeLanguage" stylesheets="@bootstrapfx.css" text="es" textAlignment="CENTER">
+               <opaqueInsets>
+                  <Insets />
+               </opaqueInsets>
+               <HBox.margin>
+                  <Insets left="15.0" right="15.0" />
+               </HBox.margin>
+            </Button>
+            <Button fx:id="eng" alignment="CENTER" contentDisplay="CENTER" mnemonicParsing="false" onAction="#changeLanguage" stylesheets="@bootstrapfx.css" text="en" textAlignment="CENTER" />
+         </children>
+         <opaqueInsets>
+            <Insets />
+         </opaqueInsets>
+      </HBox>
+   </bottom>
 
 </BorderPane>

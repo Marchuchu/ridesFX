@@ -66,12 +66,13 @@ public class SignUpController implements Controller {
     }
 
     @FXML
-    void onClickSignUp(ActionEvent event) throws IOException {
-
-        mainGUI.mGUIC.getSeeAlertsBttn().setVisible(true);
+    void onClickSignUp(ActionEvent event){
 
         if (name.getText() == null || email.getText() == null || password.getText() == null || repPas.getText() == null || role.getValue() == null) {
             hasLogin.setText("Please fill all the fields");
+            mainGUI.mGUIC.getSeeAlertsBttn().setVisible(false);
+            hasLogin.setStyle("-fx-text-fill: #d54242");
+
         } else {
 
             User user = new User(email.getText(), name.getText(), password.getText());
@@ -107,6 +108,9 @@ public class SignUpController implements Controller {
                         password.setText("");
                         repPas.setText("");
                         role.setValue(null);
+
+                        mainGUI.mGUIC.getSeeAlertsBttn().setVisible(true);
+
 
                     }
 
@@ -150,7 +154,7 @@ public class SignUpController implements Controller {
     }
 
     @FXML
-    void initialize() throws IOException {
+    void initialize(){
 
         role.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
             r = newValue;
@@ -159,6 +163,9 @@ public class SignUpController implements Controller {
         role.setItems(FXCollections.observableArrayList("Driver", "Traveler"));
 
         signUpButt.setStyle("-fx-background-color: #f85774");
+        signUpButt.setText("Sign Up");
+
+
 
 
     }

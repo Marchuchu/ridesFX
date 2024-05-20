@@ -21,10 +21,7 @@ public class LoginController implements Controller {
 
     BlFacade businessLogic;
     MainGUI mGUI;
-    @FXML
-    private ResourceBundle resources;
-    @FXML
-    private URL location;
+
     @FXML
     private TextField email;
     @FXML
@@ -47,11 +44,12 @@ public class LoginController implements Controller {
     }
 
     @FXML
-    void onClickLogIn(ActionEvent event) throws UnknownUser, IOException {
-
-        mGUI.mGUIC.getSeeAlertsBttn().setVisible(true);
+    void onClickLogIn(ActionEvent event) {
 
         if (logInButt.getText() == null || password.getText() == null) {
+
+            mGUI.mGUIC.getSeeAlertsBttn().setVisible(false);
+
             return;
         } else {
 
@@ -71,6 +69,7 @@ public class LoginController implements Controller {
 
                         mGUI.mGUIC.getCreateRidesBtn().setVisible(false);
                         mGUI.mGUIC.getQueryRidesBtn().setVisible(true);
+                        mGUI.mGUIC.getSeeAlertsBttn().setVisible(true);
                         mGUI.showScene("Query Rides");
 
 
@@ -78,6 +77,7 @@ public class LoginController implements Controller {
 
                         mGUI.mGUIC.getQueryRidesBtn().setVisible(false);
                         mGUI.mGUIC.getCreateRidesBtn().setVisible(true);
+                        mGUI.mGUIC.getSeeAlertsBttn().setVisible(true);
                         mGUI.showScene("Create Ride");
 
                     }
@@ -106,6 +106,7 @@ public class LoginController implements Controller {
     void initialize() {
 
         logInButt.setStyle("-fx-background-color: #f85774;");
+        logInButt.setText("Log In");
 
     }
 

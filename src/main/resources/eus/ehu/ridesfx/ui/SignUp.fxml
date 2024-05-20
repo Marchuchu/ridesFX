@@ -11,46 +11,46 @@
 
 <AnchorPane fx:id="mainWrapper" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="eus.ehu.ridesfx.uicontrollers.SignUpController">
    <children>
+      <TextField fx:id="name" layoutX="238.0" layoutY="108.0" />
       <TextField fx:id="email" layoutX="238.0" layoutY="150.0" />
-      <Text layoutX="178.0" layoutY="170.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Email:">
-         <font>
-            <Font size="20.0" />
-         </font>
-      </Text>
-      <Text layoutX="142.0" layoutY="207.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Password:">
-         <font>
-            <Font size="20.0" />
-         </font>
-      </Text>
-      <Button fx:id="signUpButt" layoutX="277.0" layoutY="310.0" mnemonicParsing="false" onAction="#onClickSignUp" text="Sign Up">
+      <PasswordField fx:id="password" layoutX="238.0" layoutY="188.0" />
+      <PasswordField fx:id="repPas" layoutX="238.0" layoutY="228.0" />
+      <ComboBox fx:id="role" layoutX="238.0" layoutY="267.0" prefHeight="25.0" prefWidth="149.0" />
+      <Button fx:id="signUpButt" layoutX="277.0" layoutY="310.0" mnemonicParsing="false" onAction="#onClickSignUp" text="%SignUp">
          <font>
             <Font size="15.0" />
          </font>
       </Button>
+      <Text layoutX="167.0" layoutY="170.0" strokeType="OUTSIDE" strokeWidth="0.0" text="%Email">
+         <font>
+            <Font size="20.0" />
+         </font>
+      </Text>
+      <Text layoutX="127.0" layoutY="208.0" strokeType="OUTSIDE" strokeWidth="0.0" text="%Password">
+         <font>
+            <Font size="20.0" />
+         </font>
+      </Text>
       <Label fx:id="hasLogin" layoutX="217.0" layoutY="347.0" prefHeight="31.0" prefWidth="192.0" stylesheets="@bootstrapfx.css" />
       <Label layoutX="179.0" layoutY="14.0" text="CARPOOLING">
          <font>
             <Font name="Wingdings 2" size="40.0" />
          </font>
       </Label>
-      <Text layoutX="175.0" layoutY="127.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Name:">
+      <Text layoutX="157.0" layoutY="128.0" strokeType="OUTSIDE" strokeWidth="0.0" text="%Name">
          <font>
             <Font size="20.0" />
          </font>
       </Text>
-      <TextField fx:id="name" layoutX="238.0" layoutY="108.0" />
-      <Text layoutX="66.0" layoutY="249.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Repeate password:">
+      <Text layoutX="52.0" layoutY="248.0" strokeType="OUTSIDE" strokeWidth="0.0" text="%RepeatePassword">
          <font>
             <Font size="20.0" />
          </font>
       </Text>
-      <ComboBox fx:id="role" layoutX="238.0" layoutY="267.0" prefHeight="25.0" prefWidth="149.0" />
-      <Text layoutX="179.0" layoutY="287.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Role:">
+      <Text layoutX="171.0" layoutY="287.0" strokeType="OUTSIDE" strokeWidth="0.0" text="%Role">
          <font>
             <Font size="20.0" />
          </font>
       </Text>
-      <PasswordField fx:id="password" layoutX="238.0" layoutY="188.0" />
-      <PasswordField fx:id="repPas" layoutX="238.0" layoutY="228.0" />
    </children>
 </AnchorPane>

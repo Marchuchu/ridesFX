@@ -2,11 +2,20 @@ package eus.ehu.ridesfx.domain;
 
 import jakarta.persistence.*;
 
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
+
+import eus.ehu.ridesfx.domain.Alerts;
+
 @Entity
 public class Traveler extends User {
 
 
     private String repPassword;
+
+    @OneToMany
+    private List<Alerts> alertsList = new ArrayList<Alerts>();
 
 
     public Traveler(String email, String name, String password, String repPassword) {
@@ -49,6 +58,21 @@ public class Traveler extends User {
 //    public void setEmail(String email) {
 //        this.email = email;
 //    }
+
+    public List<Alerts> getAlertsList() {
+        return alertsList;
+    }
+
+    public void setAlertsList(List<Alerts> alertsList) {
+        this.alertsList = alertsList;
+    }
+
+    public Alerts addAlert(String from, String to, Date date) {
+        Alerts alert = new Alerts(from, to, date, this.getName());
+        alertsList.add(alert);
+        return alert;
+    }
+
 
     public String toString() {
         return getName();

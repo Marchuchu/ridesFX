@@ -4,19 +4,16 @@ import eus.ehu.ridesfx.businessLogic.BlFacade;
 import eus.ehu.ridesfx.domain.Driver;
 import eus.ehu.ridesfx.domain.Traveler;
 import eus.ehu.ridesfx.domain.User;
-import eus.ehu.ridesfx.exceptions.UnknownUser;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.scene.Parent;
-import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import eus.ehu.ridesfx.ui.MainGUI;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.text.Text;
-import javafx.stage.Stage;
 
 import java.io.IOException;
+import java.util.Locale;
 import java.util.ResourceBundle;
 
 public class MainGUIController implements Controller {
@@ -28,16 +25,23 @@ public class MainGUIController implements Controller {
     private Label lblDriver;
 
     @FXML
-    private ResourceBundle resources;
+    private Button eng;
+
+    @FXML
+    private Button es;
+
+    @FXML
+    private Button eus;
 
     @FXML
     private Label rolName;
+
 
     @FXML
     private Button signUpButton;
 
     @FXML
-    private Button logOutButtn;
+    private Button exitBttn;
 
     @FXML
     private Button createRidesBtn;
@@ -95,8 +99,8 @@ public class MainGUIController implements Controller {
         return signUpButton;
     }
 
-    public Button getLogOutButtn() {
-        return logOutButtn;
+    public Button getExitBttn() {
+        return exitBttn;
     }
 
     public Button getCreateRidesBtn() {
@@ -120,14 +124,26 @@ public class MainGUIController implements Controller {
     }
 
 
+    public BorderPane getMainWrapper1() {
+        return mainWrapper;
+    }
+
+//    public void setBusinessLogic(BlFacade businessLogic) {
+//        this.businessLogic = businessLogic;
+//    }
+//
+//    public void setMainGUI(MainGUI mainGUI) {
+//        this.mGUI = mainGUI;
+//    }
+
     @FXML
-    void onClickLogOut(ActionEvent event) throws IOException {
+    void onClickExit(ActionEvent event) throws IOException {
 
         mGUI.showScene("Log Out");
         signUpButton.setVisible(true);
         logInButton.setVisible(true);
         queryRidesBtn.setVisible(true);
-        logOutButtn.setVisible(false);
+        exitBttn.setVisible(false);
         createRidesBtn.setVisible(false);
         seeAlertsBttn.setVisible(false);
         seeAlertsBttn.setVisible(false);
@@ -145,7 +161,7 @@ public class MainGUIController implements Controller {
         signUpButton.setVisible(false);
         logInButton.setVisible(false);
         queryRidesBtn.setVisible(true);
-        logOutButtn.setVisible(true);
+        exitBttn.setVisible(true);
 
         if (businessLogic.getCurrentUser().getClass().equals(Traveler.class) || businessLogic.getCurrentUser().getClass().equals(Driver.class)) {
 
@@ -169,7 +185,7 @@ public class MainGUIController implements Controller {
         createRidesBtn.setVisible(false);
         logInButton.setVisible(false);
         signUpButton.setVisible(false);
-        logOutButtn.setVisible(true);
+        exitBttn.setVisible(true);
 
         if (businessLogic.getCurrentUser().getClass().equals(Traveler.class) || businessLogic.getCurrentUser().getClass().equals(Driver.class)) {
 
@@ -185,36 +201,59 @@ public class MainGUIController implements Controller {
     }
 
     @FXML
-    void queryRides(ActionEvent event) throws IOException {
+    void queryRides(ActionEvent event) {
 
         mGUI.showScene("Query Rides");
-        logOutButtn.setVisible(false);
-        createRidesBtn.setVisible(false);
-        logInButton.setVisible(true);
-        signUpButton.setVisible(true);
+
+        if (mGUI.getBusinessLogic().getCurrentUser().getClass().equals(Driver.class)) {
+            createRidesBtn.setVisible(true);
+            queryRidesBtn.setVisible(false);
+            exitBttn.setVisible(true);
+            logInButton.setVisible(false);
+            signUpButton.setVisible(false);
+            seeAlertsBttn.setVisible(true);
+
+        } else if (mGUI.getBusinessLogic().getCurrentUser().getClass().equals(Traveler.class)) {
+            queryRidesBtn.setVisible(true);
+            createRidesBtn.setVisible(false);
+            exitBttn.setVisible(true);
+            createRidesBtn.setVisible(false);
+            seeAlertsBttn.setVisible(true);
+
+        } else {
+
+            logInButton.setVisible(true);
+            signUpButton.setVisible(true);
+            queryRidesBtn.setVisible(true);
+            exitBttn.setVisible(false);
+            createRidesBtn.setVisible(false);
+            seeAlertsBttn.setVisible(false);
+
+        }
+
 
     }
 
     @FXML
-    void createRide(ActionEvent event) throws IOException {
+    void createRide(ActionEvent event){
 
         mGUI.showScene("Create Ride");
         queryRidesBtn.setVisible(false);
-        logOutButtn.setVisible(true);
+        exitBttn.setVisible(true);
         logInButton.setVisible(false);
         signUpButton.setVisible(false);
 
     }
 
     @FXML
-
-    void seeAlerts(ActionEvent event) throws IOException {
+    void seeAlerts(ActionEvent event)  {
         mGUI.showScene("See Alerts");
 
-        if(mGUI.getBusinessLogic().getCurrentUser().getClass().equals(Driver.class)){
+        if (mGUI.getBusinessLogic().getCurrentUser().getClass().equals(Driver.class)) {
             queryRidesBtn.setVisible(false);
-        } else if(mGUI.getBusinessLogic().getCurrentUser().getClass().equals(Traveler.class)) {
+        } else if (mGUI.getBusinessLogic().getCurrentUser().getClass().equals(Traveler.class)) {
             createRidesBtn.setVisible(false);
+
         }
     }
 
@@ -223,20 +262,23 @@ public class MainGUIController implements Controller {
 
         createRidesBtn.setVisible(false);
 
-        logOutButtn.setVisible(false);
+        exitBttn.setVisible(false);
         seeAlertsBttn.setVisible(false);
 
 
-        logOutButtn.setStyle("-fx-background-color: #f85774");
+        exitBttn.setStyle("-fx-background-color: #f85774");
         logInButton.setStyle("-fx-background-color: #f85774");
         signUpButton.setStyle("-fx-background-color: #f85774");
         queryRidesBtn.setStyle("-fx-background-color: #f85774");
         createRidesBtn.setStyle("-fx-background-color: #f85774");
         seeAlertsBttn.setStyle("-fx-background-color: #f85774");
+        es.setStyle("-fx-background-color: #f85774");
+        eng.setStyle("-fx-background-color: #f85774");
+        eus.setStyle("-fx-background-color: #f85774");
 
 
         businessLogic.setCurrentUser(new User());
-        rolName.setText("Guest");
+        rolName.setText(ResourceBundle.getBundle("Etiquetas", Locale.getDefault()).getString("Guest"));
 
 
     }
@@ -245,6 +287,25 @@ public class MainGUIController implements Controller {
     @Override
     public void setMainApp(MainGUI mainGUI) {
         this.mGUI = mainGUI;
+    }
+
+    @FXML
+    public void changeLanguage(ActionEvent event) {
+
+        Button b = (Button) event.getSource();
+        Locale loc = new Locale(b.getId());
+
+        ResourceBundle resources = ResourceBundle.getBundle("Etiquetas", loc);
+
+        signUpButton.setText(resources.getString("SignUp"));
+        exitBttn.setText(resources.getString("LogIn"));
+        createRidesBtn.setText(resources.getString("CreateRide"));
+        queryRidesBtn.setText(resources.getString("QueryRides"));
+        logInButton.setText(resources.getString("LogIn"));
+        seeAlertsBttn.setText(resources.getString("SeeAlerts"));
+        exitBttn.setText(resources.getString("Exit"));
+        rolName.setText(resources.getString("Guest"));
+
     }
 
 }

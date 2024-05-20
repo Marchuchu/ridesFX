@@ -6,7 +6,6 @@ import eus.ehu.ridesfx.domain.*;
 import eus.ehu.ridesfx.exceptions.RideAlreadyExistException;
 import eus.ehu.ridesfx.exceptions.RideMustBeLaterThanTodayException;
 import eus.ehu.ridesfx.exceptions.UnknownUser;
-import javafx.scene.control.TableColumn;
 
 import java.util.Date;
 import java.util.List;
@@ -94,7 +93,7 @@ public class BlFacadeImplementation implements BlFacade {
     }
 
     @Override
-    public MyAlert createAlert(String from, String to, Date date, String email) {
+    public Alerts createAlert(String from, String to, Date date, String email) {
 
         return dbManager.addAlert(from, to, date, email);
 
@@ -105,6 +104,15 @@ public class BlFacadeImplementation implements BlFacade {
         return departLocations;
 
     }
+
+
+    public List<String> getArrivalCities(String from){
+
+        List<String> arrivalLocations = dbManager.getArrivalCities(from);
+        return arrivalLocations;
+
+    }
+
 
     /**
      * {@inheritDoc}
@@ -143,18 +151,7 @@ public class BlFacadeImplementation implements BlFacade {
 
     }
 
-    @Override
-    public boolean checkComboBox(String city){
 
-        return dbManager.checkComboBox(city);
-
-    }
-
-    @Override
-    public void updateComboBox(String city) {
-
-
-    }
 
     @Override
     public void takeRide(Ride selectedItem, int nP, float p) {

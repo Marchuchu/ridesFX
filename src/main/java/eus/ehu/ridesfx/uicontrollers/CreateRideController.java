@@ -19,49 +19,42 @@ import java.util.ResourceBundle;
 
 public class CreateRideController implements Controller {
 
+    private BlFacade businessLogic;
+    @FXML
+    private DatePicker datePicker;
+    private MainGUI mainGUI;
+    @FXML
+    private Label lblErrorMessage;
+    @FXML
+    private Label lblErrorMinBet;
+    @FXML
+    private Button btnCreateRide;
+    @FXML
+    private TextField txtArrivalCity;
+    @FXML
+    private TextField txtDepartCity;
+    @FXML
+    private TextField txtNumberOfSeats;
+    @FXML
+    private TextField txtPrice;
+    private List<LocalDate> holidays = new ArrayList<>();
+
     public CreateRideController(BlFacade bl, MainGUI mGUI) {
         this.businessLogic = bl;
         this.mainGUI = mGUI;
     }
 
+
     public CreateRideController(BlFacade bl) {
         this.businessLogic = bl;
     }
 
-    private BlFacade businessLogic;
-
-    @FXML
-    private DatePicker datePicker;
-
-    private MainGUI mainGUI;
-
-    @FXML
-    private Label lblErrorMessage;
-
-    @FXML
-    private Label lblErrorMinBet;
-
-    @FXML
-    private Button btnCreateRide;
-
-    @FXML
-    private TextField txtArrivalCity;
-
-    @FXML
-    private TextField txtDepartCity;
-
-    @FXML
-    private TextField txtNumberOfSeats;
-
-    @FXML
-    private TextField txtPrice;
-
-
-    /**@FXML
-    void closeClick(ActionEvent event) {
-    clearErrorLabels();
-    mainGUI.showMain();
-    }*/
+    /**
+     * @FXML void closeClick(ActionEvent event) {
+     * clearErrorLabels();
+     * mainGUI.showMain();
+     * }
+     */
 
     private void clearErrorLabels() {
         lblErrorMessage.setText("");
@@ -69,7 +62,6 @@ public class CreateRideController implements Controller {
         lblErrorMinBet.getStyleClass().clear();
         lblErrorMessage.getStyleClass().clear();
     }
-
 
     private String field_Errors() {
 
@@ -104,13 +96,13 @@ public class CreateRideController implements Controller {
         }
     }
 
-    void displayMessage(String message, String label){
+    void displayMessage(String message, String label) {
         lblErrorMessage.getStyleClass().clear();
-        lblErrorMessage.getStyleClass().setAll("lbl", "lbl-"+label);
+        lblErrorMessage.getStyleClass().setAll("lbl", "lbl-" + label);
         lblErrorMessage.setText(message);
     }
 
-    boolean addC(String c){
+    boolean addC(String c) {
 
         String from = txtDepartCity.getText();
         String to = txtArrivalCity.getText();
@@ -120,12 +112,12 @@ public class CreateRideController implements Controller {
         List<String> deptCities = businessLogic.getDepartCities();
         List<String> destCities = businessLogic.getDestinationCities(from);
 
-        if(!deptCities.contains(from) ){
+        if (!deptCities.contains(from)) {
             businessLogic.addCitie(from);
             a = true;
         }
 
-        if(!destCities.contains(to)){
+        if (!destCities.contains(to)) {
             businessLogic.addCitie(to);
             b = true;
         }
@@ -145,53 +137,145 @@ public class CreateRideController implements Controller {
 
         mainGUI.mGUIC.getSeeAlertsBttn().setVisible(true);
 
-        if(from != null && to != null && date != null){
 
-            try{
-                int numPlaces = Integer.parseInt(txtNumberOfSeats.getText());
-            } catch (NumberFormatException e1){
-                lblErrorMessage.setText("The number of seats must be a number");
-                lblErrorMessage.setStyle("-fx-text-fill: #d54242");
-            }
+        try {
 
-            int numPlaces = Integer.parseInt(txtNumberOfSeats.getText());
-
-            try{
-                float price = Float.parseFloat(txtPrice.getText());
-            } catch (NumberFormatException e1){
-                lblErrorMessage.setText("The price must be a number");
-                lblErrorMessage.setStyle("-fx-text-fill: #d54242");
-            }
-
-            float price = Float.parseFloat(txtPrice.getText());
-
-            if(numPlaces >= 4){
-
-                lblErrorMessage.setText("The number of seats must be less than 4");
-                lblErrorMessage.setStyle("-fx-text-fill: #d54242");
-
-
-            } else {
-
-                User user = businessLogic.getCurrentUser();
-
-                businessLogic.createRideClick(from, to, Dates.convertToDate(date), numPlaces, price, user.getEmail());
-                displayMessage(ResourceBundle.getBundle("Etiquetas").getString("CreateRideGUI.RideCreated"), "success");
-
-                List<String> deptCities = businessLogic.getDepartCities();
-                List<String> destCities = businessLogic.getDestinationCities(from);
-
-            }
-
-        } else {
-
-            lblErrorMinBet.setText("Please fill all the fields");
+            lblErrorMessage.setText("Please fill the date");
             lblErrorMessage.setStyle("-fx-text-fill: #d54242");
-            lblErrorMinBet.getStyleClass().setAll("lbl", "lbl-danger");
+
+        } catch (Exception e1) {
+            e1.printStackTrace();
 
         }
 
+        if (date.compareTo(LocalDate.now()) < 0) {
 
+            lblErrorMessage.setText("The date must be later than today");
+            lblErrorMessage.setStyle("-fx-text-fill: #d54242");
+            return;
+
+
+        }
+
+        if (from == null) {
+
+            lblErrorMessage.setText("Please fill the departure city");
+            lblErrorMessage.setStyle("-fx-text-fill: #d54242");
+            return;
+
+
+        }
+
+        if (to == null) {
+
+            lblErrorMessage.setText("Please fill the arrival city");
+            lblErrorMessage.setStyle("-fx-text-fill: #d54242");
+            return;
+
+        }
+
+        if (txtNumberOfSeats.getText() == null) {
+
+            lblErrorMessage.setText("Please fill the number of seats");
+            lblErrorMessage.setStyle("-fx-text-fill: #d54242");
+            return;
+
+        } else {
+
+            try {
+                int numPlaces = Integer.parseInt(txtNumberOfSeats.getText());
+            } catch (NumberFormatException e1) {
+                //lblErrorMessage.setText("The number of seats must be a number");
+                lblErrorMessage.setText(ResourceBundle.getBundle("Etiquetas").getString("CreateRideGUI.NumberOfSeatsMustBeANumber"));
+                lblErrorMessage.setStyle("-fx-text-fill: #d54242");
+                return;
+            }
+
+        }
+
+        int numPlaces = Integer.parseInt(txtNumberOfSeats.getText());
+
+        if (txtPrice.getText() == null) {
+
+            lblErrorMessage.setText("Please fill the price");
+            lblErrorMessage.setStyle("-fx-text-fill: #d54242");
+            return;
+
+        } else {
+
+            try {
+                float price = Float.parseFloat(txtPrice.getText());
+            } catch (NumberFormatException e1) {
+                lblErrorMessage.setText("The price must be a number");
+                lblErrorMessage.setStyle("-fx-text-fill: #d54242");
+                return;
+            }
+
+        }
+
+        float price = Float.parseFloat(txtPrice.getText());
+
+        if (numPlaces >= 4) {
+
+            lblErrorMessage.setText("The number of seats must be less than 4");
+            lblErrorMessage.setStyle("-fx-text-fill: #d54242");
+            return;
+        }
+
+
+        User user = businessLogic.getCurrentUser();
+        businessLogic.createRideClick(from, to, Dates.convertToDate(date), numPlaces, price, user.getEmail());
+        displayMessage(ResourceBundle.getBundle("Etiquetas").getString("CreateRideGUI.RideCreated"), "success");
+        List<String> deptCities = businessLogic.getDepartCities();
+        List<String> destCities = businessLogic.getDestinationCities(from);
+
+
+//            if (from != null && to != null && date != null && txtNumberOfSeats.getText() != null && txtPrice.getText() != null) {
+//
+//                try {
+//                    int numPlaces = Integer.parseInt(txtNumberOfSeats.getText());
+//                } catch (NumberFormatException e1) {
+//                    //lblErrorMessage.setText("The number of seats must be a number");
+//                    lblErrorMessage.setText(ResourceBundle.getBundle("Etiquetas").getString("CreateRideGUI.NumberOfSeatsMustBeANumber"));
+//                    lblErrorMessage.setStyle("-fx-text-fill: #d54242");
+//                }
+//
+//                int numPlaces = Integer.parseInt(txtNumberOfSeats.getText());
+//
+//                try {
+//                    float price = Float.parseFloat(txtPrice.getText());
+//                } catch (NumberFormatException e1) {
+//                    lblErrorMessage.setText("The price must be a number");
+//                    lblErrorMessage.setStyle("-fx-text-fill: #d54242");
+//                }
+//
+//                float price = Float.parseFloat(txtPrice.getText());
+//
+//                if (numPlaces >= 4) {
+//
+//                    lblErrorMessage.setText("The number of seats must be less than 4");
+//                    lblErrorMessage.setStyle("-fx-text-fill: #d54242");
+//
+//
+//                } else {
+//
+//                    User user = businessLogic.getCurrentUser();
+//
+//                    businessLogic.createRideClick(from, to, Dates.convertToDate(date), numPlaces, price, user.getEmail());
+//                    displayMessage(ResourceBundle.getBundle("Etiquetas").getString("CreateRideGUI.RideCreated"), "success");
+//
+//                    List<String> deptCities = businessLogic.getDepartCities();
+//                    List<String> destCities = businessLogic.getDestinationCities(from);
+//
+//                }
+//
+//            } else {
+//
+//                lblErrorMinBet.setText("Please fill all the fields");
+//                lblErrorMessage.setStyle("-fx-text-fill: #d54242");
+//                lblErrorMinBet.getStyleClass().setAll("lbl", "lbl-danger");
+//
+//            }
 
 
 //
@@ -230,8 +314,6 @@ public class CreateRideController implements Controller {
     }
  */
     }
-
-    private List<LocalDate> holidays = new ArrayList<>();
 
   /*private void setEventsPrePost(int year, int month) {
     LocalDate date = LocalDate.of(year, month, 1);

@@ -4,16 +4,16 @@ import eus.ehu.ridesfx.businessLogic.BlFacade;
 import eus.ehu.ridesfx.ui.MainGUI;
 import javafx.fxml.FXML;
 
-public class LogOutController implements Controller {
+public class ExitController implements Controller {
 
     private final BlFacade businessLogic;
     private MainGUI mainGUI;
 
-    public LogOutController(BlFacade bl) {
+    public ExitController(BlFacade bl) {
         this.businessLogic = bl;
     }
 
-    public LogOutController(BlFacade bl, MainGUI mainGUI) {
+    public ExitController(BlFacade bl, MainGUI mainGUI) {
         this.businessLogic = bl;
         this.mainGUI = mainGUI;
     }

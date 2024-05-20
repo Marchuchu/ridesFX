@@ -19,6 +19,8 @@ public class Ride implements Serializable {
     private Date date;
     private float price;
 
+//Lista con las alertas que tiene
+
     @ManyToOne
     private Driver driver;
 

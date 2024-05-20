@@ -1,7 +1,7 @@
 package eus.ehu.ridesfx.businessLogic;
 
 import eus.ehu.ridesfx.domain.Driver;
-import eus.ehu.ridesfx.domain.MyAlert;
+import eus.ehu.ridesfx.domain.Alerts;
 import eus.ehu.ridesfx.domain.Ride;
 import eus.ehu.ridesfx.domain.User;
 import eus.ehu.ridesfx.exceptions.RideAlreadyExistException;
@@ -39,7 +39,7 @@ public interface BlFacade {
 
     public void addUser(User user);
 
-    public MyAlert createAlert(String from, String to, Date date, String email);
+    public Alerts createAlert(String from, String to, Date date, String email);
 
     /**
      * This method retrieves from the database the dates in a month for which there are events
@@ -73,6 +73,8 @@ public interface BlFacade {
 
     public List<String> getDepartCities();
 
+    public List<String> getArrivalCities(String from);
+
     /**
      * This method returns all the arrival destinations, from all rides that depart from a given city
      *
@@ -99,10 +101,6 @@ public interface BlFacade {
     User getDriver(User u);
 
     void addCitie(String from);
-
-    boolean checkComboBox(String city);
-
-    void updateComboBox(String city);
 
     public void takeRide(Ride selectedItem, int nP, float p);
 

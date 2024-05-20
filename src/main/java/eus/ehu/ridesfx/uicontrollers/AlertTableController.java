@@ -1,14 +1,9 @@
 package eus.ehu.ridesfx.uicontrollers;
 
-import java.net.URL;
 import java.util.Date;
-import java.util.ResourceBundle;
 
 import eus.ehu.ridesfx.businessLogic.BlFacade;
-import eus.ehu.ridesfx.domain.Driver;
-import eus.ehu.ridesfx.domain.Ride;
-import eus.ehu.ridesfx.domain.Traveler;
-import eus.ehu.ridesfx.domain.User;
+import eus.ehu.ridesfx.domain.*;
 import eus.ehu.ridesfx.ui.MainGUI;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -18,7 +13,7 @@ import javafx.scene.layout.AnchorPane;
 public class AlertTableController implements Controller{
 
     @FXML
-    private TableColumn<Ride, Date> date;
+    private TableColumn<Alerts, Date> date;
 
     @FXML
     private TableColumn<Ride, String> from;
@@ -50,18 +45,47 @@ public class AlertTableController implements Controller{
     private MainGUI mGUI;
     private BlFacade businessLogic;
 
+    public AlertTableController(BlFacade bl, MainGUI mainGUIC) {
+
+        this.businessLogic = bl;
+        this.mGUI = mainGUIC;
+
+    }
+
+    public AlertTableController(BlFacade bl) {
+
+        this.businessLogic = bl;
+
+    }
+
     @FXML
     void onClickCancelAlert(ActionEvent event) {
 
         Ride r = tblAlerts.getSelectionModel().getSelectedItem();
 
+        takeRideBttn.setStyle("-fx-background-color: #f85774");
+        cancelAlertBttn.setStyle("-fx-background-color: #f85774");
+
         if(businessLogic.getCurrentUser().getClass().equals(Traveler.class) && r != null){
 
             businessLogic.cancelAlert(r);
+            takeRideBttn.setVisible(false);
+            cancelAlertBttn.setVisible(true);
 
-        } else {
+
+        } else if (r == null){
 
             message.setText("You must select an alert to cancel");
+            cancelAlertBttn.setVisible(true);
+            takeRideBttn.setVisible(false);
+
+
+        } else if(businessLogic.getCurrentUser().getClass().equals(Driver.class)){
+
+            message.setText("Choose the ride you want to take");
+            cancelAlertBttn.setVisible(false);
+            takeRideBttn.setVisible(true);
+
 
         }
 
@@ -112,6 +136,23 @@ public class AlertTableController implements Controller{
 
     @FXML
     void initialize() {
+
+        takeRideBttn.setStyle("-fx-background-color: #f85774");
+        cancelAlertBttn.setStyle("-fx-background-color: #f85774");
+
+        if(businessLogic.getCurrentUser().getClass().equals(Traveler.class)){
+
+            takeRideBttn.setVisible(false);
+            cancelAlertBttn.setVisible(true);
+            price.setVisible(false);
+
+
+        } else if(businessLogic.getCurrentUser().getClass().equals(Driver.class)) {
+
+            cancelAlertBttn.setVisible(false);
+            takeRideBttn.setVisible(true);
+
+        }
 
     }
 

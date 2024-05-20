@@ -54,6 +54,15 @@ public class QueryRidesController implements Controller {
     @FXML
     private ComboBox<String> comboDepartCity;
 
+    @FXML
+    private Label ArrivalCity;
+
+    @FXML
+    private Label DepartCity;
+
+    @FXML
+    private Label EventDate;
+
 
     @FXML
     private AnchorPane mainAncor;
@@ -101,13 +110,13 @@ public class QueryRidesController implements Controller {
     }
 
 
-    public void addArrivalCity(String c){
+    public void addArrivalCity(String c) {
 
         comboArrivalCity.getItems().add(c);
 
     }
 
-    public void addDepartCity(String c){
+    public void addDepartCity(String c) {
 
         comboDepartCity.getItems().add(c);
 
@@ -162,26 +171,50 @@ public class QueryRidesController implements Controller {
         });
     }
 
-    private void showScene(String scene) {
-
-    }
-
-//    private void updateComboBox(String city){
-//
-//        businessLogic.checkComboBox(city);
-//
-//    }
 
     @FXML
 
-    public void onClickCreateAlert(ActionEvent event) throws IOException {
+    public void onClickCreateAlert(ActionEvent event) {
 
-        if(businessLogic.getCurrentUser().getClass().equals(Traveler.class)){
 
-            businessLogic.createAlert(comboDepartCity.getValue(), comboArrivalCity.getValue(), Dates.convertToDate(datepicker.getValue()), businessLogic.getCurrentUser().getEmail());
+        Ride ride = new Ride(comboDepartCity.getValue(), comboArrivalCity.getValue(), Dates.convertToDate(datepicker.getValue()));
+        User user = mainGUI.getBusinessLogic().getCurrentUser();
+
+        if (user.getClass().equals(Traveler.class)) {
+
+            if(ride != null){
+
+                businessLogic.createAlert(ride.getFromLocation(), ride.getToLocation(), ride.getDate(), user.getEmail());
+                reservationMessage.setText("Alert created!");
+                reservationMessage.setStyle("-fx-text-fill: #188a2e");
+
+
+
+                PauseTransition pause = new PauseTransition(Duration.seconds(3));
+                pause.setOnFinished(e -> {
+                    reservationMessage.setText("");
+                });
+                pause.play();
+
+            } else {
+
+                reservationMessage.setText("Please fill in all the fields");
+                reservationMessage.setStyle("-fx-text-fill: #d54242");
+                PauseTransition pause = new PauseTransition(Duration.seconds(5));
+                pause.setOnFinished(e -> {
+                    reservationMessage.setText("");
+                });
+                pause.play();
+
+            }
+
+
+        } else {
+
+            reservationMessage.setText("Please log in or sign up to create an alert");
+            reservationMessage.setStyle("-fx-text-fill: #d54242");
 
         }
-
     }
 
 
@@ -190,6 +223,15 @@ public class QueryRidesController implements Controller {
 
         bookButtn.setStyle("-fx-background-color: #f85774");
         createAlertBut.setStyle("-fx-background-color: #f85774");
+
+
+        ////////////////???????????????????????
+        bookButtn.setText(ResourceBundle.getBundle("Etiquetas").getString("Book"));
+        createAlertBut.setText(ResourceBundle.getBundle("Etiquetas").getString("CreateAlert"));
+        DepartCity.setText(ResourceBundle.getBundle("Etiquetas").getString("DepartCity"));
+        ArrivalCity.setText(ResourceBundle.getBundle("Etiquetas").getString("ArrivalCity"));
+        EventDate.setText(ResourceBundle.getBundle("Etiquetas").getString("EventDate"));
+        ///////????????????????????????????????
 
         LocalDate lD = LocalDate.now();
 
@@ -205,6 +247,13 @@ public class QueryRidesController implements Controller {
         departureCities.setAll(businessLogic.getDepartCities());
 
         ObservableList<String> arrivalCities = FXCollections.observableArrayList(new ArrayList<>());
+        arrivalCities.setAll(businessLogic.getArrivalCities(comboDepartCity.getValue()));
+
+        comboArrivalCity.setEditable(true);
+        comboDepartCity.setEditable(true);
+
+        comboDepartCity.getItems().addAll(departureCities);
+        comboArrivalCity.getItems().addAll(arrivalCities);
 
         comboDepartCity.setItems(departureCities);
         comboArrivalCity.setItems(arrivalCities);
@@ -218,12 +267,24 @@ public class QueryRidesController implements Controller {
         // a date has been chosen, update the combobox of Rides
         datepicker.setOnAction(actionEvent -> {
 
-            tblRides.getItems().clear();
-            // Vector<domain.Ride> events = businessLogic.getEvents(Dates.convertToDate(datepicker.getValue()));
-            List<Ride> rides = businessLogic.getRides(comboDepartCity.getValue(), comboArrivalCity.getValue(), Dates.convertToDate(datepicker.getValue()));
-            // List<Ride> rides = Arrays.asList(new Ride("Bilbao", "Donostia", Dates.convertToDate(datepicker.getValue()), 3, 3.5f, new Driver("pepe@pepe.com", "pepe")));
-            for (Ride ride : rides) {
-                tblRides.getItems().add(ride);
+            if (datepicker.getValue().compareTo(LocalDate.now()) < 0) {
+                reservationMessage.setText("Please select a valid date");
+                reservationMessage.setStyle("-fx-text-fill: #d54242");
+                PauseTransition pause = new PauseTransition(Duration.seconds(5));
+                pause.setOnFinished(e -> {
+                    reservationMessage.setText("");
+                });
+                pause.play();
+            } else {
+
+                tblRides.getItems().clear();
+                // Vector<domain.Ride> events = businessLogic.getEvents(Dates.convertToDate(datepicker.getValue()));
+                List<Ride> rides = businessLogic.getRides(comboDepartCity.getValue(), comboArrivalCity.getValue(), Dates.convertToDate(datepicker.getValue()));
+                // List<Ride> rides = Arrays.asList(new Ride("Bilbao", "Donostia", Dates.convertToDate(datepicker.getValue()), 3, 3.5f, new Driver("pepe@pepe.com", "pepe")));
+                for (Ride ride : rides) {
+                    tblRides.getItems().add(ride);
+                }
+
             }
         });
 
@@ -234,7 +295,6 @@ public class QueryRidesController implements Controller {
             DatePickerSkin skin = (DatePickerSkin) datepicker.getSkin();
             skin.getPopupContent().lookupAll(".button").forEach(node -> {
                 node.setOnMouseClicked(event -> {
-
 
                     List<Node> labels = skin.getPopupContent().lookupAll(".label").stream().toList();
 
@@ -299,7 +359,7 @@ public class QueryRidesController implements Controller {
 
             }
 
-        } else{
+        } else {
 
             reservationMessage.setText("Please log in or sign up to book a ride");
             reservationMessage.setStyle("-fx-text-fill: #d54242");
@@ -309,9 +369,12 @@ public class QueryRidesController implements Controller {
             });
             pause.play();
 
+            mainGUI.mGUIC.getSeeAlertsBttn().setVisible(false);
 
         }
 
 
     }
+
+
 }
