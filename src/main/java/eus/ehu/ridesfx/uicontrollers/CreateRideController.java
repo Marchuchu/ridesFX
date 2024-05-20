@@ -137,15 +137,10 @@ public class CreateRideController implements Controller {
 
         mainGUI.mGUIC.getSeeAlertsBttn().setVisible(true);
 
-
-        try {
-
+        if(date == null){
             lblErrorMessage.setText("Please fill the date");
             lblErrorMessage.setStyle("-fx-text-fill: #d54242");
-
-        } catch (Exception e1) {
-            e1.printStackTrace();
-
+            return;
         }
 
         if (date.compareTo(LocalDate.now()) < 0) {
@@ -180,44 +175,36 @@ public class CreateRideController implements Controller {
             lblErrorMessage.setStyle("-fx-text-fill: #d54242");
             return;
 
-        } else {
-
-            try {
-                int numPlaces = Integer.parseInt(txtNumberOfSeats.getText());
-            } catch (NumberFormatException e1) {
-                //lblErrorMessage.setText("The number of seats must be a number");
-                lblErrorMessage.setText(ResourceBundle.getBundle("Etiquetas").getString("CreateRideGUI.NumberOfSeatsMustBeANumber"));
-                lblErrorMessage.setStyle("-fx-text-fill: #d54242");
-                return;
-            }
-
         }
 
-        int numPlaces = Integer.parseInt(txtNumberOfSeats.getText());
+        int numPlaces = 0;
+        try {
+            numPlaces = Integer.parseInt(txtNumberOfSeats.getText());
+        } catch (NumberFormatException e1) {
+            //lblErrorMessage.setText("The number of seats must be a number");
+            lblErrorMessage.setText(ResourceBundle.getBundle("Etiquetas").getString("CreateRideGUI.NumberOfSeatsMustBeANumber"));
+            lblErrorMessage.setStyle("-fx-text-fill: #d54242");
+            return;
+        }
 
         if (txtPrice.getText() == null) {
 
             lblErrorMessage.setText("Please fill the price");
             lblErrorMessage.setStyle("-fx-text-fill: #d54242");
             return;
-
-        } else {
-
-            try {
-                float price = Float.parseFloat(txtPrice.getText());
-            } catch (NumberFormatException e1) {
-                lblErrorMessage.setText("The price must be a number");
-                lblErrorMessage.setStyle("-fx-text-fill: #d54242");
-                return;
-            }
-
         }
 
-        float price = Float.parseFloat(txtPrice.getText());
+        float price = 0;
+        try {
+             price = Float.parseFloat(txtPrice.getText());
+        } catch (NumberFormatException e1) {
+            lblErrorMessage.setText("The price must be a number");
+            lblErrorMessage.setStyle("-fx-text-fill: #d54242");
+            return;
+        }
 
-        if (numPlaces >= 4) {
-
-            lblErrorMessage.setText("The number of seats must be less than 4");
+        if (numPlaces > 4) {
+            lblErrorMessage.setText("The maximum number of seats is 4");
             lblErrorMessage.setStyle("-fx-text-fill: #d54242");
             return;
         }
@@ -226,131 +213,19 @@ public class CreateRideController implements Controller {
         User user = businessLogic.getCurrentUser();
         businessLogic.createRideClick(from, to, Dates.convertToDate(date), numPlaces, price, user.getEmail());
         displayMessage(ResourceBundle.getBundle("Etiquetas").getString("CreateRideGUI.RideCreated"), "success");
+
+        // TODO: add new city to the combo box
         List<String> deptCities = businessLogic.getDepartCities();
         List<String> destCities = businessLogic.getDestinationCities(from);
 
 
-//            if (from != null && to != null && date != null && txtNumberOfSeats.getText() != null && txtPrice.getText() != null) {
-//
-//                try {
-//                    int numPlaces = Integer.parseInt(txtNumberOfSeats.getText());
-//                } catch (NumberFormatException e1) {
-//                    //lblErrorMessage.setText("The number of seats must be a number");
-//                    lblErrorMessage.setText(ResourceBundle.getBundle("Etiquetas").getString("CreateRideGUI.NumberOfSeatsMustBeANumber"));
-//                    lblErrorMessage.setStyle("-fx-text-fill: #d54242");
-//                }
-//
-//                int numPlaces = Integer.parseInt(txtNumberOfSeats.getText());
-//
-//                try {
-//                    float price = Float.parseFloat(txtPrice.getText());
-//                } catch (NumberFormatException e1) {
-//                    lblErrorMessage.setText("The price must be a number");
-//                    lblErrorMessage.setStyle("-fx-text-fill: #d54242");
-//                }
-//
-//                float price = Float.parseFloat(txtPrice.getText());
-//
-//                if (numPlaces >= 4) {
-//
-//                    lblErrorMessage.setText("The number of seats must be less than 4");
-//                    lblErrorMessage.setStyle("-fx-text-fill: #d54242");
-//
-//
-//                } else {
-//
-//                    User user = businessLogic.getCurrentUser();
-//
-//                    businessLogic.createRideClick(from, to, Dates.convertToDate(date), numPlaces, price, user.getEmail());
-//                    displayMessage(ResourceBundle.getBundle("Etiquetas").getString("CreateRideGUI.RideCreated"), "success");
-//
-//                    List<String> deptCities = businessLogic.getDepartCities();
-//                    List<String> destCities = businessLogic.getDestinationCities(from);
-//
-//                }
-//
-//            } else {
-//
-//                lblErrorMinBet.setText("Please fill all the fields");
-//                lblErrorMessage.setStyle("-fx-text-fill: #d54242");
-//                lblErrorMinBet.getStyleClass().setAll("lbl", "lbl-danger");
-//
-//            }
-
-
-//
-//        clearErrorLabels();
-//
-//        //  Event event = comboEvents.getSelectionModel().getSelectedItem();
-//        String errors = field_Errors();
-//
-//        if (errors != null) {
-//            // businessLogic.createQuestion(event, inputQuestion, inputPrice);
-//            displayMessage(errors, "danger");
-//
-//        } else {
-//            try {
-//
-//                int inputSeats = Integer.parseInt(txtNumberOfSeats.getText());
-//                float price = Float.parseFloat(txtPrice.getText());
-//                User user = businessLogic.getCurrentUser();
-//                Ride r = businessLogic.createRide(txtDepartCity.getText(), txtArrivalCity.getText(), Dates.convertToDate(datePicker.getValue()), inputSeats, price, user.getEmail());
-//                displayMessage(ResourceBundle.getBundle("Etiquetas").getString("CreateRideGUI.RideCreated"), "success");
-//
-//
-//            } catch (RideMustBeLaterThanTodayException e1) {
-//                displayMessage(e1.getMessage(), "danger");
-//            } catch (RideAlreadyExistException e1) {
-//                displayMessage(e1.getMessage(), "danger");
-//            }
-//        }
-
-/*
-    if (lblErrorMinBet.getText().length() > 0 && showErrors) {
-      lblErrorMinBet.getStyleClass().setAll("lbl", "lbl-danger");
-    }
-    if (lblErrorQuestion.getText().length() > 0 && showErrors) {
-      lblErrorQuestion.getStyleClass().setAll("lbl", "lbl-danger");
-    }
- */
     }
 
-  /*private void setEventsPrePost(int year, int month) {
-    LocalDate date = LocalDate.of(year, month, 1);
-    setEvents(date.getYear(), date.getMonth().getValue());
-    setEvents(date.plusMonths(1).getYear(), date.plusMonths(1).getMonth().getValue());
-    setEvents(date.plusMonths(-1).getYear(), date.plusMonths(-1).getMonth().getValue());
-  }*/
-
- /* private void setEvents(int year, int month) {
-
-    Date date = Dates.toDate(year, month);
-
-    for (Date day : businessLogic.getEventsMonth(date)) {
-      holidays.add(Dates.convertToLocalDateViaInstant(day));
-    }
-  }*/
 
     @FXML
     void initialize() {
 
         btnCreateRide.setStyle("-fx-background-color: #f85774");
-
-/*
-    Callback<ListView<Event>, ListCell<Event>> factory = lv -> new ListCell<>() {
-      @Override
-      protected void updateItem(Event item, boolean empty) {
-        super.updateItem(item, empty);
-        setText(empty ? "" : item.getDescription());
-      }
-    };
-
-
-     comboEvents.setCellFactory(factory);
-    comboEvents.setButtonCell(factory.call(null));
-
- */
-
 
         // setEventsPrePost(LocalDate.now().getYear(), LocalDate.now().getMonth().getValue());
 
@@ -393,21 +268,6 @@ public class CreateRideController implements Controller {
 
         // when a date is selected...
         datePicker.setOnAction(actionEvent -> {
-     /* comboEvents.getItems().clear();
-
-      oListEvents = FXCollections.observableArrayList(new ArrayList<>());
-      oListEvents.setAll(businessLogic.getEvents(Dates.convertToDate(datePicker.getValue())));
-
-      comboEvents.setItems(oListEvents);
-
-      if (comboEvents.getItems().size() == 0)
-        btnCreateRide.setDisable(true);
-      else {
-         btnCreateRide.setDisable(false);
-        // select first option
-        comboEvents.getSelectionModel().select(0);
-      }
-*/
         });
 
     }
