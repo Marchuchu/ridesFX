@@ -34,4 +34,6 @@ public class ExitController implements Controller {
     public void changeLanguage(ResourceBundle resources) {
 
     }
+
+
 }

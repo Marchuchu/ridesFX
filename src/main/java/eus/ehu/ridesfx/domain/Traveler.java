@@ -14,7 +14,7 @@ public class Traveler extends User {
 
     private String repPassword;
 
-    @OneToMany
+    @OneToMany (fetch = FetchType.EAGER, cascade = CascadeType.PERSIST)
     private List<Alerts> alertsList = new ArrayList<Alerts>();
 
 
@@ -51,14 +51,6 @@ public class Traveler extends User {
         this.repPassword = repPassword;
     }
 
-//    public String getEmail() {
-//        return email;
-//    }
-//
-//    public void setEmail(String email) {
-//        this.email = email;
-//    }
-
     public List<Alerts> getAlertsList() {
         return alertsList;
     }
@@ -68,10 +60,11 @@ public class Traveler extends User {
     }
 
     public Alerts addAlert(String from, String to, Date date) {
-        Alerts alert = new Alerts(from, to, date, this.getName());
+        Alerts alert = new Alerts(from, to, date);
         alertsList.add(alert);
         return alert;
     }
+
 
 
     public String toString() {

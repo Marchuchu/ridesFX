@@ -9,6 +9,11 @@ import java.util.Date;
 
 public class Alerts {
 
+    @ManyToOne
+    @Id
+    @GeneratedValue
+    private Traveler traveler;
+
     @Column(name = "alert_from")
     private String from;
 
@@ -21,34 +26,19 @@ public class Alerts {
     @Column(name = "alert_date")
     private Date date;
 
-    @ManyToOne
-    private Traveler traveler;
-
-    @Id
-    private String email;
 
     public Alerts(String from, String to, Date date) {
 
         this.from = from;
         this.to = to;
         this.date = date;
-
     }
 
-    public Alerts(String from, String to, Date date, String email) {
+    public Alerts(String from, String to, Date date, Traveler traveler) {
 
         this.from = from;
         this.to = to;
         this.date = date;
-        this.email = email;
-    }
-
-    public Alerts(String from, String to, Date date, String email, Traveler traveler) {
-
-        this.from = from;
-        this.to = to;
-        this.date = date;
-        this.email = email;
         this.traveler = traveler;
     }
 
@@ -57,13 +47,6 @@ public class Alerts {
 
     }
 
-    public String getEmail() {
-        return email;
-    }
-
-    public void setEmail(String email) {
-        this.email = email;
-    }
 
     @JoinColumn
     public Alerts getAlert() {

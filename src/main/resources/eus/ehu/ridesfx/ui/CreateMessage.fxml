@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.TextArea?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.text.Text?>
+
+<AnchorPane fx:id="mainWrapper" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="eus.ehu.ridesfx.uicontrollers.CreateMessageController">
+   <children>
+      <TextField fx:id="toBox" layoutX="100.0" layoutY="38.0" />
+      <TextField fx:id="subjectBox" layoutX="100.0" layoutY="78.0" prefHeight="25.0" prefWidth="452.0" />
+      <TextArea fx:id="messageField" layoutX="100.0" layoutY="125.0" prefHeight="176.0" prefWidth="452.0" />
+      <Button fx:id="sendMessageBttn" layoutX="274.0" layoutY="348.0" mnemonicParsing="false" onAction="#onClickSendMessage" text="%Send" />
+      <Text layoutX="67.0" layoutY="55.0" strokeType="OUTSIDE" strokeWidth="0.0" text="%To" />
+      <Text layoutX="39.0" layoutY="138.0" strokeType="OUTSIDE" strokeWidth="0.0" text="%Message" />
+      <Text fx:id="errorMessage" layoutX="259.0" layoutY="331.0" strokeType="OUTSIDE" strokeWidth="0.0" text="%errorMessage" />
+      <Text layoutX="43.0" layoutY="95.0" strokeType="OUTSIDE" strokeWidth="0.0" text="%Subject" />
+   </children>
+</AnchorPane>

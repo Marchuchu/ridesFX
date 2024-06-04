@@ -123,9 +123,9 @@ public class DataAccess {
             Traveler traveler1 = new Traveler("traveler1@gmail.com", "Jose Antonio", "amorch1", "amorch");
             Traveler traveler2 = new Traveler("traveler2@gmail.com", "Lius Fernando", "54321", "54321");
 
-            //Create Alerts
-            // Alerts alert1 = new Alerts("Donostia", "Bilbo", UtilDate.newDate(year, month, 15), traveler1.getEmail());
-            // Alerts alert2 = new Alerts("Donostia", "Vitoria", UtilDate.newDate(year, month + 1, 15), traveler2.getEmail());
+//            Create Alerts
+//             Alerts alert1 = new Alerts("Donostia", "Bilbo", UtilDate.newDate(year, month, 15));
+//             Alerts alert2 = new Alerts("Donostia", "Vitoria", UtilDate.newDate(year, month + 1, 15));
 
 
             //Create rides
@@ -143,8 +143,7 @@ public class DataAccess {
 
             driver3.addRide("Bilbo", "Donostia", UtilDate.newDate(year, month + 1, 14), 1, 3);
 
-        //    traveler2.setAlertsList(Arrays.asList(alert2));
-         //   traveler1.setAlertsList(Arrays.asList(alert1));
+           // traveler1.addAlert("Donostia", "Vitoria", UtilDate.newDate(year, month + 1, 15));
 
             db.persist(driver1);
             db.persist(driver2);
@@ -153,7 +152,7 @@ public class DataAccess {
             db.persist(traveler1);
             db.persist(traveler2);
 
-            //db.persist(alert1);
+//            db.persist(alert1);
             //db.persist(alert2);
 
             db.getTransaction().commit();
@@ -257,7 +256,7 @@ public class DataAccess {
 
             db.getTransaction().begin();
 
-            Alerts alert = new Alerts(from, to, date, email);
+            Alerts alert = new Alerts(from, to, date);
 
             if(alert != null){
 

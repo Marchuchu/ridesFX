@@ -98,6 +98,7 @@ public interface BlFacade {
 
     void createRideClick(String from, String to, Date date, int nPlaces, float price, String driverEmail);
 
+
     User getDriver(User u);
 
     void addCitie(String from);

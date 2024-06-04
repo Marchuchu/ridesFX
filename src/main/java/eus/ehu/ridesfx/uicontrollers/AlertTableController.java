@@ -76,7 +76,7 @@ public class AlertTableController implements Controller{
 
         } else if (r == null){
 
-            message.setText("You must select an alert to cancel");
+            message.setText(translate("YouMustSelectAnAlertToCancel"));
             cancelAlertBttn.setVisible(true);
             takeRideBttn.setVisible(false);
 
@@ -92,7 +92,7 @@ public class AlertTableController implements Controller{
 
         takeRideBttn.setVisible(false);
         cancelAlertBttn.setStyle("-fx-background-color: #f85774");
-        message.setText("Choose the alert you want to cancel");
+        message.setText(translate("ChooseTheRideYouWantToTake"));
 
     }
 
@@ -107,13 +107,13 @@ public class AlertTableController implements Controller{
 
         } else {
 
-            message.setText("You must select a ride to take");
+            message.setText(translate("YouMustSelectARideToTake"));
 
         }
 
         cancelAlertBttn.setVisible(false);
         takeRideBttn.setStyle("-fx-background-color: #f85774");
-        message.setText("Choose the ride you want to take");
+        message.setText(translate("ChooseTheRideYouWantToTake"));
 
     }
 
@@ -137,6 +137,20 @@ public class AlertTableController implements Controller{
 
     @Override
     public void changeLanguage(ResourceBundle resources) {
+
+        takeRideBttn.setText(resources.getString("TakeRide"));
+        cancelAlertBttn.setText(resources.getString("CancelAlert"));
+        from.setText(resources.getString("From"));
+        to.setText(resources.getString("To"));
+        user.setText(resources.getString("User"));
+        date.setText(resources.getString("Date"));
+
+
+    }
+
+    String translate(String txt){
+
+        return ResourceBundle.getBundle("Etiquetas").getString(txt);
 
     }
 
