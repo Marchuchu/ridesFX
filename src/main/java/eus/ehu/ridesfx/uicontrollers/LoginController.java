@@ -78,6 +78,8 @@ public class LoginController implements Controller {
                         mGUI.mGUIC.getQueryRidesBtn().setVisible(false);
                         mGUI.mGUIC.getCreateRidesBtn().setVisible(true);
                         mGUI.mGUIC.getSeeAlertsBttn().setVisible(true);
+                        mGUI.mGUIC.getCreateRidesBtn().setVisible(false);
+
                         mGUI.showScene("Create Ride");
 
                     }
@@ -86,7 +88,8 @@ public class LoginController implements Controller {
 
 
             } catch (UnknownUser unknownUser) {
-                hasLogin.setText("Login failed");
+
+                hasLogin.setText(translate("LoginController.LoginFailed"));
                 hasLogin.setStyle("-fx-text-fill: #d54242");
                 PauseTransition pause = new PauseTransition(Duration.seconds(3));
                 pause.setOnFinished(e -> {
@@ -106,8 +109,12 @@ public class LoginController implements Controller {
     void initialize() {
 
         logInButt.setStyle("-fx-background-color: #f85774;");
-        logInButt.setText("Log In");
+        logInButt.setText(translate("LoginController.LogIn"));
 
+    }
+
+    String translate(String txt) {
+        return ResourceBundle.getBundle("Etiquetas").getString(txt);
     }
 
     @Override

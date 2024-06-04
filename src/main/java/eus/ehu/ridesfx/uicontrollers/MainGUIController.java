@@ -36,6 +36,8 @@ public class MainGUIController implements Controller {
     @FXML
     private Label rolName;
 
+    @FXML
+    private Button seeMessagesBttn;
 
     @FXML
     private Button signUpButton;
@@ -235,26 +237,33 @@ public class MainGUIController implements Controller {
     }
 
     @FXML
-    void createRide(ActionEvent event){
+    void createRide(ActionEvent event) {
 
         mGUI.showScene("Create Ride");
         queryRidesBtn.setVisible(false);
         exitBttn.setVisible(true);
         logInButton.setVisible(false);
         signUpButton.setVisible(false);
+        createRidesBtn.setVisible(false);
 
     }
 
     @FXML
-    void seeAlerts(ActionEvent event)  {
+    void seeAlerts(ActionEvent event) {
         mGUI.showScene("See Alerts");
 
         if (mGUI.getBusinessLogic().getCurrentUser().getClass().equals(Driver.class)) {
             queryRidesBtn.setVisible(false);
+            createRidesBtn.setVisible(true);
         } else if (mGUI.getBusinessLogic().getCurrentUser().getClass().equals(Traveler.class)) {
             createRidesBtn.setVisible(false);
 
         }
+    }
+
+    @FXML
+    void seeMessages(ActionEvent event) {
+
     }
 
     @FXML
@@ -284,6 +293,8 @@ public class MainGUIController implements Controller {
     }
 
 
+
+
     @Override
     public void setMainApp(MainGUI mainGUI) {
         this.mGUI = mainGUI;
@@ -291,6 +302,7 @@ public class MainGUIController implements Controller {
 
     @Override
     public void changeLanguage(ResourceBundle resources) {
+
         signUpButton.setText(resources.getString("SignUp"));
         exitBttn.setText(resources.getString("LogIn"));
         createRidesBtn.setText(resources.getString("CreateRide"));
@@ -299,7 +311,6 @@ public class MainGUIController implements Controller {
         seeAlertsBttn.setText(resources.getString("SeeAlerts"));
         exitBttn.setText(resources.getString("Exit"));
         rolName.setText(resources.getString("Guest"));
-
 
 
     }

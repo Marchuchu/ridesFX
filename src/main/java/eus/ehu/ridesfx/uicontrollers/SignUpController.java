@@ -71,10 +71,11 @@ public class SignUpController implements Controller {
     }
 
     @FXML
-    void onClickSignUp(ActionEvent event){
+    void onClickSignUp(ActionEvent event) {
 
         if (name.getText() == null || email.getText() == null || password.getText() == null || repPas.getText() == null || role.getValue() == null) {
-            hasLogin.setText("Please fill all the fields");
+
+            hasLogin.setText(translate("SignUpController.EmptyFields"));
             mainGUI.mGUIC.getSeeAlertsBttn().setVisible(false);
             hasLogin.setStyle("-fx-text-fill: #d54242");
 
@@ -122,7 +123,7 @@ public class SignUpController implements Controller {
 
                 } else if (!email.getText().contains("@")) {
 
-                    hasLogin.setText("Introduce a valid email");
+                    hasLogin.setText(translate("SignUpController.ValidEmail"));
                     hasLogin.setStyle("-fx-text-fill: #d54242");
 
                     PauseTransition pause = new PauseTransition(Duration.seconds(3));
@@ -132,7 +133,8 @@ public class SignUpController implements Controller {
                     pause.play();
 
                 } else {
-                    hasLogin.setText("User already exists");
+
+                    hasLogin.setText(translate("SignUpController.UserExists"));
                     hasLogin.setStyle("-fx-text-fill: #d54242");
 
                     PauseTransition pause = new PauseTransition(Duration.seconds(3));
@@ -144,7 +146,8 @@ public class SignUpController implements Controller {
                 }
 
             } else {
-                hasLogin.setText("Passwords doesn't match");
+
+                hasLogin.setText(translate("SignUpController.PasswordsDontMatch"));
                 hasLogin.setStyle("-fx-text-fill: #d54242");
 
                 PauseTransition pause = new PauseTransition(Duration.seconds(3));
@@ -159,7 +162,7 @@ public class SignUpController implements Controller {
     }
 
     @FXML
-    void initialize(){
+    void initialize() {
 
         role.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
             r = newValue;
@@ -171,8 +174,10 @@ public class SignUpController implements Controller {
         signUpButt.setText("Sign Up");
 
 
+    }
 
-
+    String translate(String txt) {
+        return ResourceBundle.getBundle("Etiquetas").getString(txt);
     }
 
     public class Window {

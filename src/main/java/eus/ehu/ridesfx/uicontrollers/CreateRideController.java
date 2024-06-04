@@ -137,74 +137,80 @@ public class CreateRideController implements Controller {
 
         mainGUI.mGUIC.getSeeAlertsBttn().setVisible(true);
 
-        if(date == null){
-            lblErrorMessage.setText("Please fill the date");
+        if (date == null) {
+
+            lblErrorMessage.setText(translate("CreateRideGUI.FillDate"));
             lblErrorMessage.setStyle("-fx-text-fill: #d54242");
             return;
         }
 
         if (date.compareTo(LocalDate.now()) < 0) {
 
-            lblErrorMessage.setText("The date must be later than today");
+            //lblErrorMessage.setText("The date must be later than today");
+
+            lblErrorMessage.setText(translate("CreateRideGUI.DateMustBeLaterThanToday"));
             lblErrorMessage.setStyle("-fx-text-fill: #d54242");
             return;
 
 
         }
 
-        if (from == null) {
+        if (from.equals("")) {
 
-            lblErrorMessage.setText("Please fill the departure city");
+            lblErrorMessage.setText(translate("CreateRideGUI.FillDepartureCity"));
             lblErrorMessage.setStyle("-fx-text-fill: #d54242");
             return;
 
 
         }
 
-        if (to == null) {
+        if (to.equals("")) {
 
-            lblErrorMessage.setText("Please fill the arrival city");
             lblErrorMessage.setStyle("-fx-text-fill: #d54242");
+            lblErrorMessage.setText(translate("CreateRideGUI.FillArrivalCity"));
             return;
 
         }
 
         if (txtNumberOfSeats.getText() == null) {
 
-            lblErrorMessage.setText("Please fill the number of seats");
+            lblErrorMessage.setText(translate("CreateRideGUI.FillNumberOfSeats"));
             lblErrorMessage.setStyle("-fx-text-fill: #d54242");
             return;
 
         }
 
         int numPlaces = 0;
+
         try {
             numPlaces = Integer.parseInt(txtNumberOfSeats.getText());
         } catch (NumberFormatException e1) {
-            //lblErrorMessage.setText("The number of seats must be a number");
-            lblErrorMessage.setText(ResourceBundle.getBundle("Etiquetas").getString("CreateRideGUI.NumberOfSeatsMustBeANumber"));
+
+            lblErrorMessage.setText(translate("CreateRideGUI.NumberOfSeatsMustBeANumber"));
             lblErrorMessage.setStyle("-fx-text-fill: #d54242");
             return;
         }
 
         if (txtPrice.getText() == null) {
 
-            lblErrorMessage.setText("Please fill the price");
+            lblErrorMessage.setText(translate("CreateRideGUI.FillPrice"));
             lblErrorMessage.setStyle("-fx-text-fill: #d54242");
             return;
         }
 
         float price = 0;
         try {
-             price = Float.parseFloat(txtPrice.getText());
+            price = Float.parseFloat(txtPrice.getText());
         } catch (NumberFormatException e1) {
-            lblErrorMessage.setText("The price must be a number");
+
+            lblErrorMessage.setText(translate("CreateRideGUI.PriceMustBeANumber"));
             lblErrorMessage.setStyle("-fx-text-fill: #d54242");
             return;
         }
 
-        if (numPlaces > 4) {
-            lblErrorMessage.setText("The maximum number of seats is 4");
+        if (numPlaces > 5) {
+
+            lblErrorMessage.setText(translate("CreateRideGUI.NumberOfSeatsMustBeLessThan5"));
             lblErrorMessage.setStyle("-fx-text-fill: #d54242");
             return;
         }
@@ -212,11 +218,19 @@ public class CreateRideController implements Controller {
 
         User user = businessLogic.getCurrentUser();
         businessLogic.createRideClick(from, to, Dates.convertToDate(date), numPlaces, price, user.getEmail());
-        displayMessage(ResourceBundle.getBundle("Etiquetas").getString("CreateRideGUI.RideCreated"), "success");
+        displayMessage(translate("CreateRideGUI.RideCreated"), "success");
 
         // TODO: add new city to the combo box
         List<String> deptCities = businessLogic.getDepartCities();
         List<String> destCities = businessLogic.getDestinationCities(from);
+
+        if (!deptCities.contains(from)) {
+            businessLogic.addCitie(from);
+        }
+
+        if (!destCities.contains(to)) {
+            businessLogic.addCitie(to);
+        }
 
 
     }
@@ -275,6 +289,10 @@ public class CreateRideController implements Controller {
     @Override
     public void setMainApp(MainGUI mainGUI) {
         this.mainGUI = mainGUI;
+    }
+
+    String translate(String txt) {
+        return ResourceBundle.getBundle("Etiquetas").getString(txt);
     }
 
     @Override

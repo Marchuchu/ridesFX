@@ -17,7 +17,7 @@ public class MainGUI {
 
     public MainGUIController mGUIC;
     private BlFacade businessLogic;
-    private Window createRideWin, queryRideWin, loginWin, signUWin, mainWin, logoutWin, alertWin;
+    private Window createRideWin, queryRideWin, loginWin, signUWin, mainWin, logoutWin, alertWin, seeMessageWin, createMessageWin;
     private Stage stage;
     private Scene scene;
 
@@ -63,7 +63,7 @@ public class MainGUI {
         return window;
     }
 
-    public void showScene(String scene){
+    public void showScene(String scene) {
 
         switch (scene) {
 
@@ -73,6 +73,8 @@ public class MainGUI {
             case "Log In" -> mGUIC.getMainWrapper().setCenter(loginWin.ui);
             case "Log Out" -> mGUIC.getMainWrapper().setCenter(logoutWin.ui);
             case "See Alerts" -> mGUIC.getMainWrapper().setCenter(alertWin.ui);
+            //case "See Messages" -> mGUIC.getMainWrapper().setCenter(seeMessageWin.ui);
+            //case "Send Message" -> mGUIC.getMainWrapper().setCenter(createMessageWin.ui);
 
         }
     }
@@ -90,18 +92,29 @@ public class MainGUI {
         loginWin = load("LogIn.fxml");
         logoutWin = load("Exit.fxml");
         alertWin = load("AlertTable.fxml");
+        seeMessageWin = load("Messages.fxml");
+        createMessageWin = load("CreateMessage.fxml");
 
         Scene scene = new Scene(mainWin.ui);
         stage.setTitle("ShareTrip BorderLayout");
         stage.setScene(scene);
-        stage.setWidth(1300);
-        stage.setHeight(800);
+        stage.setWidth(1150);
+        stage.setHeight(740);
         stage.show();
     }
 
     public void changeLanguage(ResourceBundle resources) {
+
         mainWin.controller.changeLanguage(resources);
         queryRideWin.controller.changeLanguage(resources);
+        createRideWin.controller.changeLanguage(resources);
+        signUWin.controller.changeLanguage(resources);
+        loginWin.controller.changeLanguage(resources);
+        logoutWin.controller.changeLanguage(resources);
+        alertWin.controller.changeLanguage(resources);
+        seeMessageWin.controller.changeLanguage(resources);
+        createMessageWin.controller.changeLanguage(resources);
+
     }
 
     public static class Window {

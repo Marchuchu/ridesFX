@@ -178,17 +178,27 @@ public class QueryRidesController implements Controller {
     public void onClickCreateAlert(ActionEvent event) {
 
 
-        Ride ride = new Ride(comboDepartCity.getValue(), comboArrivalCity.getValue(), Dates.convertToDate(datepicker.getValue()));
+        Alerts ride = new Alerts(comboDepartCity.getValue(), comboArrivalCity.getValue(), Dates.convertToDate(datepicker.getValue()));
         User user = mainGUI.getBusinessLogic().getCurrentUser();
 
         if (user.getClass().equals(Traveler.class)) {
 
-            if(ride != null){
+            if (ride.getFrom() != null && ride.getTo() != null && ride.getDate() != null) {
 
-                businessLogic.createAlert(ride.getFromLocation(), ride.getToLocation(), ride.getDate(), user.getEmail());
-                reservationMessage.setText("Alert created!");
+                businessLogic.createAlert(ride.getFrom(), ride.getTo(), ride.getDate(), user.getEmail());
+                reservationMessage.setText(translate("AlertCreated"));
                 reservationMessage.setStyle("-fx-text-fill: #188a2e");
 
+//                Thread t = new Thread(() -> {
+//                    try {
+//                        Thread.sleep(3);
+//                    } catch (InterruptedException e) {
+//                        e.printStackTrace();
+//                    }
+//                    reservationMessage.setText("");
+//                });
+//
+//                t.start();
 
 
                 PauseTransition pause = new PauseTransition(Duration.seconds(3));
@@ -199,7 +209,7 @@ public class QueryRidesController implements Controller {
 
             } else {
 
-                reservationMessage.setText("Please fill in all the fields");
+                reservationMessage.setText(translate("QueryRidesController.PleaseFillInAllFields"));
                 reservationMessage.setStyle("-fx-text-fill: #d54242");
                 PauseTransition pause = new PauseTransition(Duration.seconds(5));
                 pause.setOnFinished(e -> {
@@ -212,12 +222,17 @@ public class QueryRidesController implements Controller {
 
         } else {
 
-            reservationMessage.setText("Please log in or sign up to create an alert");
+            reservationMessage.setText(translate("QueryRidesController.PleaseLogInOrSignUp"));
             reservationMessage.setStyle("-fx-text-fill: #d54242");
 
         }
     }
 
+    String translate(String txt) {
+
+        return ResourceBundle.getBundle("Etiquetas").getString(txt);
+
+    }
 
     @FXML
     void initialize() {
@@ -225,14 +240,11 @@ public class QueryRidesController implements Controller {
         bookButtn.setStyle("-fx-background-color: #f85774");
         createAlertBut.setStyle("-fx-background-color: #f85774");
 
-
-        ////////////////???????????????????????
-        bookButtn.setText(ResourceBundle.getBundle("Etiquetas").getString("Book"));
-        createAlertBut.setText(ResourceBundle.getBundle("Etiquetas").getString("CreateAlert"));
-        DepartCity.setText(ResourceBundle.getBundle("Etiquetas").getString("DepartCity"));
-        ArrivalCity.setText(ResourceBundle.getBundle("Etiquetas").getString("ArrivalCity"));
-        EventDate.setText(ResourceBundle.getBundle("Etiquetas").getString("EventDate"));
-        ///////????????????????????????????????
+        bookButtn.setText(translate("Book"));
+        createAlertBut.setText(translate("CreateAlert"));
+        DepartCity.setText(translate("DepartCity"));
+        ArrivalCity.setText(translate("ArrivalCity"));
+        EventDate.setText(translate("EventDate"));
 
         LocalDate lD = LocalDate.now();
 
@@ -269,7 +281,8 @@ public class QueryRidesController implements Controller {
         datepicker.setOnAction(actionEvent -> {
 
             if (datepicker.getValue().compareTo(LocalDate.now()) < 0) {
-                reservationMessage.setText("Please select a valid date");
+
+                reservationMessage.setText(translate("QueryRidesController.PleaseSelectFutureDate"));
                 reservationMessage.setStyle("-fx-text-fill: #d54242");
                 PauseTransition pause = new PauseTransition(Duration.seconds(5));
                 pause.setOnFinished(e -> {
@@ -337,7 +350,8 @@ public class QueryRidesController implements Controller {
 
             if (ride != null) {
 
-                reservationMessage.setText("Booking succesful!");
+
+                reservationMessage.setText(translate("QueryRidesController.RideBooked"));
                 reservationMessage.setStyle("-fx-text-fill: #188a2e");
 
                 PauseTransition pause = new PauseTransition(Duration.seconds(3));
@@ -350,7 +364,7 @@ public class QueryRidesController implements Controller {
 
             } else {
 
-                reservationMessage.setText("Please select a ride to book");
+                reservationMessage.setText(translate("QueryRidesController.PleaseSelectRideToBook"));
                 reservationMessage.setStyle("-fx-text-fill: #d54242");
                 PauseTransition pause = new PauseTransition(Duration.seconds(5));
                 pause.setOnFinished(e -> {
@@ -362,7 +376,7 @@ public class QueryRidesController implements Controller {
 
         } else {
 
-            reservationMessage.setText("Please log in or sign up to book a ride");
+            reservationMessage.setText(translate("QueryRidesController.PleaseLogInOrSignUp"));
             reservationMessage.setStyle("-fx-text-fill: #d54242");
             PauseTransition pause = new PauseTransition(Duration.seconds(7));
             pause.setOnFinished(e -> {
