@@ -5,6 +5,7 @@ import java.util.ResourceBundle;
 
 import eus.ehu.ridesfx.businessLogic.BlFacade;
 import eus.ehu.ridesfx.ui.MainGUI;
+import eus.ehu.ridesfx.utils.StringUtils;
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -52,7 +53,7 @@ public class CreateMessageController implements Controller {
 
         if (toBox.getText().isEmpty() || subjectBox.getText().isEmpty() || messageField.getText().isEmpty()) {
             errorMessage.setVisible(true);
-            errorMessage.setText(translate("CreateMessageController.EmptyFields"));
+            errorMessage.setText(StringUtils.translate("CreateMessageController.EmptyFields"));
 
             Thread thread = new Thread(() -> {
                 try {
@@ -67,7 +68,7 @@ public class CreateMessageController implements Controller {
             return;
         } else if (!toBox.getText().contains("@")) {
 
-            errorMessage.setText(translate("CreateMessageController.InvalidEmail"));
+            errorMessage.setText(StringUtils.translate("CreateMessageController.InvalidEmail"));
 
             Thread thread = new Thread(() -> {
                 try {
@@ -81,9 +82,9 @@ public class CreateMessageController implements Controller {
 
         } else {
 
-            //TODO: el ID va a ser el ultimo elemento +1 , no el 1
-            businessLogic.sendMessage(1, toBox.getText(), subjectBox.getText(), messageField.getText());
-            errorMessage.setText(translate("CreateMessageController.MessageSent"));
+
+            businessLogic.sendMessage(toBox.getText(), subjectBox.getText(), messageField.getText());
+            errorMessage.setText(StringUtils.translate("CreateMessageController.MessageSent"));
 
             toBox.setText("");
             subjectBox.setText("");
@@ -119,15 +120,17 @@ public class CreateMessageController implements Controller {
 
     }
 
-    String translate(String txt) {
-        return ResourceBundle.getBundle("Etiquetas").getString(txt);
-    }
 
     @Override
     public void changeLanguage(ResourceBundle resources) {
 
         sendMessageBttn.setText(resources.getString("SendMessage"));
         errorMessage.setText(resources.getString("CreateMessageController.EmptyFields"));
+
+    }
+
+    @Override
+    public void showHide() {
 
     }
 }

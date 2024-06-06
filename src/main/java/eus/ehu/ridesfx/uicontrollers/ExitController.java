@@ -35,5 +35,10 @@ public class ExitController implements Controller {
 
     }
 
+    @Override
+    public void showHide() {
+
+    }
+
 
 }

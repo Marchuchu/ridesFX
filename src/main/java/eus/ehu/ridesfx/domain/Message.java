@@ -2,12 +2,13 @@ package eus.ehu.ridesfx.domain;
 
 
 import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
 
 @Entity
 public class Message {
 
-    @Id
+    @Id @GeneratedValue
     private int id;
     private String from;
     private String to;
@@ -21,8 +22,7 @@ public class Message {
         this.subject = subject;
     }
 
-    public Message(int id,String from, String message, String subject) {
-        this.id = id;
+    public Message(String from, String message, String subject) {
         this.from = from;
         this.message = message;
         this.subject = subject;

@@ -8,6 +8,7 @@ import eus.ehu.ridesfx.businessLogic.BlFacade;
 import eus.ehu.ridesfx.domain.Traveler;
 import eus.ehu.ridesfx.exceptions.UnknownUser;
 import eus.ehu.ridesfx.ui.MainGUI;
+import eus.ehu.ridesfx.utils.StringUtils;
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -56,7 +57,7 @@ public class LoginController implements Controller {
         if (logInButt.getText() == null || password.getText() == null) {
 
             mGUI.mGUIC.getSeeAlertsBttn().setVisible(false);
-            hasLogin.setText(translate("LoginController.LoginFailed"));
+            hasLogin.setText(StringUtils.translate("LoginController.LoginFailed"));
             hasLogin.setVisible(true);
 
             return;
@@ -74,7 +75,7 @@ public class LoginController implements Controller {
                     mGUI.showScene("Query Rides");
                     mGUI.mGUIC.setRolName(businessLogic.getCurrentUser().getName());
 
-                    if (businessLogic.getCurrentUser().getClass().equals(Traveler.class)) {
+                    if (businessLogic.getCurrentUser() instanceof Traveler) {
 
                         mGUI.mGUIC.getCreateRidesBtn().setVisible(false);
                         mGUI.mGUIC.getQueryRidesBtn().setVisible(true);
@@ -131,14 +132,11 @@ public class LoginController implements Controller {
 
         logInButt.setStyle("-fx-background-color: #f85774;");
         hasLogin.setVisible(false);
-        EmailTXT.setText(translate("Email"));
-        PasswordTXT.setText(translate("Password"));
+        EmailTXT.setText(StringUtils.translate("Email"));
+        PasswordTXT.setText(StringUtils.translate("Password"));
 
     }
 
-    String translate(String txt) {
-        return ResourceBundle.getBundle("Etiquetas").getString(txt);
-    }
 
     @Override
     public void setMainApp(MainGUI mainGUI) {
@@ -152,6 +150,11 @@ public class LoginController implements Controller {
         hasLogin.setText(resources.getString("LoginController.LoginFailed"));
         EmailTXT.setText(resources.getString("Email"));
         PasswordTXT.setText(resources.getString("Password"));
+
+    }
+
+    @Override
+    public void showHide() {
 
     }
 

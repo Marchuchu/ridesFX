@@ -8,4 +8,6 @@ public interface Controller {
     void setMainApp(MainGUI mainGUI);
 
     void changeLanguage(ResourceBundle resources);
+
+    void showHide();
 }

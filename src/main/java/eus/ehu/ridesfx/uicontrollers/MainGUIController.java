@@ -208,7 +208,7 @@ public class MainGUIController implements Controller {
         mGUI.showScene("Query Rides");
         queryRidesBtn.setVisible(false);
 
-        if (mGUI.getBusinessLogic().getCurrentUser().getClass().equals(Driver.class)) {
+        if (mGUI.getBusinessLogic().getCurrentUser() instanceof Driver ) {
             createRidesBtn.setVisible(true);
             queryRidesBtn.setVisible(true);
             exitBttn.setVisible(true);
@@ -217,7 +217,7 @@ public class MainGUIController implements Controller {
             seeAlertsBttn.setVisible(true);
             seeMessagesBttn.setVisible(true);
 
-        } else if (mGUI.getBusinessLogic().getCurrentUser().getClass().equals(Traveler.class)) {
+        } else if (mGUI.getBusinessLogic().getCurrentUser() instanceof Traveler ) {
             queryRidesBtn.setVisible(true);
             createRidesBtn.setVisible(false);
             exitBttn.setVisible(true);
@@ -261,18 +261,21 @@ public class MainGUIController implements Controller {
 
         mGUI.showScene("See Alerts");
 
-        if (mGUI.getBusinessLogic().getCurrentUser().getClass().equals(Driver.class)) {
+        if (mGUI.getBusinessLogic().getCurrentUser() instanceof Driver) {
             queryRidesBtn.setVisible(false);
             createRidesBtn.setVisible(true);
             seeMessagesBttn.setVisible(true);
             seeAlertsBttn.setVisible(true);
 
-        } else if (mGUI.getBusinessLogic().getCurrentUser().getClass().equals(Traveler.class)) {
+        } else if (mGUI.getBusinessLogic().getCurrentUser() instanceof Traveler ) {
             createRidesBtn.setVisible(false);
             seeMessagesBttn.setVisible(true);
             seeAlertsBttn.setVisible(true);
 
         }
+
+
+        mGUI.alertsShowHideButtons();
     }
 
     @FXML
@@ -280,7 +283,7 @@ public class MainGUIController implements Controller {
 
         mGUI.showScene("See Messages");
 
-        if (mGUI.getBusinessLogic().getCurrentUser().getClass().equals(Driver.class)) {
+        if (mGUI.getBusinessLogic().getCurrentUser() instanceof Driver) {
             queryRidesBtn.setVisible(false);
             createRidesBtn.setVisible(true);
             seeMessagesBttn.setVisible(true);
@@ -289,7 +292,7 @@ public class MainGUIController implements Controller {
             signUpButton.setVisible(false);
             exitBttn.setVisible(true);
 
-        } else if (mGUI.getBusinessLogic().getCurrentUser().getClass().equals(Traveler.class)) {
+        } else if (mGUI.getBusinessLogic().getCurrentUser() instanceof Traveler) {
             createRidesBtn.setVisible(false);
             seeMessagesBttn.setVisible(true);
             seeAlertsBttn.setVisible(true);
@@ -348,14 +351,17 @@ public class MainGUIController implements Controller {
 
     }
 
+    @Override
+    public void showHide() {
+
+    }
+
     @FXML
     public void changeLanguage(ActionEvent event) {
 
         Button b = (Button) event.getSource();
-        Locale loc = new Locale(b.getId());
-        ResourceBundle resources = ResourceBundle.getBundle("Etiquetas", loc);
+        Locale.setDefault(new Locale(b.getId()));
 
-        this.mGUI.changeLanguage(resources);
     }
 
 }

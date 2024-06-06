@@ -535,10 +535,10 @@ public class DataAccess {
 
     }
 
-    public void sendMessage(int id,String to, String subject, String message){
+    public void sendMessage(String to, String subject, String message){
 
         db.getTransaction().begin();
-        db.persist(new Message(id, to, subject, message));
+        db.persist(new Message(to, subject, message));
         db.getTransaction().commit();
 
     }

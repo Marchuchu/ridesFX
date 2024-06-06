@@ -30,6 +30,6 @@
         <Label fx:id="ArrivalCity" layoutX="39.0" layoutY="106.0" text="%ArrivalCity" />
         <Button fx:id="createAlertBut" layoutX="464.0" layoutY="310.0" mnemonicParsing="false" onAction="#onClickCreateAlert" text="%CreateAlert" />
       <Button fx:id="bookButtn" layoutX="698.0" layoutY="310.0" mnemonicParsing="false" onAction="#onClickBook" text="%Book" />
-      <Label fx:id="reservationMessage" contentDisplay="CENTER" layoutX="394.0" layoutY="278.0" prefHeight="17.0" prefWidth="445.0" stylesheets="@bootstrapfx.css" textAlignment="CENTER" />
+      <Label fx:id="reservationMessage" alignment="CENTER" contentDisplay="CENTER" layoutX="394.0" layoutY="278.0" prefHeight="18.0" prefWidth="446.0" textAlignment="CENTER" />
     </children>
 </AnchorPane>

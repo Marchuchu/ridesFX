@@ -178,9 +178,9 @@ public class BlFacadeImplementation implements BlFacade {
 
     }
 
-    public void sendMessage(int id, String to, String subject, String message){
+    public void sendMessage( String to, String subject, String message){
 
-        dbManager.sendMessage(id, to, subject, message);
+        dbManager.sendMessage(to, subject, message);
 
     }
 

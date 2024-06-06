@@ -103,19 +103,10 @@ public class MainGUI {
         stage.show();
     }
 
-    public void changeLanguage(ResourceBundle resources) {
-
-        mainWin.controller.changeLanguage(resources);
-        queryRideWin.controller.changeLanguage(resources);
-        createRideWin.controller.changeLanguage(resources);
-        signUWin.controller.changeLanguage(resources);
-        loginWin.controller.changeLanguage(resources);
-        logoutWin.controller.changeLanguage(resources);
-        alertWin.controller.changeLanguage(resources);
-        seeMessageWin.controller.changeLanguage(resources);
-        createMessageWin.controller.changeLanguage(resources);
-
+    public void alertsShowHideButtons() {
+        ((AlertTableController)alertWin.controller).showHide();
     }
+
 
     public static class Window {
 

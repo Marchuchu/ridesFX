@@ -10,6 +10,7 @@ import eus.ehu.ridesfx.domain.Traveler;
 import eus.ehu.ridesfx.domain.User;
 import eus.ehu.ridesfx.exceptions.UnknownUser;
 import eus.ehu.ridesfx.ui.MainGUI;
+import eus.ehu.ridesfx.utils.StringUtils;
 import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.event.ActionEvent;
@@ -87,7 +88,7 @@ public class SignUpController implements Controller {
 
             mainGUI.mGUIC.getSeeAlertsBttn().setVisible(false);
             hasLogin.setStyle("-fx-text-fill: #d54242");
-            hasLogin.setText(translate("SignUpController.EmptyFields"));
+            hasLogin.setText(StringUtils.translate("SignUpController.EmptyFields"));
             hasLogin.setVisible(true);
 
 
@@ -110,7 +111,7 @@ public class SignUpController implements Controller {
                         mainGUI.mGUIC.setRolName(user.getName());
                         businessLogic.setCurrentUser(user);
 
-                        if (user.getClass().equals(Traveler.class)) {
+                        if (user  instanceof Traveler) {
                             mainGUI.showScene("Query Rides");
                             mainGUI.mGUIC.getCreateRidesBtn().setVisible(false);
                             mainGUI.mGUIC.getQueryRidesBtn().setVisible(true);
@@ -139,7 +140,7 @@ public class SignUpController implements Controller {
 
                 } else if (!email.getText().contains("@")) {
 
-                    hasLogin.setText(translate("SignUpController.ValidEmail"));
+                    hasLogin.setText(StringUtils.translate("SignUpController.ValidEmail"));
                     hasLogin.setStyle("-fx-text-fill: #d54242");
                     hasLogin.setVisible(true);
 
@@ -155,7 +156,7 @@ public class SignUpController implements Controller {
                     thread.start();
                 } else {
 
-                    hasLogin.setText(translate("SignUpController.UserExists"));
+                    hasLogin.setText(StringUtils.translate("SignUpController.UserExists"));
                     hasLogin.setStyle("-fx-text-fill: #d54242");
                     hasLogin.setVisible(true);
 
@@ -173,8 +174,7 @@ public class SignUpController implements Controller {
 
             } else {
 
-//                hasLogin.setText(translate("SignUpController.PasswordsDontMatch"));
-                hasLogin.setText("FALLO 1");
+                hasLogin.setText(StringUtils.translate("SignUpController.PasswordsDontMatch"));
 
                 hasLogin.setStyle("-fx-text-fill: #d54242");
                 hasLogin.setVisible(true);
@@ -207,21 +207,8 @@ public class SignUpController implements Controller {
         role.setItems(FXCollections.observableArrayList("Driver", "Traveler"));
 
         signUpButt.setStyle("-fx-background-color: #f85774");
-        signUpButt.setText("Sign Up");
+        signUpButt.setText(StringUtils.translate("SignUpController.SignUp"));
 
-        emailTXT.setText(translate("Email"));
-        nameTXT.setText(translate("Name"));
-        passTXT.setText(translate("Password"));
-        repPassTXT.setText(translate("SignUpController.RepeatPassword"));
-        rolTXT.setText(translate("Role"));
-
-        hasLogin.setText(translate("SignUpController.EmptyFields"));
-
-        hasLogin.setText(translate("SignUpController.ValidEmail"));
-        hasLogin.setText(translate("SignUpController.UserExists"));
-        hasLogin.setText(translate("SignUpController.PasswordsDontMatch"));
-
-        hasLogin.setText("FALLO 2");
 
     }
 
@@ -229,13 +216,6 @@ public class SignUpController implements Controller {
     public void changeLanguage(ResourceBundle resources) {
 
         signUpButt.setText(resources.getString("SignUpController.SignUp"));
-
-        hasLogin.setText(resources.getString("SignUpController.EmptyFields"));
-        hasLogin.setText(resources.getString("SignUpController.ValidEmail"));
-        hasLogin.setText(resources.getString("SignUpController.UserExists"));
-//        hasLogin.setText(resources.getString("SignUpController.PasswordsDontMatch"));
-        hasLogin.setText("FALLO 3");
-
 
         emailTXT.setText(resources.getString("Email"));
         nameTXT.setText(resources.getString("Name"));
@@ -246,8 +226,9 @@ public class SignUpController implements Controller {
 
     }
 
-    String translate(String txt) {
-        return ResourceBundle.getBundle("Etiquetas").getString(txt);
+    @Override
+    public void showHide() {
+
     }
 
     public class Window {

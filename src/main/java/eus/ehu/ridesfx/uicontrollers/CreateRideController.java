@@ -3,6 +3,7 @@ package eus.ehu.ridesfx.uicontrollers;
 import eus.ehu.ridesfx.businessLogic.BlFacade;
 import eus.ehu.ridesfx.domain.User;
 import eus.ehu.ridesfx.ui.MainGUI;
+import eus.ehu.ridesfx.utils.StringUtils;
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -140,7 +141,7 @@ public class CreateRideController implements Controller {
 
         if (date == null) {
 
-            lblErrorMessage.setText(translate("CreateRideGUI.FillDate"));
+            lblErrorMessage.setText(StringUtils.translate("CreateRideGUI.FillDate"));
 
             Thread thread = new Thread(() -> {
                 try {
@@ -158,7 +159,7 @@ public class CreateRideController implements Controller {
 
         if (date.isBefore(LocalDate.now())) {
 
-            lblErrorMessage.setText(translate("CreateRideGUI.DateMustBeLaterThanToday"));
+            lblErrorMessage.setText(StringUtils.translate("CreateRideGUI.DateMustBeLaterThanToday"));
             Thread thread = new Thread(() -> {
                 try {
                     Thread.sleep(5000);
@@ -175,7 +176,7 @@ public class CreateRideController implements Controller {
 
         if (from.isEmpty()) {
 
-            lblErrorMessage.setText(translate("CreateRideGUI.FillDepartureCity"));
+            lblErrorMessage.setText(StringUtils.translate("CreateRideGUI.FillDepartureCity"));
             Thread thread = new Thread(() -> {
                 try {
                     Thread.sleep(5000);
@@ -194,7 +195,7 @@ public class CreateRideController implements Controller {
         if (to.isEmpty()) {
 
             lblErrorMessage.setStyle("-fx-text-fill: #d54242");
-            lblErrorMessage.setText(translate("CreateRideGUI.FillArrivalCity"));
+            lblErrorMessage.setText(StringUtils.translate("CreateRideGUI.FillArrivalCity"));
             Thread thread = new Thread(() -> {
                 try {
                     Thread.sleep(5000);
@@ -210,7 +211,7 @@ public class CreateRideController implements Controller {
 
         if (txtNumberOfSeats.getText() == null) {
 
-            lblErrorMessage.setText(translate("CreateRideGUI.FillNumberOfSeats"));
+            lblErrorMessage.setText(StringUtils.translate("CreateRideGUI.FillNumberOfSeats"));
             lblErrorMessage.setStyle("-fx-text-fill: #d54242");
             Thread thread = new Thread(() -> {
                 try {
@@ -231,7 +232,7 @@ public class CreateRideController implements Controller {
             numPlaces = Integer.parseInt(txtNumberOfSeats.getText());
         } catch (NumberFormatException e1) {
 
-            lblErrorMessage.setText(translate("CreateRideGUI.NumberOfSeatsMustBeANumber"));
+            lblErrorMessage.setText(StringUtils.translate("CreateRideGUI.NumberOfSeatsMustBeANumber"));
             lblErrorMessage.setStyle("-fx-text-fill: #d54242");
             Thread thread = new Thread(() -> {
                 try {
@@ -247,7 +248,7 @@ public class CreateRideController implements Controller {
 
         if (txtPrice.getText() == null) {
 
-            lblErrorMessage.setText(translate("CreateRideGUI.FillPrice"));
+            lblErrorMessage.setText(StringUtils.translate("CreateRideGUI.FillPrice"));
             lblErrorMessage.setStyle("-fx-text-fill: #d54242");
             Thread thread = new Thread(() -> {
                 try {
@@ -266,7 +267,7 @@ public class CreateRideController implements Controller {
             price = Float.parseFloat(txtPrice.getText());
         } catch (NumberFormatException e1) {
 
-            lblErrorMessage.setText(translate("CreateRideGUI.PriceMustBeANumber"));
+            lblErrorMessage.setText(StringUtils.translate("CreateRideGUI.PriceMustBeANumber"));
             lblErrorMessage.setStyle("-fx-text-fill: #d54242");
             Thread thread = new Thread(() -> {
                 try {
@@ -282,7 +283,7 @@ public class CreateRideController implements Controller {
 
         if (numPlaces > 5) {
 
-            lblErrorMessage.setText(translate("CreateRideGUI.NumberOfSeatsMustBeLessThan5"));
+            lblErrorMessage.setText(StringUtils.translate("CreateRideGUI.NumberOfSeatsMustBeLessThan5"));
             lblErrorMessage.setStyle("-fx-text-fill: #d54242");
             Thread thread = new Thread(() -> {
                 try {
@@ -299,8 +300,7 @@ public class CreateRideController implements Controller {
 
         User user = businessLogic.getCurrentUser();
         businessLogic.createRideClick(from, to, Dates.convertToDate(date), numPlaces, price, user.getEmail());
-//        displayMessage(translate("CreateRideGUI.RideCreated"), "success");
-        lblErrorMessage.setText(translate("CreateRideGUI.RideCreated"));
+        lblErrorMessage.setText(StringUtils.translate("CreateRideGUI.RideCreated"));
 
         Thread thread = new Thread(() -> {
             try {
@@ -383,26 +383,15 @@ public class CreateRideController implements Controller {
         this.mainGUI = mainGUI;
     }
 
-    String translate(String txt) {
-        return ResourceBundle.getBundle("Etiquetas").getString(txt);
-    }
-
     @Override
     public void changeLanguage(ResourceBundle resources) {
 
         btnCreateRide.setText(resources.getString("CreateRide"));
 
-        lblErrorMessage.setText(resources.getString("CreateRideGUI.FillDate"));
-        lblErrorMessage.setText(resources.getString("CreateRideGUI.DateMustBeLaterThanToday"));
-        lblErrorMessage.setText(resources.getString("CreateRideGUI.FillDepartureCity"));
-        lblErrorMessage.setText(resources.getString("CreateRideGUI.FillArrivalCity"));
-        lblErrorMessage.setText(resources.getString("CreateRideGUI.FillNumberOfSeats"));
-        lblErrorMessage.setText(resources.getString("CreateRideGUI.NumberOfSeatsMustBeANumber"));
-        lblErrorMessage.setText(resources.getString("CreateRideGUI.FillPrice"));
-        lblErrorMessage.setText(resources.getString("CreateRideGUI.PriceMustBeANumber"));
-        lblErrorMessage.setText(resources.getString("CreateRideGUI.NumberOfSeatsMustBeLessThan5"));
-        lblErrorMessage.setText(resources.getString("CreateRideGUI.RideCreated"));
+    }
 
+    @Override
+    public void showHide() {
 
     }
 }

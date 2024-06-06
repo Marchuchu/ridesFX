@@ -2,6 +2,7 @@ package eus.ehu.ridesfx.uicontrollers;
 
 import eus.ehu.ridesfx.businessLogic.BlFacade;
 import eus.ehu.ridesfx.domain.*;
+import eus.ehu.ridesfx.utils.StringUtils;
 import javafx.application.Platform;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.value.ObservableValue;
@@ -182,7 +183,7 @@ public class QueryRidesController implements Controller {
         Alerts ride = new Alerts(comboDepartCity.getValue(), comboArrivalCity.getValue(), Dates.convertToDate(datepicker.getValue()));
         User user = mainGUI.getBusinessLogic().getCurrentUser();
 
-        if (user.getClass().equals(Traveler.class)) {
+        if (user instanceof Traveler) {
 
             if (ride.getFrom() != null && ride.getTo() != null && ride.getDate() != null) {
 
@@ -202,7 +203,7 @@ public class QueryRidesController implements Controller {
 
             } else {
 
-                reservationMessage.setText(resources.getString("QueryRidesController.PleaseFillInAllFields"));
+                reservationMessage.setText(StringUtils.translate("QueryRidesController.PleaseFillInAllFields"));
                 reservationMessage.setVisible(true);
                 reservationMessage.setStyle("-fx-text-fill: #d54242");
                 Thread thread = new Thread(() -> {
@@ -219,7 +220,7 @@ public class QueryRidesController implements Controller {
 
         } else {
 
-            reservationMessage.setText(resources.getString("QueryRidesController.PleaseLogInOrSignUp"));
+            reservationMessage.setText(StringUtils.translate("QueryRidesController.PleaseLogInOrSignUp"));
 
             Thread thread = new Thread(() -> {
                 try {
@@ -245,18 +246,20 @@ public class QueryRidesController implements Controller {
     @FXML
     void initialize() {
 
+        //Locale.setDefault(mainGUI.mGUIC);
+
         bookButtn.setStyle("-fx-background-color: #f85774");
         createAlertBut.setStyle("-fx-background-color: #f85774");
 
-        bookButtn.setText(translate("Book"));
-        createAlertBut.setText(translate("CreateAlert"));
-        DepartCity.setText(translate("DepartCity"));
-        ArrivalCity.setText(translate("ArrivalCity"));
-        EventDate.setText(translate("EventDate"));
+        bookButtn.setText(StringUtils.translate("Book"));
+        createAlertBut.setText(StringUtils.translate("CreateAlert"));
+        DepartCity.setText(StringUtils.translate("DepartCity"));
+        ArrivalCity.setText(StringUtils.translate("ArrivalCity"));
+        EventDate.setText(StringUtils.translate("EventDate"));
 
-        qc1.setText(translate("Driver"));
-        qc2.setText(translate("Seats"));
-        qc3.setText(translate("Price"));
+        qc1.setText(StringUtils.translate("Driver"));
+        qc2.setText(StringUtils.translate("Seats"));
+        qc3.setText(StringUtils.translate("Price"));
 
         reservationMessage.setVisible(false);
 
@@ -296,7 +299,7 @@ public class QueryRidesController implements Controller {
 
             if (datepicker.getValue().compareTo(LocalDate.now()) < 0) {
 
-                reservationMessage.setText(resources.getString("QueryRidesController.PleaseSelectFutureDate"));
+                reservationMessage.setText(StringUtils.translate("QueryRidesController.PleaseSelectFutureDate"));
                 reservationMessage.setStyle("-fx-text-fill: #d54242");
                 reservationMessage.setVisible(true);
 
@@ -367,12 +370,12 @@ public class QueryRidesController implements Controller {
 
         mainGUI.mGUIC.getSeeAlertsBttn().setVisible(true);
 
-        if (user.getClass().equals(Traveler.class)) {
+        if (user instanceof Traveler) {
 
             if (ride != null) {
 
 
-                reservationMessage.setText(resources.getString("QueryRidesController.RideBooked"));
+                reservationMessage.setText(StringUtils.translate("QueryRidesController.RideBooked"));
                 reservationMessage.setStyle("-fx-text-fill: #188a2e");
                 reservationMessage.setVisible(true);
 
@@ -390,7 +393,7 @@ public class QueryRidesController implements Controller {
 
             } else {
 
-                reservationMessage.setText(resources.getString("QueryRidesController.PleaseSelectRideToBook"));
+                reservationMessage.setText(StringUtils.translate("QueryRidesController.PleaseSelectRideToBook"));
                 reservationMessage.setStyle("-fx-text-fill: #d54242");
                 reservationMessage.setVisible(true);
 
@@ -408,7 +411,7 @@ public class QueryRidesController implements Controller {
 
         } else {
 
-            reservationMessage.setText(resources.getString("QueryRidesController.PleaseLogInOrSignUp"));
+            reservationMessage.setText(StringUtils.translate("QueryRidesController.PleaseLogInOrSignUp"));
 
             reservationMessage.setStyle("-fx-text-fill: #d54242");
             reservationMessage.setVisible(true);
@@ -429,12 +432,6 @@ public class QueryRidesController implements Controller {
 
     }
 
-    String translate(String txt) {
-
-        return ResourceBundle.getBundle("Etiquetas").getString(txt);
-
-    }
-
     @Override
     public void changeLanguage(ResourceBundle resources) {
 
@@ -443,7 +440,7 @@ public class QueryRidesController implements Controller {
         DepartCity.setText(resources.getString("DepartCity"));
         ArrivalCity.setText(resources.getString("ArrivalCity"));
         EventDate.setText(resources.getString("EventDate"));
-
+/*
         reservationMessage.setText(resources.getString("QueryRidesController.PleaseSelectRideToBook"));
         reservationMessage.setText(resources.getString("QueryRidesController.PleaseFillInAllFields"));
         reservationMessage.setText(resources.getString("QueryRidesController.PleaseSelectFutureDate"));
@@ -451,11 +448,16 @@ public class QueryRidesController implements Controller {
 
         reservationMessage.setText(resources.getString("QueryRidesController.RideBooked"));
         reservationMessage.setText(resources.getString("AlertCreated"));
-
+*/
         qc1.setText(resources.getString("Driver"));
         qc2.setText(resources.getString("Seats"));
         qc3.setText(resources.getString("Price"));
 
+
+    }
+
+    @Override
+    public void showHide() {
 
     }
 }

@@ -74,7 +74,7 @@ public class AlertTableController implements Controller {
 
         //ESTO ME LO PODRIA AHORRAR
 
-        if (businessLogic.getCurrentUser().getClass().equals(Traveler.class) && r != null) {
+        if (businessLogic.getCurrentUser() instanceof Traveler && r != null) {
 
             businessLogic.cancelAlert(r);
             takeRideBttn.setVisible(false);
@@ -99,7 +99,7 @@ public class AlertTableController implements Controller {
             takeRideBttn.setVisible(false);
 
 
-        } else if (businessLogic.getCurrentUser().getClass().equals(Driver.class)) {
+        } else if (businessLogic.getCurrentUser() instanceof Driver) {
 
             message.setText("Choose the ride you want to take");
 
@@ -139,7 +139,7 @@ public class AlertTableController implements Controller {
 
         Ride r = tblAlerts.getSelectionModel().getSelectedItem();
 
-        if (businessLogic.getCurrentUser().getClass().equals(Driver.class) && r != null) {
+        if (businessLogic.getCurrentUser() instanceof Driver && r != null) {
 
             businessLogic.takeRide(r, 1, Integer.parseInt(price.getText()));
 
@@ -217,7 +217,12 @@ public class AlertTableController implements Controller {
 
         price.setText("0");
 
-        if (businessLogic.getCurrentUser().getClass().equals(Traveler.class)) {
+        showHide();
+
+    }
+
+    public void showHide() {
+        if (businessLogic.getCurrentUser() instanceof  Traveler) {
 
             takeRideBttn.setVisible(false);
             cancelAlertBttn.setVisible(true);
@@ -225,7 +230,7 @@ public class AlertTableController implements Controller {
             setPriceTXT.setVisible(false);
             cancelAlertBttn.setStyle("-fx-background-color: #f85774");
 
-        } else if (businessLogic.getCurrentUser().getClass().equals(Driver.class)) {
+        } else if (businessLogic.getCurrentUser() instanceof Driver ) {
 
             cancelAlertBttn.setVisible(false);
             takeRideBttn.setVisible(true);
@@ -234,7 +239,6 @@ public class AlertTableController implements Controller {
             takeRideBttn.setStyle("-fx-background-color: #f85774");
 
         }
-
     }
 
 }

@@ -6,6 +6,7 @@ import java.util.ResourceBundle;
 import eus.ehu.ridesfx.businessLogic.BlFacade;
 import eus.ehu.ridesfx.domain.Message;
 import eus.ehu.ridesfx.ui.MainGUI;
+import eus.ehu.ridesfx.utils.StringUtils;
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -61,7 +62,7 @@ public class MessageController implements Controller {
         Message message = messageTable.getSelectionModel().getSelectedItem();
 
         if (message == null) {
-            errorMessage.setText(resources.getString("MessageController.selectMessage"));
+            errorMessage.setText(StringUtils.translate("MessageController.selectMessage"));
 
             Thread thread = new Thread(() -> {
                 try {
@@ -117,6 +118,10 @@ public class MessageController implements Controller {
         Message.setText(resources.getString("Message"));
         Subject.setText(resources.getString("Subject"));
 
+    }
+
+    @Override
+    public void showHide() {
 
     }
 }
