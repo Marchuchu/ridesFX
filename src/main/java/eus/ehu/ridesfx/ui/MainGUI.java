@@ -73,8 +73,8 @@ public class MainGUI {
             case "Log In" -> mGUIC.getMainWrapper().setCenter(loginWin.ui);
             case "Log Out" -> mGUIC.getMainWrapper().setCenter(logoutWin.ui);
             case "See Alerts" -> mGUIC.getMainWrapper().setCenter(alertWin.ui);
-            //case "See Messages" -> mGUIC.getMainWrapper().setCenter(seeMessageWin.ui);
-            //case "Send Message" -> mGUIC.getMainWrapper().setCenter(createMessageWin.ui);
+            case "See Messages" -> mGUIC.getMainWrapper().setCenter(seeMessageWin.ui);
+            case "Send Message" -> mGUIC.getMainWrapper().setCenter(createMessageWin.ui);
 
         }
     }

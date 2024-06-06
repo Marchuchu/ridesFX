@@ -10,7 +10,7 @@ import eus.ehu.ridesfx.domain.Traveler;
 import eus.ehu.ridesfx.domain.User;
 import eus.ehu.ridesfx.exceptions.UnknownUser;
 import eus.ehu.ridesfx.ui.MainGUI;
-import javafx.animation.PauseTransition;
+import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -20,6 +20,7 @@ import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.AnchorPane;
+import javafx.scene.text.Text;
 import javafx.util.Duration;
 
 public class SignUpController implements Controller {
@@ -27,10 +28,7 @@ public class SignUpController implements Controller {
     String r;
     BlFacade businessLogic;
     MainGUI mainGUI;
-    @FXML
-    private ResourceBundle resources;
-    @FXML
-    private URL location;
+
     @FXML
     private TextField email;
     @FXML
@@ -47,6 +45,21 @@ public class SignUpController implements Controller {
     private Button signUpButt;
     @FXML
     private ComboBox<String> role;
+
+    @FXML
+    private Text emailTXT;
+
+    @FXML
+    private Text nameTXT;
+
+    @FXML
+    private Text passTXT;
+
+    @FXML
+    private Text repPassTXT;
+
+    @FXML
+    private Text rolTXT;
 
     private MainGUI.Window queryRideWin;
 
@@ -65,19 +78,18 @@ public class SignUpController implements Controller {
         this.mainGUI = mainGUI;
     }
 
-    @Override
-    public void changeLanguage(ResourceBundle resources) {
 
-    }
 
     @FXML
     void onClickSignUp(ActionEvent event) {
 
         if (name.getText() == null || email.getText() == null || password.getText() == null || repPas.getText() == null || role.getValue() == null) {
 
-            hasLogin.setText(translate("SignUpController.EmptyFields"));
             mainGUI.mGUIC.getSeeAlertsBttn().setVisible(false);
             hasLogin.setStyle("-fx-text-fill: #d54242");
+            hasLogin.setText(translate("SignUpController.EmptyFields"));
+            hasLogin.setVisible(true);
+
 
         } else {
 
@@ -116,6 +128,10 @@ public class SignUpController implements Controller {
                         role.setValue(null);
 
                         mainGUI.mGUIC.getSeeAlertsBttn().setVisible(true);
+                        mainGUI.mGUIC.getLogInButton().setVisible(false);
+                        mainGUI.mGUIC.getSignUpButton().setVisible(false);
+                        mainGUI.mGUIC.getExitBttn().setVisible(true);
+                        mainGUI.mGUIC.getSeeMessagesBttn().setVisible(true);
 
 
                     }
@@ -125,36 +141,53 @@ public class SignUpController implements Controller {
 
                     hasLogin.setText(translate("SignUpController.ValidEmail"));
                     hasLogin.setStyle("-fx-text-fill: #d54242");
+                    hasLogin.setVisible(true);
 
-                    PauseTransition pause = new PauseTransition(Duration.seconds(3));
-                    pause.setOnFinished(e -> {
-                        hasLogin.setText("");
+
+                    Thread thread = new Thread(() -> {
+                        try {
+                            Thread.sleep(5000);
+                            Platform.runLater(() -> hasLogin.setVisible(false));
+                        } catch (InterruptedException e) {
+                            e.printStackTrace();
+                        }
                     });
-                    pause.play();
-
+                    thread.start();
                 } else {
 
                     hasLogin.setText(translate("SignUpController.UserExists"));
                     hasLogin.setStyle("-fx-text-fill: #d54242");
+                    hasLogin.setVisible(true);
 
-                    PauseTransition pause = new PauseTransition(Duration.seconds(3));
-                    pause.setOnFinished(e -> {
-                        hasLogin.setText("");
+                    Thread thread = new Thread(() -> {
+                        try {
+                            Thread.sleep(5000);
+                            Platform.runLater(() -> hasLogin.setVisible(false));
+                        } catch (InterruptedException e) {
+                            e.printStackTrace();
+                        }
                     });
-                    pause.play();
+                    thread.start();
 
                 }
 
             } else {
 
-                hasLogin.setText(translate("SignUpController.PasswordsDontMatch"));
-                hasLogin.setStyle("-fx-text-fill: #d54242");
+//                hasLogin.setText(translate("SignUpController.PasswordsDontMatch"));
+                hasLogin.setText("FALLO 1");
 
-                PauseTransition pause = new PauseTransition(Duration.seconds(3));
-                pause.setOnFinished(e -> {
-                    hasLogin.setText("");
+                hasLogin.setStyle("-fx-text-fill: #d54242");
+                hasLogin.setVisible(true);
+
+                Thread thread = new Thread(() -> {
+                    try {
+                        Thread.sleep(5000);
+                        Platform.runLater(() -> hasLogin.setVisible(false));
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
                 });
-                pause.play();
+                thread.start();
 
             }
 
@@ -164,14 +197,51 @@ public class SignUpController implements Controller {
     @FXML
     void initialize() {
 
+        hasLogin.setVisible(false);
+
         role.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
             r = newValue;
+
         });
 
         role.setItems(FXCollections.observableArrayList("Driver", "Traveler"));
 
         signUpButt.setStyle("-fx-background-color: #f85774");
         signUpButt.setText("Sign Up");
+
+        emailTXT.setText(translate("Email"));
+        nameTXT.setText(translate("Name"));
+        passTXT.setText(translate("Password"));
+        repPassTXT.setText(translate("SignUpController.RepeatPassword"));
+        rolTXT.setText(translate("Role"));
+
+        hasLogin.setText(translate("SignUpController.EmptyFields"));
+
+        hasLogin.setText(translate("SignUpController.ValidEmail"));
+        hasLogin.setText(translate("SignUpController.UserExists"));
+        hasLogin.setText(translate("SignUpController.PasswordsDontMatch"));
+
+        hasLogin.setText("FALLO 2");
+
+    }
+
+    @Override
+    public void changeLanguage(ResourceBundle resources) {
+
+        signUpButt.setText(resources.getString("SignUpController.SignUp"));
+
+        hasLogin.setText(resources.getString("SignUpController.EmptyFields"));
+        hasLogin.setText(resources.getString("SignUpController.ValidEmail"));
+        hasLogin.setText(resources.getString("SignUpController.UserExists"));
+//        hasLogin.setText(resources.getString("SignUpController.PasswordsDontMatch"));
+        hasLogin.setText("FALLO 3");
+
+
+        emailTXT.setText(resources.getString("Email"));
+        nameTXT.setText(resources.getString("Name"));
+        passTXT.setText(resources.getString("Password"));
+        repPassTXT.setText(resources.getString("SignUpController.RepeatPassword"));
+        rolTXT.setText(resources.getString("Role"));
 
 
     }

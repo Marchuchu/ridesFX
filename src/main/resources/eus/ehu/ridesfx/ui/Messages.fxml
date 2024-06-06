@@ -7,20 +7,20 @@
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.text.Text?>
 
-
-<AnchorPane fx:id="mainWrapper" prefHeight="400.0" prefWidth="773.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="eus.ehu.ridesfx.uicontrollers.MessageController">
+<AnchorPane fx:id="mainWrapper" prefHeight="589.0" prefWidth="815.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="eus.ehu.ridesfx.uicontrollers.MessageController">
    <children>
-      <TextArea fx:id="messageTXT" layoutX="395.0" layoutY="53.0" prefHeight="267.0" prefWidth="325.0" />
-      <TableView fx:id="messageTable" layoutX="64.0" layoutY="53.0" prefHeight="243.0" prefWidth="263.0">
+      <TextArea fx:id="messageTXT" layoutX="438.0" layoutY="50.0" prefHeight="419.0" prefWidth="325.0" />
+      <TableView fx:id="messageTable" layoutX="55.0" layoutY="50.0" prefHeight="419.0" prefWidth="325.0">
         <columns>
-          <TableColumn prefWidth="75.0" text="%From" />
-          <TableColumn prefWidth="83.0" text="%Subject" />
-            <TableColumn prefWidth="67.0" text="%Message" />
+            <TableColumn fx:id="iD" prefWidth="30.0" text="ID" />
+          <TableColumn fx:id="From" prefWidth="75.0" text="%From" />
+          <TableColumn fx:id="Subject" prefWidth="115.0" text="%Subject" />
+            <TableColumn fx:id="Message" prefWidth="104.0" text="%Message" />
         </columns>
       </TableView>
-      <Button fx:id="seeMessageBttn" layoutX="153.0" layoutY="343.0" mnemonicParsing="false" onAction="#onClickSeeMessage" text="%SeeMessage" />
-      <Button fx:id="sendNewMessageBttn" layoutX="499.0" layoutY="343.0" mnemonicParsing="false" onAction="#onClickSendNewMessage" text="%SendNewMessage" />
+      <Button fx:id="seeMessageBttn" layoutX="171.0" layoutY="509.0" mnemonicParsing="false" onAction="#onClickSeeMessage" text="%SeeMessage" />
+      <Button fx:id="sendNewMessageBttn" layoutX="539.0" layoutY="509.0" mnemonicParsing="false" onAction="#onClickSendNewMessage" text="%SendNewMessage" />
       <Text fx:id="errorM" layoutX="147.0" layoutY="325.0" strokeType="OUTSIDE" strokeWidth="0.0" />
-      <Text fx:id="errorMessage" layoutX="174.0" layoutY="324.0" strokeType="OUTSIDE" strokeWidth="0.0" text="%empty" />
+      <Text fx:id="errorMessage" layoutX="86.0" layoutY="493.0" strokeType="OUTSIDE" strokeWidth="0.0" text="%empty" textAlignment="CENTER" wrappingWidth="263.0" />
    </children>
 </AnchorPane>

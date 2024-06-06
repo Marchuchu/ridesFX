@@ -57,6 +57,7 @@ public class MainGUIController implements Controller {
     @FXML
     private Button seeAlertsBttn;
 
+
     @FXML
     private Text userNames;
 
@@ -79,15 +80,9 @@ public class MainGUIController implements Controller {
         return businessLogic;
     }
 
-//    void showName(String role) {
-//
-//        if (businessLogic.getCurrentUser().getClass().equals(Driver.class) || businessLogic.getCurrentUser().getClass().equals(Traveler.class)) {
-//            rolName.setText(businessLogic.getCurrentUser().getName());
-//        } else {
-//            rolName.setText("Anonymous");
-//        }
-//
-//    }
+    public void setBusinessLogic(BlFacade businessLogic) {
+        this.businessLogic = businessLogic;
+    }
 
     public Label getRolName() {
         return rolName;
@@ -125,21 +120,71 @@ public class MainGUIController implements Controller {
         return mainWrapper;
     }
 
+    public Button getSeeMessagesBttn() {
+        return seeMessagesBttn;
+    }
+
+    public void setMainGUI(MainGUI mainGUI) {
+        this.mGUI = mainGUI;
+    }
+
 
     public BorderPane getMainWrapper1() {
         return mainWrapper;
     }
 
-//    public void setBusinessLogic(BlFacade businessLogic) {
-//        this.businessLogic = businessLogic;
-//    }
-//
-//    public void setMainGUI(MainGUI mainGUI) {
-//        this.mGUI = mainGUI;
-//    }
+    @FXML
+    void logIn(ActionEvent event) {
+
+        mGUI.showScene("Log In");
+
+        createRidesBtn.setVisible(false);
+        logInButton.setVisible(true);
+        signUpButton.setVisible(true);
+        queryRidesBtn.setVisible(true);
+        seeMessagesBttn.setVisible(false);
+        seeAlertsBttn.setVisible(false);
+
+        if (businessLogic.getCurrentUser().getClass().equals(Traveler.class) || businessLogic.getCurrentUser().getClass().equals(Driver.class)) {
+
+            rolName.setText(businessLogic.getCurrentUser().getName());
+
+        } else {
+
+            rolName.setText("Guest");
+
+        }
+
+
+    }
 
     @FXML
-    void onClickExit(ActionEvent event) throws IOException {
+    void signUp(ActionEvent event) {
+        mGUI.showScene("Sign Up");
+
+        signUpButton.setVisible(true);
+        logInButton.setVisible(true);
+        queryRidesBtn.setVisible(true);
+        exitBttn.setVisible(false);
+        seeMessagesBttn.setVisible(false);
+        seeAlertsBttn.setVisible(false);
+
+
+        if (businessLogic.getCurrentUser().getClass().equals(Traveler.class) || businessLogic.getCurrentUser().getClass().equals(Driver.class)) {
+
+            rolName.setText(businessLogic.getCurrentUser().getName());
+
+        } else {
+
+            rolName.setText("Guest");
+
+        }
+
+
+    }
+
+    @FXML
+    void exit(ActionEvent event) {
 
         mGUI.showScene("Log Out");
         signUpButton.setVisible(true);
@@ -148,7 +193,7 @@ public class MainGUIController implements Controller {
         exitBttn.setVisible(false);
         createRidesBtn.setVisible(false);
         seeAlertsBttn.setVisible(false);
-        seeAlertsBttn.setVisible(false);
+        seeMessagesBttn.setVisible(false);
 
         businessLogic.setCurrentUser(new User());
         rolName.setText("Guest");
@@ -156,71 +201,30 @@ public class MainGUIController implements Controller {
 
     }
 
-    @FXML
-    void onClickSignUp(ActionEvent event) throws IOException {
-        mGUI.showScene("Sign Up");
-
-        signUpButton.setVisible(false);
-        logInButton.setVisible(false);
-        queryRidesBtn.setVisible(true);
-        exitBttn.setVisible(true);
-
-        if (businessLogic.getCurrentUser().getClass().equals(Traveler.class) || businessLogic.getCurrentUser().getClass().equals(Driver.class)) {
-
-            rolName.setText(businessLogic.getCurrentUser().getName());
-
-        } else {
-
-            rolName.setText("Guest");
-
-        }
-
-
-    }
-
-
-    @FXML
-    void onClickLogIn(ActionEvent event) throws IOException {
-
-        mGUI.showScene("Log In");
-
-        createRidesBtn.setVisible(false);
-        logInButton.setVisible(false);
-        signUpButton.setVisible(false);
-        exitBttn.setVisible(true);
-
-        if (businessLogic.getCurrentUser().getClass().equals(Traveler.class) || businessLogic.getCurrentUser().getClass().equals(Driver.class)) {
-
-            rolName.setText(businessLogic.getCurrentUser().getName());
-
-        } else {
-
-            rolName.setText("Guest");
-
-        }
-
-
-    }
 
     @FXML
     void queryRides(ActionEvent event) {
 
         mGUI.showScene("Query Rides");
+        queryRidesBtn.setVisible(false);
 
         if (mGUI.getBusinessLogic().getCurrentUser().getClass().equals(Driver.class)) {
             createRidesBtn.setVisible(true);
-            queryRidesBtn.setVisible(false);
+            queryRidesBtn.setVisible(true);
             exitBttn.setVisible(true);
             logInButton.setVisible(false);
             signUpButton.setVisible(false);
             seeAlertsBttn.setVisible(true);
+            seeMessagesBttn.setVisible(true);
 
         } else if (mGUI.getBusinessLogic().getCurrentUser().getClass().equals(Traveler.class)) {
             queryRidesBtn.setVisible(true);
             createRidesBtn.setVisible(false);
             exitBttn.setVisible(true);
-            createRidesBtn.setVisible(false);
             seeAlertsBttn.setVisible(true);
+            seeMessagesBttn.setVisible(true);
+            logInButton.setVisible(false);
+            signUpButton.setVisible(false);
 
         } else {
 
@@ -230,6 +234,7 @@ public class MainGUIController implements Controller {
             exitBttn.setVisible(false);
             createRidesBtn.setVisible(false);
             seeAlertsBttn.setVisible(false);
+            seeMessagesBttn.setVisible(false);
 
         }
 
@@ -240,29 +245,60 @@ public class MainGUIController implements Controller {
     void createRide(ActionEvent event) {
 
         mGUI.showScene("Create Ride");
-        queryRidesBtn.setVisible(false);
+
         exitBttn.setVisible(true);
         logInButton.setVisible(false);
         signUpButton.setVisible(false);
-        createRidesBtn.setVisible(false);
+        createRidesBtn.setVisible(true);
+        seeMessagesBttn.setVisible(true);
+        seeAlertsBttn.setVisible(true);
+
 
     }
 
     @FXML
     void seeAlerts(ActionEvent event) {
+
         mGUI.showScene("See Alerts");
 
         if (mGUI.getBusinessLogic().getCurrentUser().getClass().equals(Driver.class)) {
             queryRidesBtn.setVisible(false);
             createRidesBtn.setVisible(true);
+            seeMessagesBttn.setVisible(true);
+            seeAlertsBttn.setVisible(true);
+
         } else if (mGUI.getBusinessLogic().getCurrentUser().getClass().equals(Traveler.class)) {
             createRidesBtn.setVisible(false);
+            seeMessagesBttn.setVisible(true);
+            seeAlertsBttn.setVisible(true);
 
         }
     }
 
     @FXML
     void seeMessages(ActionEvent event) {
+
+        mGUI.showScene("See Messages");
+
+        if (mGUI.getBusinessLogic().getCurrentUser().getClass().equals(Driver.class)) {
+            queryRidesBtn.setVisible(false);
+            createRidesBtn.setVisible(true);
+            seeMessagesBttn.setVisible(true);
+            seeAlertsBttn.setVisible(true);
+            logInButton.setVisible(false);
+            signUpButton.setVisible(false);
+            exitBttn.setVisible(true);
+
+        } else if (mGUI.getBusinessLogic().getCurrentUser().getClass().equals(Traveler.class)) {
+            createRidesBtn.setVisible(false);
+            seeMessagesBttn.setVisible(true);
+            seeAlertsBttn.setVisible(true);
+            queryRidesBtn.setVisible(true);
+            logInButton.setVisible(false);
+            signUpButton.setVisible(false);
+            exitBttn.setVisible(true);
+
+        }
 
     }
 
@@ -273,6 +309,7 @@ public class MainGUIController implements Controller {
 
         exitBttn.setVisible(false);
         seeAlertsBttn.setVisible(false);
+        seeMessagesBttn.setVisible(false);
 
 
         exitBttn.setStyle("-fx-background-color: #f85774");
@@ -281,18 +318,15 @@ public class MainGUIController implements Controller {
         queryRidesBtn.setStyle("-fx-background-color: #f85774");
         createRidesBtn.setStyle("-fx-background-color: #f85774");
         seeAlertsBttn.setStyle("-fx-background-color: #f85774");
+        seeMessagesBttn.setStyle("-fx-background-color: #f85774");
         es.setStyle("-fx-background-color: #f85774");
         eng.setStyle("-fx-background-color: #f85774");
         eus.setStyle("-fx-background-color: #f85774");
 
-
         businessLogic.setCurrentUser(new User());
         rolName.setText(ResourceBundle.getBundle("Etiquetas", Locale.getDefault()).getString("Guest"));
 
-
     }
-
-
 
 
     @Override
@@ -304,14 +338,13 @@ public class MainGUIController implements Controller {
     public void changeLanguage(ResourceBundle resources) {
 
         signUpButton.setText(resources.getString("SignUp"));
-        exitBttn.setText(resources.getString("LogIn"));
+        exitBttn.setText(resources.getString("Exit"));
         createRidesBtn.setText(resources.getString("CreateRide"));
         queryRidesBtn.setText(resources.getString("QueryRides"));
         logInButton.setText(resources.getString("LogIn"));
         seeAlertsBttn.setText(resources.getString("SeeAlerts"));
+        seeMessagesBttn.setText(resources.getString("SeeMessages"));
         exitBttn.setText(resources.getString("Exit"));
-        rolName.setText(resources.getString("Guest"));
-
 
     }
 

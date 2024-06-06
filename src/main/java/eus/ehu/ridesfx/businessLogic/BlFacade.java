@@ -105,4 +105,6 @@ public interface BlFacade {
 
     public void takeRide(Ride selectedItem, int nP, float p);
 
+    public void sendMessage(int id, String to, String subject, String message);
+
 }

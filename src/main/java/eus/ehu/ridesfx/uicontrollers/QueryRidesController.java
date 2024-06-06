@@ -2,7 +2,7 @@ package eus.ehu.ridesfx.uicontrollers;
 
 import eus.ehu.ridesfx.businessLogic.BlFacade;
 import eus.ehu.ridesfx.domain.*;
-import javafx.animation.PauseTransition;
+import javafx.application.Platform;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
@@ -40,6 +40,9 @@ public class QueryRidesController implements Controller {
     private Button bookButtn;
 
     @FXML
+    private ResourceBundle resources;
+
+    @FXML
     private TableColumn<Ride, String> qc1;
 
     @FXML
@@ -62,7 +65,6 @@ public class QueryRidesController implements Controller {
 
     @FXML
     private Label EventDate;
-
 
     @FXML
     private AnchorPane mainAncor;
@@ -174,7 +176,6 @@ public class QueryRidesController implements Controller {
 
 
     @FXML
-
     public void onClickCreateAlert(ActionEvent event) {
 
 
@@ -186,53 +187,60 @@ public class QueryRidesController implements Controller {
             if (ride.getFrom() != null && ride.getTo() != null && ride.getDate() != null) {
 
                 businessLogic.createAlert(ride.getFrom(), ride.getTo(), ride.getDate(), user.getEmail());
-                reservationMessage.setText(translate("AlertCreated"));
                 reservationMessage.setStyle("-fx-text-fill: #188a2e");
+                reservationMessage.setText(resources.getString("AlertCreated"));
 
-//                Thread t = new Thread(() -> {
-//                    try {
-//                        Thread.sleep(3);
-//                    } catch (InterruptedException e) {
-//                        e.printStackTrace();
-//                    }
-//                    reservationMessage.setText("");
-//                });
-//
-//                t.start();
-
-
-                PauseTransition pause = new PauseTransition(Duration.seconds(3));
-                pause.setOnFinished(e -> {
-                    reservationMessage.setText("");
+                Thread thread = new Thread(() -> {
+                    try {
+                        Thread.sleep(5000);
+                        Platform.runLater(() -> reservationMessage.setVisible(false));
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
                 });
-                pause.play();
+                thread.start();
 
             } else {
 
-                reservationMessage.setText(translate("QueryRidesController.PleaseFillInAllFields"));
+                reservationMessage.setText(resources.getString("QueryRidesController.PleaseFillInAllFields"));
+                reservationMessage.setVisible(true);
                 reservationMessage.setStyle("-fx-text-fill: #d54242");
-                PauseTransition pause = new PauseTransition(Duration.seconds(5));
-                pause.setOnFinished(e -> {
-                    reservationMessage.setText("");
+                Thread thread = new Thread(() -> {
+                    try {
+                        Thread.sleep(5000);
+                        Platform.runLater(() -> reservationMessage.setVisible(false));
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
                 });
-                pause.play();
-
+                thread.start();
             }
 
 
         } else {
 
-            reservationMessage.setText(translate("QueryRidesController.PleaseLogInOrSignUp"));
+            reservationMessage.setText(resources.getString("QueryRidesController.PleaseLogInOrSignUp"));
+
+            Thread thread = new Thread(() -> {
+                try {
+                    Thread.sleep(5000);
+                    Platform.runLater(() -> reservationMessage.setVisible(false));
+                } catch (InterruptedException ex) {
+                    ex.printStackTrace();
+                }
+            });
+            thread.start();
+
             reservationMessage.setStyle("-fx-text-fill: #d54242");
+            reservationMessage.setVisible(true);
+
+
+
 
         }
     }
 
-    String translate(String txt) {
 
-        return ResourceBundle.getBundle("Etiquetas").getString(txt);
-
-    }
 
     @FXML
     void initialize() {
@@ -245,6 +253,12 @@ public class QueryRidesController implements Controller {
         DepartCity.setText(translate("DepartCity"));
         ArrivalCity.setText(translate("ArrivalCity"));
         EventDate.setText(translate("EventDate"));
+
+        qc1.setText(translate("Driver"));
+        qc2.setText(translate("Seats"));
+        qc3.setText(translate("Price"));
+
+        reservationMessage.setVisible(false);
 
         LocalDate lD = LocalDate.now();
 
@@ -282,13 +296,20 @@ public class QueryRidesController implements Controller {
 
             if (datepicker.getValue().compareTo(LocalDate.now()) < 0) {
 
-                reservationMessage.setText(translate("QueryRidesController.PleaseSelectFutureDate"));
+                reservationMessage.setText(resources.getString("QueryRidesController.PleaseSelectFutureDate"));
                 reservationMessage.setStyle("-fx-text-fill: #d54242");
-                PauseTransition pause = new PauseTransition(Duration.seconds(5));
-                pause.setOnFinished(e -> {
-                    reservationMessage.setText("");
+                reservationMessage.setVisible(true);
+
+                Thread thread = new Thread(() -> {
+                    try {
+                        Thread.sleep(5000);
+                        Platform.runLater(() -> reservationMessage.setVisible(false));
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
                 });
-                pause.play();
+                thread.start();
+
             } else {
 
                 tblRides.getItems().clear();
@@ -351,38 +372,56 @@ public class QueryRidesController implements Controller {
             if (ride != null) {
 
 
-                reservationMessage.setText(translate("QueryRidesController.RideBooked"));
+                reservationMessage.setText(resources.getString("QueryRidesController.RideBooked"));
                 reservationMessage.setStyle("-fx-text-fill: #188a2e");
+                reservationMessage.setVisible(true);
 
-                PauseTransition pause = new PauseTransition(Duration.seconds(3));
-                pause.setOnFinished(e -> {
-                    reservationMessage.setText("");
+                Thread thread = new Thread(() -> {
+                    try {
+                        Thread.sleep(5000);
+                        Platform.runLater(() -> reservationMessage.setVisible(false));
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
                 });
-                pause.play();
+                thread.start();
 
                 ride.setNumPlaces(ride.getNumPlaces() - 1);
 
             } else {
 
-                reservationMessage.setText(translate("QueryRidesController.PleaseSelectRideToBook"));
+                reservationMessage.setText(resources.getString("QueryRidesController.PleaseSelectRideToBook"));
                 reservationMessage.setStyle("-fx-text-fill: #d54242");
-                PauseTransition pause = new PauseTransition(Duration.seconds(5));
-                pause.setOnFinished(e -> {
-                    reservationMessage.setText("");
+                reservationMessage.setVisible(true);
+
+                Thread thread = new Thread(() -> {
+                    try {
+                        Thread.sleep(5000);
+                        Platform.runLater(() -> reservationMessage.setVisible(false));
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
                 });
-                pause.play();
+                thread.start();
 
             }
 
         } else {
 
-            reservationMessage.setText(translate("QueryRidesController.PleaseLogInOrSignUp"));
+            reservationMessage.setText(resources.getString("QueryRidesController.PleaseLogInOrSignUp"));
+
             reservationMessage.setStyle("-fx-text-fill: #d54242");
-            PauseTransition pause = new PauseTransition(Duration.seconds(7));
-            pause.setOnFinished(e -> {
-                reservationMessage.setText("");
+            reservationMessage.setVisible(true);
+
+            Thread thread = new Thread(() -> {
+                try {
+                    Thread.sleep(5000);
+                    Platform.runLater(() -> reservationMessage.setVisible(false));
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
             });
-            pause.play();
+            thread.start();
 
             mainGUI.mGUIC.getSeeAlertsBttn().setVisible(false);
 
@@ -390,13 +429,33 @@ public class QueryRidesController implements Controller {
 
     }
 
+    String translate(String txt) {
+
+        return ResourceBundle.getBundle("Etiquetas").getString(txt);
+
+    }
 
     @Override
     public void changeLanguage(ResourceBundle resources) {
+
         bookButtn.setText(resources.getString("Book"));
         createAlertBut.setText(resources.getString("CreateAlert"));
         DepartCity.setText(resources.getString("DepartCity"));
         ArrivalCity.setText(resources.getString("ArrivalCity"));
         EventDate.setText(resources.getString("EventDate"));
+
+        reservationMessage.setText(resources.getString("QueryRidesController.PleaseSelectRideToBook"));
+        reservationMessage.setText(resources.getString("QueryRidesController.PleaseFillInAllFields"));
+        reservationMessage.setText(resources.getString("QueryRidesController.PleaseSelectFutureDate"));
+        reservationMessage.setText(resources.getString("QueryRidesController.PleaseLogInOrSignUp"));
+
+        reservationMessage.setText(resources.getString("QueryRidesController.RideBooked"));
+        reservationMessage.setText(resources.getString("AlertCreated"));
+
+        qc1.setText(resources.getString("Driver"));
+        qc2.setText(resources.getString("Seats"));
+        qc3.setText(resources.getString("Price"));
+
+
     }
 }

@@ -8,13 +8,14 @@ import eus.ehu.ridesfx.businessLogic.BlFacade;
 import eus.ehu.ridesfx.domain.Traveler;
 import eus.ehu.ridesfx.exceptions.UnknownUser;
 import eus.ehu.ridesfx.ui.MainGUI;
-import javafx.animation.PauseTransition;
+import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.BorderPane;
+import javafx.scene.text.Text;
 import javafx.util.Duration;
 
 public class LoginController implements Controller {
@@ -31,6 +32,12 @@ public class LoginController implements Controller {
 
     @FXML
     private TextField password;
+
+    @FXML
+    private Text EmailTXT;
+
+    @FXML
+    private Text PasswordTXT;
 
     public LoginController(BlFacade bl, MainGUI mainGUIC) {
         this.businessLogic = bl;
@@ -49,6 +56,8 @@ public class LoginController implements Controller {
         if (logInButt.getText() == null || password.getText() == null) {
 
             mGUI.mGUIC.getSeeAlertsBttn().setVisible(false);
+            hasLogin.setText(translate("LoginController.LoginFailed"));
+            hasLogin.setVisible(true);
 
             return;
         } else {
@@ -70,15 +79,23 @@ public class LoginController implements Controller {
                         mGUI.mGUIC.getCreateRidesBtn().setVisible(false);
                         mGUI.mGUIC.getQueryRidesBtn().setVisible(true);
                         mGUI.mGUIC.getSeeAlertsBttn().setVisible(true);
+                        mGUI.mGUIC.getLogInButton().setVisible(false);
+                        mGUI.mGUIC.getSignUpButton().setVisible(false);
+                        mGUI.mGUIC.getExitBttn().setVisible(true);
+                        mGUI.mGUIC.getSeeMessagesBttn().setVisible(true);
+
                         mGUI.showScene("Query Rides");
 
 
                     } else {
 
                         mGUI.mGUIC.getQueryRidesBtn().setVisible(false);
-                        mGUI.mGUIC.getCreateRidesBtn().setVisible(true);
                         mGUI.mGUIC.getSeeAlertsBttn().setVisible(true);
                         mGUI.mGUIC.getCreateRidesBtn().setVisible(false);
+                        mGUI.mGUIC.getLogInButton().setVisible(false);
+                        mGUI.mGUIC.getSignUpButton().setVisible(false);
+                        mGUI.mGUIC.getExitBttn().setVisible(true);
+                        mGUI.mGUIC.getSeeMessagesBttn().setVisible(true);
 
                         mGUI.showScene("Create Ride");
 
@@ -89,13 +106,17 @@ public class LoginController implements Controller {
 
             } catch (UnknownUser unknownUser) {
 
-                hasLogin.setText(translate("LoginController.LoginFailed"));
                 hasLogin.setStyle("-fx-text-fill: #d54242");
-                PauseTransition pause = new PauseTransition(Duration.seconds(3));
-                pause.setOnFinished(e -> {
-                    hasLogin.setText("");
+                hasLogin.setVisible(true);
+                Thread thread = new Thread(() -> {
+                    try {
+                        Thread.sleep(5000);
+                        Platform.runLater(() -> hasLogin.setVisible(false));
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
                 });
-                pause.play();
+                thread.start();
 
             }
 
@@ -109,7 +130,9 @@ public class LoginController implements Controller {
     void initialize() {
 
         logInButt.setStyle("-fx-background-color: #f85774;");
-        logInButt.setText(translate("LoginController.LogIn"));
+        hasLogin.setVisible(false);
+        EmailTXT.setText(translate("Email"));
+        PasswordTXT.setText(translate("Password"));
 
     }
 
@@ -124,6 +147,11 @@ public class LoginController implements Controller {
 
     @Override
     public void changeLanguage(ResourceBundle resources) {
+
+        logInButt.setText(resources.getString("LoginController.LogIn"));
+        hasLogin.setText(resources.getString("LoginController.LoginFailed"));
+        EmailTXT.setText(resources.getString("Email"));
+        PasswordTXT.setText(resources.getString("Password"));
 
     }
 

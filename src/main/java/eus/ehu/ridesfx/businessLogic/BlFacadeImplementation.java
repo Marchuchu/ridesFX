@@ -178,6 +178,11 @@ public class BlFacadeImplementation implements BlFacade {
 
     }
 
+    public void sendMessage(int id, String to, String subject, String message){
+
+        dbManager.sendMessage(id, to, subject, message);
+
+    }
 
     @Override
     public void cancelAlert(Ride r) {

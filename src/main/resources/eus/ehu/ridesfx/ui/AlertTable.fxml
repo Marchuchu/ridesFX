@@ -24,7 +24,7 @@
       <Button fx:id="takeRideBttn" layoutX="314.0" layoutY="375.0" mnemonicParsing="false" onAction="#onClickTakeRide" text="Take Ride" />
       <Label fx:id="message" layoutX="347.0" layoutY="347.0" prefHeight="18.0" prefWidth="190.0" textAlignment="CENTER" />
       <Button fx:id="cancelAlertBttn" layoutX="498.0" layoutY="375.0" mnemonicParsing="false" onAction="#onClickCancelAlert" text="Cancel Alert" />
-      <Text layoutX="135.0" layoutY="392.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Set price:" />
+      <Text fx:id="setPriceTXT" layoutX="135.0" layoutY="392.0" strokeType="OUTSIDE" strokeWidth="0.0" text="%SetPrice" />
       <TextField fx:id="price" layoutX="198.0" layoutY="375.0" prefHeight="26.0" prefWidth="30.0" />
    </children>
 </AnchorPane>

@@ -28,15 +28,15 @@
                   <Image url="@/KarKrash.png" />
                </image>
             </ImageView>
-            <Button fx:id="logInButton" mnemonicParsing="false" onAction="#onClickLogIn" prefHeight="26.0" prefWidth="181.0" text="%LogIn" textAlignment="CENTER">
+            <Button fx:id="logInButton" mnemonicParsing="false" onAction="#logIn" prefHeight="26.0" prefWidth="181.0" text="%LogIn" textAlignment="CENTER">
                <VBox.margin>
                   <Insets left="15.0" right="15.0" />
                </VBox.margin></Button>
-            <Button fx:id="signUpButton" mnemonicParsing="false" onAction="#onClickSignUp" prefHeight="26.0" prefWidth="181.0" text="%SignUp" textAlignment="CENTER">
+            <Button fx:id="signUpButton" mnemonicParsing="false" onAction="#signUp" prefHeight="26.0" prefWidth="181.0" text="%SignUp" textAlignment="CENTER">
                <VBox.margin>
                   <Insets left="15.0" right="15.0" />
                </VBox.margin></Button>
-            <Button fx:id="exitBttn" mnemonicParsing="false" onAction="#onClickExit" prefHeight="26.0" prefWidth="181.0" text="%Exit" textAlignment="CENTER">
+            <Button fx:id="exitBttn" mnemonicParsing="false" onAction="#exit" prefHeight="26.0" prefWidth="181.0" text="%Exit" textAlignment="CENTER">
                <VBox.margin>
                   <Insets left="15.0" right="15.0" />
                </VBox.margin></Button>

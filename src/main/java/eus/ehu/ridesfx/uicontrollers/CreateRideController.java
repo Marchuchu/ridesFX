@@ -3,6 +3,7 @@ package eus.ehu.ridesfx.uicontrollers;
 import eus.ehu.ridesfx.businessLogic.BlFacade;
 import eus.ehu.ridesfx.domain.User;
 import eus.ehu.ridesfx.ui.MainGUI;
+import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.Node;
@@ -63,38 +64,38 @@ public class CreateRideController implements Controller {
         lblErrorMessage.getStyleClass().clear();
     }
 
-    private String field_Errors() {
-
-        try {
-            if ((txtDepartCity.getText().length() == 0) || (txtArrivalCity.getText().length() == 0) || (txtNumberOfSeats.getText().length() == 0) || (txtPrice.getText().length() == 0))
-                return ResourceBundle.getBundle("Etiquetas").getString("CreateRideGUI.ErrorQuery");
-            else {
-
-                // trigger an exception if the introduced string is not a number
-                int inputSeats = Integer.parseInt(txtNumberOfSeats.getText());
-
-                if (inputSeats <= 0) {
-                    return ResourceBundle.getBundle("Etiquetas").getString("CreateRideGUI.SeatsMustBeGreaterThan0");
-                } else {
-                    float price = Float.parseFloat(txtPrice.getText());
-                    if (price <= 0)
-                        return ResourceBundle.getBundle("Etiquetas").getString("CreateRideGUI.PriceMustBeGreaterThan0");
-
-                    else
-                        return null;
-
-                }
-            }
-        } catch (NumberFormatException e1) {
-
-            return ResourceBundle.getBundle("Etiquetas").getString("CreateRideGUI.ErrorNumber");
-        } catch (Exception e1) {
-
-            e1.printStackTrace();
-            return null;
-
-        }
-    }
+//    private String field_Errors() {
+//
+//        try {
+//            if ((txtDepartCity.getText().length() == 0) || (txtArrivalCity.getText().length() == 0) || (txtNumberOfSeats.getText().length() == 0) || (txtPrice.getText().length() == 0))
+//                return ResourceBundle.getBundle("Etiquetas").getString("CreateRideGUI.ErrorQuery");
+//            else {
+//
+//                // trigger an exception if the introduced string is not a number
+//                int inputSeats = Integer.parseInt(txtNumberOfSeats.getText());
+//
+//                if (inputSeats <= 0) {
+//                    return ResourceBundle.getBundle("Etiquetas").getString("CreateRideGUI.SeatsMustBeGreaterThan0");
+//                } else {
+//                    float price = Float.parseFloat(txtPrice.getText());
+//                    if (price <= 0)
+//                        return ResourceBundle.getBundle("Etiquetas").getString("CreateRideGUI.PriceMustBeGreaterThan0");
+//
+//                    else
+//                        return null;
+//
+//                }
+//            }
+//        } catch (NumberFormatException e1) {
+//
+//            return ResourceBundle.getBundle("Etiquetas").getString("CreateRideGUI.ErrorNumber");
+//        } catch (Exception e1) {
+//
+//            e1.printStackTrace();
+//            return null;
+//
+//        }
+//    }
 
     void displayMessage(String message, String label) {
         lblErrorMessage.getStyleClass().clear();
@@ -140,34 +141,69 @@ public class CreateRideController implements Controller {
         if (date == null) {
 
             lblErrorMessage.setText(translate("CreateRideGUI.FillDate"));
+
+            Thread thread = new Thread(() -> {
+                try {
+                    Thread.sleep(5000);
+                    Platform.runLater(() -> lblErrorMessage.setVisible(false));
+                } catch (InterruptedException ex) {
+                    ex.printStackTrace();
+                }
+            });
+            thread.start();
+
             lblErrorMessage.setStyle("-fx-text-fill: #d54242");
             return;
         }
 
-        if (date.compareTo(LocalDate.now()) < 0) {
-
-            //lblErrorMessage.setText("The date must be later than today");
+        if (date.isBefore(LocalDate.now())) {
 
             lblErrorMessage.setText(translate("CreateRideGUI.DateMustBeLaterThanToday"));
+            Thread thread = new Thread(() -> {
+                try {
+                    Thread.sleep(5000);
+                    Platform.runLater(() -> lblErrorMessage.setVisible(false));
+                } catch (InterruptedException ex) {
+                    ex.printStackTrace();
+                }
+            });
+            thread.start();
             lblErrorMessage.setStyle("-fx-text-fill: #d54242");
             return;
 
-
         }
 
-        if (from.equals("")) {
+        if (from.isEmpty()) {
 
             lblErrorMessage.setText(translate("CreateRideGUI.FillDepartureCity"));
+            Thread thread = new Thread(() -> {
+                try {
+                    Thread.sleep(5000);
+                    Platform.runLater(() -> lblErrorMessage.setVisible(false));
+                } catch (InterruptedException ex) {
+                    ex.printStackTrace();
+                }
+            });
+            thread.start();
             lblErrorMessage.setStyle("-fx-text-fill: #d54242");
             return;
 
 
         }
 
-        if (to.equals("")) {
+        if (to.isEmpty()) {
 
             lblErrorMessage.setStyle("-fx-text-fill: #d54242");
             lblErrorMessage.setText(translate("CreateRideGUI.FillArrivalCity"));
+            Thread thread = new Thread(() -> {
+                try {
+                    Thread.sleep(5000);
+                    Platform.runLater(() -> lblErrorMessage.setVisible(false));
+                } catch (InterruptedException ex) {
+                    ex.printStackTrace();
+                }
+            });
+            thread.start();
             return;
 
         }
@@ -176,6 +212,15 @@ public class CreateRideController implements Controller {
 
             lblErrorMessage.setText(translate("CreateRideGUI.FillNumberOfSeats"));
             lblErrorMessage.setStyle("-fx-text-fill: #d54242");
+            Thread thread = new Thread(() -> {
+                try {
+                    Thread.sleep(5000);
+                    Platform.runLater(() -> lblErrorMessage.setVisible(false));
+                } catch (InterruptedException ex) {
+                    ex.printStackTrace();
+                }
+            });
+            thread.start();
             return;
 
         }
@@ -188,6 +233,15 @@ public class CreateRideController implements Controller {
 
             lblErrorMessage.setText(translate("CreateRideGUI.NumberOfSeatsMustBeANumber"));
             lblErrorMessage.setStyle("-fx-text-fill: #d54242");
+            Thread thread = new Thread(() -> {
+                try {
+                    Thread.sleep(5000);
+                    Platform.runLater(() -> lblErrorMessage.setVisible(false));
+                } catch (InterruptedException ex) {
+                    ex.printStackTrace();
+                }
+            });
+            thread.start();
             return;
         }
 
@@ -195,6 +249,15 @@ public class CreateRideController implements Controller {
 
             lblErrorMessage.setText(translate("CreateRideGUI.FillPrice"));
             lblErrorMessage.setStyle("-fx-text-fill: #d54242");
+            Thread thread = new Thread(() -> {
+                try {
+                    Thread.sleep(5000);
+                    Platform.runLater(() -> lblErrorMessage.setVisible(false));
+                } catch (InterruptedException ex) {
+                    ex.printStackTrace();
+                }
+            });
+            thread.start();
             return;
         }
 
@@ -205,6 +268,15 @@ public class CreateRideController implements Controller {
 
             lblErrorMessage.setText(translate("CreateRideGUI.PriceMustBeANumber"));
             lblErrorMessage.setStyle("-fx-text-fill: #d54242");
+            Thread thread = new Thread(() -> {
+                try {
+                    Thread.sleep(5000);
+                    Platform.runLater(() -> lblErrorMessage.setVisible(false));
+                } catch (InterruptedException ex) {
+                    ex.printStackTrace();
+                }
+            });
+            thread.start();
             return;
         }
 
@@ -212,13 +284,32 @@ public class CreateRideController implements Controller {
 
             lblErrorMessage.setText(translate("CreateRideGUI.NumberOfSeatsMustBeLessThan5"));
             lblErrorMessage.setStyle("-fx-text-fill: #d54242");
+            Thread thread = new Thread(() -> {
+                try {
+                    Thread.sleep(5000);
+                    Platform.runLater(() -> lblErrorMessage.setVisible(false));
+                } catch (InterruptedException ex) {
+                    ex.printStackTrace();
+                }
+            });
+            thread.start();
             return;
         }
 
 
         User user = businessLogic.getCurrentUser();
         businessLogic.createRideClick(from, to, Dates.convertToDate(date), numPlaces, price, user.getEmail());
-        displayMessage(translate("CreateRideGUI.RideCreated"), "success");
+//        displayMessage(translate("CreateRideGUI.RideCreated"), "success");
+        lblErrorMessage.setText(translate("CreateRideGUI.RideCreated"));
+
+        Thread thread = new Thread(() -> {
+            try {
+                Thread.sleep(5000);
+                Platform.runLater(() -> lblErrorMessage.setVisible(false));
+            } catch (InterruptedException ex) {
+                ex.printStackTrace();
+            }
+        });
 
         // TODO: add new city to the combo box
         List<String> deptCities = businessLogic.getDepartCities();
@@ -240,6 +331,7 @@ public class CreateRideController implements Controller {
     void initialize() {
 
         btnCreateRide.setStyle("-fx-background-color: #f85774");
+        lblErrorMessage.setText("");
 
         // setEventsPrePost(LocalDate.now().getYear(), LocalDate.now().getMonth().getValue());
 
@@ -297,6 +389,20 @@ public class CreateRideController implements Controller {
 
     @Override
     public void changeLanguage(ResourceBundle resources) {
+
+        btnCreateRide.setText(resources.getString("CreateRide"));
+
+        lblErrorMessage.setText(resources.getString("CreateRideGUI.FillDate"));
+        lblErrorMessage.setText(resources.getString("CreateRideGUI.DateMustBeLaterThanToday"));
+        lblErrorMessage.setText(resources.getString("CreateRideGUI.FillDepartureCity"));
+        lblErrorMessage.setText(resources.getString("CreateRideGUI.FillArrivalCity"));
+        lblErrorMessage.setText(resources.getString("CreateRideGUI.FillNumberOfSeats"));
+        lblErrorMessage.setText(resources.getString("CreateRideGUI.NumberOfSeatsMustBeANumber"));
+        lblErrorMessage.setText(resources.getString("CreateRideGUI.FillPrice"));
+        lblErrorMessage.setText(resources.getString("CreateRideGUI.PriceMustBeANumber"));
+        lblErrorMessage.setText(resources.getString("CreateRideGUI.NumberOfSeatsMustBeLessThan5"));
+        lblErrorMessage.setText(resources.getString("CreateRideGUI.RideCreated"));
+
 
     }
 }
