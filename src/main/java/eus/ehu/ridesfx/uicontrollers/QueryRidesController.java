@@ -191,30 +191,16 @@ public class QueryRidesController implements Controller {
                 reservationMessage.setStyle("-fx-text-fill: #188a2e");
                 reservationMessage.setText(resources.getString("AlertCreated"));
 
-                Thread thread = new Thread(() -> {
-                    try {
-                        Thread.sleep(5000);
-                        Platform.runLater(() -> reservationMessage.setVisible(false));
-                    } catch (InterruptedException e) {
-                        e.printStackTrace();
-                    }
-                });
-                thread.start();
+                time(null, 5, reservationMessage);
+
 
             } else {
 
                 reservationMessage.setText(StringUtils.translate("QueryRidesController.PleaseFillInAllFields"));
                 reservationMessage.setVisible(true);
                 reservationMessage.setStyle("-fx-text-fill: #d54242");
-                Thread thread = new Thread(() -> {
-                    try {
-                        Thread.sleep(5000);
-                        Platform.runLater(() -> reservationMessage.setVisible(false));
-                    } catch (InterruptedException e) {
-                        e.printStackTrace();
-                    }
-                });
-                thread.start();
+                time(null, 5, reservationMessage);
+
             }
 
 
@@ -222,15 +208,8 @@ public class QueryRidesController implements Controller {
 
             reservationMessage.setText(StringUtils.translate("QueryRidesController.PleaseLogInOrSignUp"));
 
-            Thread thread = new Thread(() -> {
-                try {
-                    Thread.sleep(5000);
-                    Platform.runLater(() -> reservationMessage.setVisible(false));
-                } catch (InterruptedException ex) {
-                    ex.printStackTrace();
-                }
-            });
-            thread.start();
+            time(null, 5, reservationMessage);
+
 
             reservationMessage.setStyle("-fx-text-fill: #d54242");
             reservationMessage.setVisible(true);
@@ -302,16 +281,8 @@ public class QueryRidesController implements Controller {
                 reservationMessage.setText(StringUtils.translate("QueryRidesController.PleaseSelectFutureDate"));
                 reservationMessage.setStyle("-fx-text-fill: #d54242");
                 reservationMessage.setVisible(true);
+                time(null, 5, reservationMessage);
 
-                Thread thread = new Thread(() -> {
-                    try {
-                        Thread.sleep(5000);
-                        Platform.runLater(() -> reservationMessage.setVisible(false));
-                    } catch (InterruptedException e) {
-                        e.printStackTrace();
-                    }
-                });
-                thread.start();
 
             } else {
 
@@ -379,15 +350,8 @@ public class QueryRidesController implements Controller {
                 reservationMessage.setStyle("-fx-text-fill: #188a2e");
                 reservationMessage.setVisible(true);
 
-                Thread thread = new Thread(() -> {
-                    try {
-                        Thread.sleep(5000);
-                        Platform.runLater(() -> reservationMessage.setVisible(false));
-                    } catch (InterruptedException e) {
-                        e.printStackTrace();
-                    }
-                });
-                thread.start();
+                time(null, 5, reservationMessage);
+
 
                 ride.setNumPlaces(ride.getNumPlaces() - 1);
 
@@ -397,15 +361,7 @@ public class QueryRidesController implements Controller {
                 reservationMessage.setStyle("-fx-text-fill: #d54242");
                 reservationMessage.setVisible(true);
 
-                Thread thread = new Thread(() -> {
-                    try {
-                        Thread.sleep(5000);
-                        Platform.runLater(() -> reservationMessage.setVisible(false));
-                    } catch (InterruptedException e) {
-                        e.printStackTrace();
-                    }
-                });
-                thread.start();
+                time(null, 5, reservationMessage);
 
             }
 
@@ -416,15 +372,8 @@ public class QueryRidesController implements Controller {
             reservationMessage.setStyle("-fx-text-fill: #d54242");
             reservationMessage.setVisible(true);
 
-            Thread thread = new Thread(() -> {
-                try {
-                    Thread.sleep(5000);
-                    Platform.runLater(() -> reservationMessage.setVisible(false));
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
-            });
-            thread.start();
+            time(null, 5, reservationMessage);
+
 
             mainGUI.mGUIC.getSeeAlertsBttn().setVisible(false);
 
@@ -440,15 +389,7 @@ public class QueryRidesController implements Controller {
         DepartCity.setText(resources.getString("DepartCity"));
         ArrivalCity.setText(resources.getString("ArrivalCity"));
         EventDate.setText(resources.getString("EventDate"));
-/*
-        reservationMessage.setText(resources.getString("QueryRidesController.PleaseSelectRideToBook"));
-        reservationMessage.setText(resources.getString("QueryRidesController.PleaseFillInAllFields"));
-        reservationMessage.setText(resources.getString("QueryRidesController.PleaseSelectFutureDate"));
-        reservationMessage.setText(resources.getString("QueryRidesController.PleaseLogInOrSignUp"));
 
-        reservationMessage.setText(resources.getString("QueryRidesController.RideBooked"));
-        reservationMessage.setText(resources.getString("AlertCreated"));
-*/
         qc1.setText(resources.getString("Driver"));
         qc2.setText(resources.getString("Seats"));
         qc3.setText(resources.getString("Price"));
@@ -458,6 +399,21 @@ public class QueryRidesController implements Controller {
 
     @Override
     public void showHide() {
+
+    }
+
+    @Override
+    public void time(String txt, int s, Label mssg) {
+
+        Thread thread = new Thread(() -> {
+            try {
+                Thread.sleep(s * 1000);
+                Platform.runLater(() -> mssg.setVisible(false));
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        });
+        thread.start();
 
     }
 }

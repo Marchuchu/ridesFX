@@ -34,6 +34,9 @@ public class SignUpController implements Controller {
     private TextField email;
     @FXML
     private Label hasLogin;
+
+
+
     @FXML
     private AnchorPane mainWrapper;
     @FXML
@@ -144,31 +147,15 @@ public class SignUpController implements Controller {
                     hasLogin.setStyle("-fx-text-fill: #d54242");
                     hasLogin.setVisible(true);
 
+                    time(null, 5, hasLogin);
 
-                    Thread thread = new Thread(() -> {
-                        try {
-                            Thread.sleep(5000);
-                            Platform.runLater(() -> hasLogin.setVisible(false));
-                        } catch (InterruptedException e) {
-                            e.printStackTrace();
-                        }
-                    });
-                    thread.start();
                 } else {
 
                     hasLogin.setText(StringUtils.translate("SignUpController.UserExists"));
                     hasLogin.setStyle("-fx-text-fill: #d54242");
                     hasLogin.setVisible(true);
 
-                    Thread thread = new Thread(() -> {
-                        try {
-                            Thread.sleep(5000);
-                            Platform.runLater(() -> hasLogin.setVisible(false));
-                        } catch (InterruptedException e) {
-                            e.printStackTrace();
-                        }
-                    });
-                    thread.start();
+                    time(null, 5, hasLogin);
 
                 }
 
@@ -179,15 +166,7 @@ public class SignUpController implements Controller {
                 hasLogin.setStyle("-fx-text-fill: #d54242");
                 hasLogin.setVisible(true);
 
-                Thread thread = new Thread(() -> {
-                    try {
-                        Thread.sleep(5000);
-                        Platform.runLater(() -> hasLogin.setVisible(false));
-                    } catch (InterruptedException e) {
-                        e.printStackTrace();
-                    }
-                });
-                thread.start();
+                time(null, 5, hasLogin);
 
             }
 
@@ -234,6 +213,21 @@ public class SignUpController implements Controller {
     public class Window {
         private Controller controller;
         private Parent ui;
+    }
+
+    @Override
+    public void time(String txt, int s, Label mssg) {
+
+        Thread thread = new Thread(() -> {
+            try {
+                Thread.sleep(s * 1000);
+                Platform.runLater(() -> mssg.setVisible(false));
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        });
+        thread.start();
+
     }
 
 }

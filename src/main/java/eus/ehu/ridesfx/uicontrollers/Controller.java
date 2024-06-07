@@ -1,6 +1,7 @@
 package eus.ehu.ridesfx.uicontrollers;
 
 import eus.ehu.ridesfx.ui.MainGUI;
+import javafx.scene.control.Label;
 
 import java.util.ResourceBundle;
 
@@ -10,4 +11,6 @@ public interface Controller {
     void changeLanguage(ResourceBundle resources);
 
     void showHide();
+
+    void time(String txt, int s, Label mssg);
 }

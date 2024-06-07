@@ -109,15 +109,9 @@ public class LoginController implements Controller {
 
                 hasLogin.setStyle("-fx-text-fill: #d54242");
                 hasLogin.setVisible(true);
-                Thread thread = new Thread(() -> {
-                    try {
-                        Thread.sleep(5000);
-                        Platform.runLater(() -> hasLogin.setVisible(false));
-                    } catch (InterruptedException e) {
-                        e.printStackTrace();
-                    }
-                });
-                thread.start();
+
+                time(null, 5, hasLogin);
+
 
             }
 
@@ -150,6 +144,21 @@ public class LoginController implements Controller {
         hasLogin.setText(resources.getString("LoginController.LoginFailed"));
         EmailTXT.setText(resources.getString("Email"));
         PasswordTXT.setText(resources.getString("Password"));
+
+    }
+
+    @Override
+    public void time(String txt, int s, Label mssg) {
+
+        Thread thread = new Thread(() -> {
+            try {
+                Thread.sleep(s * 1000);
+                Platform.runLater(() -> mssg.setVisible(false));
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        });
+        thread.start();
 
     }
 
