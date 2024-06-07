@@ -2,7 +2,9 @@ package eus.ehu.ridesfx.uicontrollers;
 
 import eus.ehu.ridesfx.businessLogic.BlFacade;
 import eus.ehu.ridesfx.ui.MainGUI;
+import javafx.application.Platform;
 import javafx.fxml.FXML;
+import javafx.scene.control.Label;
 
 import java.util.ResourceBundle;
 
@@ -40,5 +42,19 @@ public class ExitController implements Controller {
 
     }
 
+    @Override
+    public void time(String txt, int s, Label mssg) {
+
+        Thread thread = new Thread(() -> {
+            try {
+                Thread.sleep(s * 1000);
+                Platform.runLater(() -> mssg.setVisible(false));
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        });
+        thread.start();
+
+    }
 
 }

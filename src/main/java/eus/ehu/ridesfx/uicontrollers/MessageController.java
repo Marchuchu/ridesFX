@@ -10,10 +10,7 @@ import eus.ehu.ridesfx.utils.StringUtils;
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.scene.control.Button;
-import javafx.scene.control.TableColumn;
-import javafx.scene.control.TableView;
-import javafx.scene.control.TextArea;
+import javafx.scene.control.*;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.text.Text;
 
@@ -74,6 +71,7 @@ public class MessageController implements Controller {
             });
             thread.start();
 
+
             errorMessage.setVisible(true);
             return;
         } else {
@@ -122,6 +120,21 @@ public class MessageController implements Controller {
 
     @Override
     public void showHide() {
+
+    }
+
+    @Override
+    public void time(String txt, int s, Label mssg) {
+
+        Thread thread = new Thread(() -> {
+            try {
+                Thread.sleep(s * 1000);
+                Platform.runLater(() -> mssg.setVisible(false));
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        });
+        thread.start();
 
     }
 }

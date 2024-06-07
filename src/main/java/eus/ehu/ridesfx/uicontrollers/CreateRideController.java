@@ -143,15 +143,7 @@ public class CreateRideController implements Controller {
 
             lblErrorMessage.setText(StringUtils.translate("CreateRideGUI.FillDate"));
 
-            Thread thread = new Thread(() -> {
-                try {
-                    Thread.sleep(5000);
-                    Platform.runLater(() -> lblErrorMessage.setVisible(false));
-                } catch (InterruptedException ex) {
-                    ex.printStackTrace();
-                }
-            });
-            thread.start();
+            time(null, 5, lblErrorMessage);
 
             lblErrorMessage.setStyle("-fx-text-fill: #d54242");
             return;
@@ -160,15 +152,8 @@ public class CreateRideController implements Controller {
         if (date.isBefore(LocalDate.now())) {
 
             lblErrorMessage.setText(StringUtils.translate("CreateRideGUI.DateMustBeLaterThanToday"));
-            Thread thread = new Thread(() -> {
-                try {
-                    Thread.sleep(5000);
-                    Platform.runLater(() -> lblErrorMessage.setVisible(false));
-                } catch (InterruptedException ex) {
-                    ex.printStackTrace();
-                }
-            });
-            thread.start();
+            time(null, 5, lblErrorMessage);
+
             lblErrorMessage.setStyle("-fx-text-fill: #d54242");
             return;
 
@@ -177,15 +162,8 @@ public class CreateRideController implements Controller {
         if (from.isEmpty()) {
 
             lblErrorMessage.setText(StringUtils.translate("CreateRideGUI.FillDepartureCity"));
-            Thread thread = new Thread(() -> {
-                try {
-                    Thread.sleep(5000);
-                    Platform.runLater(() -> lblErrorMessage.setVisible(false));
-                } catch (InterruptedException ex) {
-                    ex.printStackTrace();
-                }
-            });
-            thread.start();
+            time(null, 5, lblErrorMessage);
+
             lblErrorMessage.setStyle("-fx-text-fill: #d54242");
             return;
 
@@ -196,15 +174,8 @@ public class CreateRideController implements Controller {
 
             lblErrorMessage.setStyle("-fx-text-fill: #d54242");
             lblErrorMessage.setText(StringUtils.translate("CreateRideGUI.FillArrivalCity"));
-            Thread thread = new Thread(() -> {
-                try {
-                    Thread.sleep(5000);
-                    Platform.runLater(() -> lblErrorMessage.setVisible(false));
-                } catch (InterruptedException ex) {
-                    ex.printStackTrace();
-                }
-            });
-            thread.start();
+            time(null, 5, lblErrorMessage);
+
             return;
 
         }
@@ -213,15 +184,8 @@ public class CreateRideController implements Controller {
 
             lblErrorMessage.setText(StringUtils.translate("CreateRideGUI.FillNumberOfSeats"));
             lblErrorMessage.setStyle("-fx-text-fill: #d54242");
-            Thread thread = new Thread(() -> {
-                try {
-                    Thread.sleep(5000);
-                    Platform.runLater(() -> lblErrorMessage.setVisible(false));
-                } catch (InterruptedException ex) {
-                    ex.printStackTrace();
-                }
-            });
-            thread.start();
+            time(null, 5, lblErrorMessage);
+
             return;
 
         }
@@ -234,15 +198,8 @@ public class CreateRideController implements Controller {
 
             lblErrorMessage.setText(StringUtils.translate("CreateRideGUI.NumberOfSeatsMustBeANumber"));
             lblErrorMessage.setStyle("-fx-text-fill: #d54242");
-            Thread thread = new Thread(() -> {
-                try {
-                    Thread.sleep(5000);
-                    Platform.runLater(() -> lblErrorMessage.setVisible(false));
-                } catch (InterruptedException ex) {
-                    ex.printStackTrace();
-                }
-            });
-            thread.start();
+            time(null, 5, lblErrorMessage);
+
             return;
         }
 
@@ -250,15 +207,8 @@ public class CreateRideController implements Controller {
 
             lblErrorMessage.setText(StringUtils.translate("CreateRideGUI.FillPrice"));
             lblErrorMessage.setStyle("-fx-text-fill: #d54242");
-            Thread thread = new Thread(() -> {
-                try {
-                    Thread.sleep(5000);
-                    Platform.runLater(() -> lblErrorMessage.setVisible(false));
-                } catch (InterruptedException ex) {
-                    ex.printStackTrace();
-                }
-            });
-            thread.start();
+            time(null, 5, lblErrorMessage);
+
             return;
         }
 
@@ -269,15 +219,8 @@ public class CreateRideController implements Controller {
 
             lblErrorMessage.setText(StringUtils.translate("CreateRideGUI.PriceMustBeANumber"));
             lblErrorMessage.setStyle("-fx-text-fill: #d54242");
-            Thread thread = new Thread(() -> {
-                try {
-                    Thread.sleep(5000);
-                    Platform.runLater(() -> lblErrorMessage.setVisible(false));
-                } catch (InterruptedException ex) {
-                    ex.printStackTrace();
-                }
-            });
-            thread.start();
+            time(null, 5, lblErrorMessage);
+
             return;
         }
 
@@ -285,15 +228,8 @@ public class CreateRideController implements Controller {
 
             lblErrorMessage.setText(StringUtils.translate("CreateRideGUI.NumberOfSeatsMustBeLessThan5"));
             lblErrorMessage.setStyle("-fx-text-fill: #d54242");
-            Thread thread = new Thread(() -> {
-                try {
-                    Thread.sleep(5000);
-                    Platform.runLater(() -> lblErrorMessage.setVisible(false));
-                } catch (InterruptedException ex) {
-                    ex.printStackTrace();
-                }
-            });
-            thread.start();
+            time(null, 5, lblErrorMessage);
+
             return;
         }
 
@@ -302,14 +238,8 @@ public class CreateRideController implements Controller {
         businessLogic.createRideClick(from, to, Dates.convertToDate(date), numPlaces, price, user.getEmail());
         lblErrorMessage.setText(StringUtils.translate("CreateRideGUI.RideCreated"));
 
-        Thread thread = new Thread(() -> {
-            try {
-                Thread.sleep(5000);
-                Platform.runLater(() -> lblErrorMessage.setVisible(false));
-            } catch (InterruptedException ex) {
-                ex.printStackTrace();
-            }
-        });
+        time(null, 5, lblErrorMessage);
+
 
         // TODO: add new city to the combo box
         List<String> deptCities = businessLogic.getDepartCities();
@@ -392,6 +322,21 @@ public class CreateRideController implements Controller {
 
     @Override
     public void showHide() {
+
+    }
+
+    @Override
+    public void time(String txt, int s, Label mssg) {
+
+        Thread thread = new Thread(() -> {
+            try {
+                Thread.sleep(s * 1000);
+                Platform.runLater(() -> mssg.setVisible(false));
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        });
+        thread.start();
 
     }
 }

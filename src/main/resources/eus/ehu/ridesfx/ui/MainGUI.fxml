@@ -78,7 +78,7 @@
                   <Insets left="15.0" right="15.0" />
                </HBox.margin>
             </Button>
-            <Button fx:id="eng" alignment="CENTER" contentDisplay="CENTER" mnemonicParsing="false" onAction="#changeLanguage" stylesheets="@bootstrapfx.css" text="en" textAlignment="CENTER" />
+            <Button fx:id="en" alignment="CENTER" contentDisplay="CENTER" mnemonicParsing="false" onAction="#changeLanguage" stylesheets="@bootstrapfx.css" text="en" textAlignment="CENTER" />
          </children>
          <opaqueInsets>
             <Insets />

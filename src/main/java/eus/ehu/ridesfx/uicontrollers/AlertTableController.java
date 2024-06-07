@@ -85,15 +85,8 @@ public class AlertTableController implements Controller {
 
             message.setText(translate("YouMustSelectAnAlertToCancel"));
 
-            Thread thread = new Thread(() -> {
-                try {
-                    Thread.sleep(5000);
-                    Platform.runLater(() -> message.setVisible(false));
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
-            });
-            thread.start();
+            time(null, 5, message);
+
 
             cancelAlertBttn.setVisible(true);
             takeRideBttn.setVisible(false);
@@ -103,15 +96,8 @@ public class AlertTableController implements Controller {
 
             message.setText("Choose the ride you want to take");
 
-            Thread thread = new Thread(() -> {
-                try {
-                    Thread.sleep(5000);
-                    Platform.runLater(() -> message.setVisible(false));
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
-            });
-            thread.start();
+            time(null, 5, message);
+
 
             cancelAlertBttn.setVisible(false);
             takeRideBttn.setVisible(true);
@@ -122,15 +108,8 @@ public class AlertTableController implements Controller {
         takeRideBttn.setVisible(false);
         cancelAlertBttn.setStyle("-fx-background-color: #f85774");
         message.setText(translate("ChooseTheRideYouWantToTake"));
-        Thread thread = new Thread(() -> {
-            try {
-                Thread.sleep(5000);
-                Platform.runLater(() -> message.setVisible(false));
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
-        });
-        thread.start();
+
+        time(null, 5, message);
 
     }
 
@@ -146,15 +125,9 @@ public class AlertTableController implements Controller {
         } else {
 
             message.setText(translate("YouMustSelectARideToTake"));
-            Thread thread = new Thread(() -> {
-                try {
-                    Thread.sleep(5000);
-                    Platform.runLater(() -> message.setVisible(false));
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
-            });
-            thread.start();
+
+            time(null, 5, message);
+
 
         }
 
@@ -162,15 +135,7 @@ public class AlertTableController implements Controller {
         takeRideBttn.setStyle("-fx-background-color: #f85774");
         message.setText(translate("ChooseTheRideYouWantToTake"));
 
-        Thread thread = new Thread(() -> {
-            try {
-                Thread.sleep(5000);
-                Platform.runLater(() -> message.setVisible(false));
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
-        });
-        thread.start();
+        time(null, 5, message);
 
     }
 
@@ -222,7 +187,7 @@ public class AlertTableController implements Controller {
     }
 
     public void showHide() {
-        if (businessLogic.getCurrentUser() instanceof  Traveler) {
+        if (businessLogic.getCurrentUser() instanceof Traveler) {
 
             takeRideBttn.setVisible(false);
             cancelAlertBttn.setVisible(true);
@@ -230,7 +195,7 @@ public class AlertTableController implements Controller {
             setPriceTXT.setVisible(false);
             cancelAlertBttn.setStyle("-fx-background-color: #f85774");
 
-        } else if (businessLogic.getCurrentUser() instanceof Driver ) {
+        } else if (businessLogic.getCurrentUser() instanceof Driver) {
 
             cancelAlertBttn.setVisible(false);
             takeRideBttn.setVisible(true);
@@ -239,6 +204,21 @@ public class AlertTableController implements Controller {
             takeRideBttn.setStyle("-fx-background-color: #f85774");
 
         }
+    }
+
+    @Override
+    public void time(String txt, int s, Label mssg) {
+
+        Thread thread = new Thread(() -> {
+            try {
+                Thread.sleep(s * 1000);
+                Platform.runLater(() -> mssg.setVisible(false));
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        });
+        thread.start();
+
     }
 
 }

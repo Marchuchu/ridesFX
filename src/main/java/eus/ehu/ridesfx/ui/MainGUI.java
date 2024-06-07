@@ -104,7 +104,7 @@ public class MainGUI {
     }
 
     public void alertsShowHideButtons() {
-        ((AlertTableController)alertWin.controller).showHide();
+        (alertWin.controller).showHide();
     }
 
 

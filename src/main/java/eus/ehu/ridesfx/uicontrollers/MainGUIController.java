@@ -4,6 +4,7 @@ import eus.ehu.ridesfx.businessLogic.BlFacade;
 import eus.ehu.ridesfx.domain.Driver;
 import eus.ehu.ridesfx.domain.Traveler;
 import eus.ehu.ridesfx.domain.User;
+import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
@@ -25,7 +26,7 @@ public class MainGUIController implements Controller {
     private Label lblDriver;
 
     @FXML
-    private Button eng;
+    private Button en;
 
     @FXML
     private Button es;
@@ -323,7 +324,7 @@ public class MainGUIController implements Controller {
         seeAlertsBttn.setStyle("-fx-background-color: #f85774");
         seeMessagesBttn.setStyle("-fx-background-color: #f85774");
         es.setStyle("-fx-background-color: #f85774");
-        eng.setStyle("-fx-background-color: #f85774");
+        en.setStyle("-fx-background-color: #f85774");
         eus.setStyle("-fx-background-color: #f85774");
 
         businessLogic.setCurrentUser(new User());
@@ -361,6 +362,21 @@ public class MainGUIController implements Controller {
 
         Button b = (Button) event.getSource();
         Locale.setDefault(new Locale(b.getId()));
+
+    }
+
+    @Override
+    public void time(String txt, int s, Label mssg) {
+
+        Thread thread = new Thread(() -> {
+            try {
+                Thread.sleep(s * 1000);
+                Platform.runLater(() -> mssg.setVisible(false));
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        });
+        thread.start();
 
     }
 
