@@ -36,7 +36,6 @@ public class SignUpController implements Controller {
     private Label hasLogin;
 
 
-
     @FXML
     private AnchorPane mainWrapper;
     @FXML
@@ -83,7 +82,6 @@ public class SignUpController implements Controller {
     }
 
 
-
     @FXML
     void onClickSignUp(ActionEvent event) {
 
@@ -114,7 +112,7 @@ public class SignUpController implements Controller {
                         mainGUI.mGUIC.setRolName(user.getName());
                         businessLogic.setCurrentUser(user);
 
-                        if (user  instanceof Traveler) {
+                        if (user instanceof Traveler) {
                             mainGUI.showScene("Query Rides");
                             mainGUI.mGUIC.getCreateRidesBtn().setVisible(false);
                             mainGUI.mGUIC.getQueryRidesBtn().setVisible(true);
@@ -147,7 +145,7 @@ public class SignUpController implements Controller {
                     hasLogin.setStyle("-fx-text-fill: #d54242");
                     hasLogin.setVisible(true);
 
-                    time(null, 5, hasLogin);
+                    time(5, hasLogin);
 
                 } else {
 
@@ -155,7 +153,7 @@ public class SignUpController implements Controller {
                     hasLogin.setStyle("-fx-text-fill: #d54242");
                     hasLogin.setVisible(true);
 
-                    time(null, 5, hasLogin);
+                    time(5, hasLogin);
 
                 }
 
@@ -166,7 +164,7 @@ public class SignUpController implements Controller {
                 hasLogin.setStyle("-fx-text-fill: #d54242");
                 hasLogin.setVisible(true);
 
-                time(null, 5, hasLogin);
+                time(5, hasLogin);
 
             }
 
@@ -192,16 +190,15 @@ public class SignUpController implements Controller {
     }
 
     @Override
-    public void changeLanguage(ResourceBundle resources) {
+    public void changeLanguage() {
 
-        signUpButt.setText(resources.getString("SignUpController.SignUp"));
+        signUpButt.setText(StringUtils.translate("SignUpController.SignUp"));
 
-        emailTXT.setText(resources.getString("Email"));
-        nameTXT.setText(resources.getString("Name"));
-        passTXT.setText(resources.getString("Password"));
-        repPassTXT.setText(resources.getString("SignUpController.RepeatPassword"));
-        rolTXT.setText(resources.getString("Role"));
-
+        emailTXT.setText(StringUtils.translate("Email"));
+        nameTXT.setText(StringUtils.translate("Name"));
+        passTXT.setText(StringUtils.translate("Password"));
+        repPassTXT.setText(StringUtils.translate("SignUpController.RepeatPassword"));
+        rolTXT.setText(StringUtils.translate("Role"));
 
     }
 
@@ -210,13 +207,8 @@ public class SignUpController implements Controller {
 
     }
 
-    public class Window {
-        private Controller controller;
-        private Parent ui;
-    }
-
     @Override
-    public void time(String txt, int s, Label mssg) {
+    public void time(int s, Label mssg) {
 
         Thread thread = new Thread(() -> {
             try {
@@ -228,6 +220,11 @@ public class SignUpController implements Controller {
         });
         thread.start();
 
+    }
+
+    public class Window {
+        private Controller controller;
+        private Parent ui;
     }
 
 }

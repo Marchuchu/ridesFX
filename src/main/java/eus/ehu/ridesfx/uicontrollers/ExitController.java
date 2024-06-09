@@ -33,7 +33,7 @@ public class ExitController implements Controller {
     }
 
     @Override
-    public void changeLanguage(ResourceBundle resources) {
+    public void changeLanguage() {
 
     }
 
@@ -43,7 +43,7 @@ public class ExitController implements Controller {
     }
 
     @Override
-    public void time(String txt, int s, Label mssg) {
+    public void time(int s, Label mssg) {
 
         Thread thread = new Thread(() -> {
             try {

@@ -2,6 +2,7 @@ package eus.ehu.ridesfx.uicontrollers;
 
 import java.net.URL;
 import java.util.ResourceBundle;
+import java.util.concurrent.atomic.AtomicReference;
 
 import eus.ehu.ridesfx.businessLogic.BlFacade;
 import eus.ehu.ridesfx.ui.MainGUI;
@@ -20,12 +21,9 @@ public class CreateMessageController implements Controller {
 
     BlFacade businessLogic;
     MainGUI mainGUI;
+
     @FXML
-    private ResourceBundle resources;
-    @FXML
-    private URL location;
-    @FXML
-    private Text errorMessage;
+    private Label errorMessage;
     @FXML
     private AnchorPane mainWrapper;
     @FXML
@@ -36,6 +34,15 @@ public class CreateMessageController implements Controller {
     private TextField subjectBox;
     @FXML
     private TextField toBox;
+
+    @FXML
+    private Text subTXT;
+
+    @FXML
+    private Text msgTXT;
+
+    @FXML
+    private Text toTXT;
 
     public CreateMessageController(BlFacade bl) {
         this.businessLogic = bl;
@@ -56,30 +63,16 @@ public class CreateMessageController implements Controller {
             errorMessage.setVisible(true);
             errorMessage.setText(StringUtils.translate("CreateMessageController.EmptyFields"));
 
-            Thread thread = new Thread(() -> {
-                try {
-                    Thread.sleep(5000);
-                    Platform.runLater(() -> errorMessage.setVisible(false));
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
-            });
-            thread.start();
+            time(5, errorMessage);
+
 
             return;
         } else if (!toBox.getText().contains("@")) {
 
             errorMessage.setText(StringUtils.translate("CreateMessageController.InvalidEmail"));
 
-            Thread thread = new Thread(() -> {
-                try {
-                    Thread.sleep(5000);
-                    Platform.runLater(() -> errorMessage.setVisible(false));
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
-            });
-            thread.start();
+            time(5, errorMessage);
+
 
         } else {
 
@@ -91,15 +84,7 @@ public class CreateMessageController implements Controller {
             subjectBox.setText("");
             messageField.setText("");
 
-            Thread thread = new Thread(() -> {
-                try {
-                    Thread.sleep(5000);
-                    Platform.runLater(() -> errorMessage.setVisible(false));
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
-            });
-            thread.start();
+            time(5, errorMessage);
 
         }
 
@@ -123,10 +108,15 @@ public class CreateMessageController implements Controller {
 
 
     @Override
-    public void changeLanguage(ResourceBundle resources) {
+    public void changeLanguage() {
 
-        sendMessageBttn.setText(resources.getString("SendMessage"));
-        errorMessage.setText(resources.getString("CreateMessageController.EmptyFields"));
+        sendMessageBttn.setText(StringUtils.translate("SendMessage"));
+        errorMessage.setText(StringUtils.translate("CreateMessageController.EmptyFields"));
+
+        subTXT.setText(StringUtils.translate("Subject"));
+        msgTXT.setText(StringUtils.translate("Message"));
+        toTXT.setText(StringUtils.translate("CreateMessageController.to"));
+
 
     }
 
@@ -136,17 +126,19 @@ public class CreateMessageController implements Controller {
     }
 
     @Override
-    public void time(String txt, int s, Label mssg) {
+    public void time(int s, Label msg) {
 
         Thread thread = new Thread(() -> {
             try {
-                Thread.sleep(s * 1000);
-                Platform.runLater(() -> mssg.setVisible(false));
+                Thread.sleep(s * 1000L);
+                Platform.runLater(() -> msg.setVisible(false));
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
         });
+
         thread.start();
+
 
     }
 }

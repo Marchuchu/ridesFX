@@ -6,6 +6,7 @@ import eus.ehu.ridesfx.domain.*;
 import eus.ehu.ridesfx.exceptions.RideAlreadyExistException;
 import eus.ehu.ridesfx.exceptions.RideMustBeLaterThanTodayException;
 import eus.ehu.ridesfx.exceptions.UnknownUser;
+import eus.ehu.ridesfx.utils.StringUtils;
 
 import java.util.Date;
 import java.util.List;
@@ -40,6 +41,17 @@ public class BlFacadeImplementation implements BlFacade {
         List<Ride> events = dbManager.getRides(origin, destination, date);
         return events;
     }
+
+
+    @Override
+    public List<Ride> getAlerts(String origin, String destination, Date date) {
+        List<Ride> events = dbManager.getRides(origin, destination, date);
+        return events;
+    }
+
+
+
+
 
 
     /**
@@ -81,12 +93,28 @@ public class BlFacadeImplementation implements BlFacade {
         this.currentUser = driver;
     }
 
-    public void addCitie(String c){
-        List<String> departLocations = dbManager.getDepartCities();
-        departLocations.add(c);
-        dbManager.addCitie(c);
+//    public void addCitie(String c){
+//
+//        List<String> departLocations = dbManager.getDepartCities();
+//        departLocations.add(c);
+//        dbManager.addCitie(c);
+//
+//    }
 
+    public void addCitie(String c) {
+        try {
+            dbManager.addCitie(c);
+
+            List<String> departLocations = dbManager.getDepartCities();
+            if (!departLocations.contains(c)) {
+                departLocations.add(c);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            throw new RuntimeException(StringUtils.translate("BIFacadeImplementation.ErrorToAddCitie") + e.getMessage());
+        }
     }
+
 
     public void addUser(User u){
         dbManager.addUser(u);
@@ -184,8 +212,12 @@ public class BlFacadeImplementation implements BlFacade {
 
     }
 
+//    public void createAlert(String from, String to, Date date, Traveler traveler) {
+//        dbManager.createAlert(from, to, date, traveler);
+//    }
+
     @Override
-    public void cancelAlert(Ride r) {
+    public void cancelAlert(Alerts r) {
         dbManager.cancelAlert(r);
     }
 

@@ -2,6 +2,7 @@ package eus.ehu.ridesfx.uicontrollers;
 
 import java.net.URL;
 import java.util.ResourceBundle;
+import java.util.concurrent.atomic.AtomicReference;
 
 import eus.ehu.ridesfx.businessLogic.BlFacade;
 import eus.ehu.ridesfx.domain.Message;
@@ -27,7 +28,7 @@ public class MessageController implements Controller {
     @FXML
     private Text errorM;
     @FXML
-    private Text errorMessage;
+    private Label errorMessage;
     @FXML
     private TextArea messageTXT;
     @FXML
@@ -61,15 +62,17 @@ public class MessageController implements Controller {
         if (message == null) {
             errorMessage.setText(StringUtils.translate("MessageController.selectMessage"));
 
-            Thread thread = new Thread(() -> {
-                try {
-                    Thread.sleep(5000);
-                    Platform.runLater(() -> errorMessage.setVisible(false));
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
-            });
-            thread.start();
+            time(5,errorMessage);
+//
+//            Thread thread = new Thread(() -> {
+//                try {
+//                    Thread.sleep(5000);
+//                    Platform.runLater(() -> errorMessage.setVisible(false));
+//                } catch (InterruptedException e) {
+//                    e.printStackTrace();
+//                }
+//            });
+//            thread.start();
 
 
             errorMessage.setVisible(true);
@@ -107,14 +110,14 @@ public class MessageController implements Controller {
     }
 
     @Override
-    public void changeLanguage(ResourceBundle resources) {
+    public void changeLanguage() {
 
-        seeMessageBttn.setText(resources.getString("SeeMessage"));
-        sendNewMessageBttn.setText(resources.getString("SendNewMessage"));
-        errorMessage.setText(resources.getString("MessageController.selectMessage"));
-        From.setText(resources.getString("From"));
-        Message.setText(resources.getString("Message"));
-        Subject.setText(resources.getString("Subject"));
+        seeMessageBttn.setText(StringUtils.translate("SeeMessage"));
+        sendNewMessageBttn.setText(StringUtils.translate("SendNewMessage"));
+        errorMessage.setText(StringUtils.translate("MessageController.selectMessage"));
+        From.setText(StringUtils.translate("From"));
+        Message.setText(StringUtils.translate("Message"));
+        Subject.setText(StringUtils.translate("Subject"));
 
     }
 
@@ -123,13 +126,12 @@ public class MessageController implements Controller {
 
     }
 
-    @Override
-    public void time(String txt, int s, Label mssg) {
+    @Override    public void time(int s, Label msg) {
 
         Thread thread = new Thread(() -> {
             try {
                 Thread.sleep(s * 1000);
-                Platform.runLater(() -> mssg.setVisible(false));
+                Platform.runLater(() -> msg.setVisible(false));
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }

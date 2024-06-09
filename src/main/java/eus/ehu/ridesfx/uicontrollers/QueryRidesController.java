@@ -31,6 +31,8 @@ import java.util.*;
 
 public class QueryRidesController implements Controller {
 
+
+
     @FXML
     private Button btnClose;
 
@@ -39,9 +41,6 @@ public class QueryRidesController implements Controller {
 
     @FXML
     private Button bookButtn;
-
-    @FXML
-    private ResourceBundle resources;
 
     @FXML
     private TableColumn<Ride, String> qc1;
@@ -126,6 +125,21 @@ public class QueryRidesController implements Controller {
 
     }
 
+    public void updateComboBoxes(String originCity) {
+        // Obtener las ciudades de origen y destino
+        List<String> departCities = businessLogic.getDepartCities();
+        List<String> arrivalCities = businessLogic.getArrivalCities(originCity);
+
+        // Actualizar ComboBox de ciudades de origen
+        ObservableList<String> departCitiesObservable = FXCollections.observableArrayList(departCities);
+        comboDepartCity.setItems(departCitiesObservable);
+
+        // Actualizar ComboBox de ciudades de destino
+        ObservableList<String> arrivalCitiesObservable = FXCollections.observableArrayList(arrivalCities);
+        comboArrivalCity.setItems(arrivalCitiesObservable);
+    }
+
+
     private void setEvents(int year, int month) {
         Date date = Dates.toDate(year, month);
 
@@ -189,9 +203,9 @@ public class QueryRidesController implements Controller {
 
                 businessLogic.createAlert(ride.getFrom(), ride.getTo(), ride.getDate(), user.getEmail());
                 reservationMessage.setStyle("-fx-text-fill: #188a2e");
-                reservationMessage.setText(resources.getString("AlertCreated"));
+                reservationMessage.setText(StringUtils.translate("AlertCreated"));
 
-                time(null, 5, reservationMessage);
+                time(5, reservationMessage);
 
 
             } else {
@@ -199,7 +213,7 @@ public class QueryRidesController implements Controller {
                 reservationMessage.setText(StringUtils.translate("QueryRidesController.PleaseFillInAllFields"));
                 reservationMessage.setVisible(true);
                 reservationMessage.setStyle("-fx-text-fill: #d54242");
-                time(null, 5, reservationMessage);
+                time(5, reservationMessage);
 
             }
 
@@ -208,24 +222,20 @@ public class QueryRidesController implements Controller {
 
             reservationMessage.setText(StringUtils.translate("QueryRidesController.PleaseLogInOrSignUp"));
 
-            time(null, 5, reservationMessage);
+            time(5, reservationMessage);
 
 
             reservationMessage.setStyle("-fx-text-fill: #d54242");
             reservationMessage.setVisible(true);
 
 
-
-
         }
     }
-
 
 
     @FXML
     void initialize() {
 
-        //Locale.setDefault(mainGUI.mGUIC);
 
         bookButtn.setStyle("-fx-background-color: #f85774");
         createAlertBut.setStyle("-fx-background-color: #f85774");
@@ -281,7 +291,7 @@ public class QueryRidesController implements Controller {
                 reservationMessage.setText(StringUtils.translate("QueryRidesController.PleaseSelectFutureDate"));
                 reservationMessage.setStyle("-fx-text-fill: #d54242");
                 reservationMessage.setVisible(true);
-                time(null, 5, reservationMessage);
+                time(5, reservationMessage);
 
 
             } else {
@@ -350,7 +360,7 @@ public class QueryRidesController implements Controller {
                 reservationMessage.setStyle("-fx-text-fill: #188a2e");
                 reservationMessage.setVisible(true);
 
-                time(null, 5, reservationMessage);
+                time(5, reservationMessage);
 
 
                 ride.setNumPlaces(ride.getNumPlaces() - 1);
@@ -361,7 +371,7 @@ public class QueryRidesController implements Controller {
                 reservationMessage.setStyle("-fx-text-fill: #d54242");
                 reservationMessage.setVisible(true);
 
-                time(null, 5, reservationMessage);
+                time(5, reservationMessage);
 
             }
 
@@ -372,7 +382,7 @@ public class QueryRidesController implements Controller {
             reservationMessage.setStyle("-fx-text-fill: #d54242");
             reservationMessage.setVisible(true);
 
-            time(null, 5, reservationMessage);
+            time(5, reservationMessage);
 
 
             mainGUI.mGUIC.getSeeAlertsBttn().setVisible(false);
@@ -382,18 +392,17 @@ public class QueryRidesController implements Controller {
     }
 
     @Override
-    public void changeLanguage(ResourceBundle resources) {
+    public void changeLanguage() {
 
-        bookButtn.setText(resources.getString("Book"));
-        createAlertBut.setText(resources.getString("CreateAlert"));
-        DepartCity.setText(resources.getString("DepartCity"));
-        ArrivalCity.setText(resources.getString("ArrivalCity"));
-        EventDate.setText(resources.getString("EventDate"));
+        bookButtn.setText(StringUtils.translate("Book"));
+        createAlertBut.setText(StringUtils.translate("CreateAlert"));
+        DepartCity.setText(StringUtils.translate("DepartCity"));
+        ArrivalCity.setText(StringUtils.translate("ArrivalCity"));
+        EventDate.setText(StringUtils.translate("EventDate"));
 
-        qc1.setText(resources.getString("Driver"));
-        qc2.setText(resources.getString("Seats"));
-        qc3.setText(resources.getString("Price"));
-
+        qc1.setText(StringUtils.translate("Driver"));
+        qc2.setText(StringUtils.translate("Seats"));
+        qc3.setText(StringUtils.translate("Price"));
 
     }
 
@@ -403,16 +412,17 @@ public class QueryRidesController implements Controller {
     }
 
     @Override
-    public void time(String txt, int s, Label mssg) {
+    public void time(int s, Label msg) {
 
         Thread thread = new Thread(() -> {
             try {
-                Thread.sleep(s * 1000);
-                Platform.runLater(() -> mssg.setVisible(false));
+                Thread.sleep(s * 1000L);
+                Platform.runLater(() -> msg.setVisible(false));
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
         });
+
         thread.start();
 
     }

@@ -8,9 +8,10 @@ import java.util.ResourceBundle;
 public interface Controller {
     void setMainApp(MainGUI mainGUI);
 
-    void changeLanguage(ResourceBundle resources);
+    void changeLanguage();
 
     void showHide();
 
-    void time(String txt, int s, Label mssg);
+//    void time(String txt, int s, Label mssg);
+    void time(int s, Label mssg);
 }

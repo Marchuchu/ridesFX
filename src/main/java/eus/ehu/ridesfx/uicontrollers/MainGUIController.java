@@ -4,6 +4,7 @@ import eus.ehu.ridesfx.businessLogic.BlFacade;
 import eus.ehu.ridesfx.domain.Driver;
 import eus.ehu.ridesfx.domain.Traveler;
 import eus.ehu.ridesfx.domain.User;
+import eus.ehu.ridesfx.utils.StringUtils;
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -339,16 +340,26 @@ public class MainGUIController implements Controller {
     }
 
     @Override
-    public void changeLanguage(ResourceBundle resources) {
+    public void changeLanguage() {
 
-        signUpButton.setText(resources.getString("SignUp"));
-        exitBttn.setText(resources.getString("Exit"));
-        createRidesBtn.setText(resources.getString("CreateRide"));
-        queryRidesBtn.setText(resources.getString("QueryRides"));
-        logInButton.setText(resources.getString("LogIn"));
-        seeAlertsBttn.setText(resources.getString("SeeAlerts"));
-        seeMessagesBttn.setText(resources.getString("SeeMessages"));
-        exitBttn.setText(resources.getString("Exit"));
+        signUpButton.setText(StringUtils.translate("SignUp"));
+        exitBttn.setText(StringUtils.translate("Exit"));
+        createRidesBtn.setText(StringUtils.translate("CreateRide"));
+        queryRidesBtn.setText(StringUtils.translate("QueryRides"));
+        logInButton.setText(StringUtils.translate("LogIn"));
+        seeAlertsBttn.setText(StringUtils.translate("SeeAlerts"));
+        seeMessagesBttn.setText(StringUtils.translate("SeeMessages"));
+        exitBttn.setText(StringUtils.translate("Exit"));
+
+        mGUI.queryRideWin.controller.changeLanguage();
+        mGUI.createRideWin.controller.changeLanguage();
+        mGUI.signUWin.controller.changeLanguage();
+        mGUI.loginWin.controller.changeLanguage();
+        mGUI.logoutWin.controller.changeLanguage();
+        mGUI.alertWin.controller.changeLanguage();
+        mGUI.seeMessageWin.controller.changeLanguage();
+        mGUI.createMessageWin.controller.changeLanguage();
+
 
     }
 
@@ -363,10 +374,12 @@ public class MainGUIController implements Controller {
         Button b = (Button) event.getSource();
         Locale.setDefault(new Locale(b.getId()));
 
+        changeLanguage();
+
     }
 
     @Override
-    public void time(String txt, int s, Label mssg) {
+    public void time(int s, Label mssg) {
 
         Thread thread = new Thread(() -> {
             try {

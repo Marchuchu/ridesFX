@@ -110,7 +110,7 @@ public class LoginController implements Controller {
                 hasLogin.setStyle("-fx-text-fill: #d54242");
                 hasLogin.setVisible(true);
 
-                time(null, 5, hasLogin);
+                time(5, hasLogin);
 
 
             }
@@ -138,17 +138,17 @@ public class LoginController implements Controller {
     }
 
     @Override
-    public void changeLanguage(ResourceBundle resources) {
+    public void changeLanguage() {
 
-        logInButt.setText(resources.getString("LoginController.LogIn"));
-        hasLogin.setText(resources.getString("LoginController.LoginFailed"));
-        EmailTXT.setText(resources.getString("Email"));
-        PasswordTXT.setText(resources.getString("Password"));
+        logInButt.setText(StringUtils.translate("LoginController.LogIn"));
+        hasLogin.setText(StringUtils.translate("LoginController.LoginFailed"));
+        EmailTXT.setText(StringUtils.translate("Email"));
+        PasswordTXT.setText(StringUtils.translate("Password"));
 
     }
 
     @Override
-    public void time(String txt, int s, Label mssg) {
+    public void time(int s, Label mssg) {
 
         Thread thread = new Thread(() -> {
             try {

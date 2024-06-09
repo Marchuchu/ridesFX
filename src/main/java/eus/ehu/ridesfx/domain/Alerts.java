@@ -1,63 +1,55 @@
 package eus.ehu.ridesfx.domain;
 
 import jakarta.persistence.*;
-
 import java.util.Date;
 
 @Entity
 @Table(name = "Alerts")
-
 public class Alerts {
 
-    @ManyToOne
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.IDENTITY) // Usamos IDENTITY para generar el ID automáticamente
+    private Long id;
+
+    @ManyToOne
+    @JoinColumn(name = "traveler_id") // Define la columna de unión para el viajero
     private Traveler traveler;
 
-    @Column(name = "alert_from")
+    @Column(name = "alert_from", nullable = false)
     private String from;
 
-    @Column(name = "alert_to")
+    @Column(name = "alert_to", nullable = false)
     private String to;
 
-    // JPA date is a keyword, name it something else
-    // change column name
     @Temporal(TemporalType.DATE)
-    @Column(name = "alert_date")
+    @Column(name = "alert_date", nullable = false)
     private Date date;
 
+    public Alerts() {
+    }
+
+    public Ride getRideFromAlerts(Alerts alert) {
+        String from = alert.getFrom();
+        String to = alert.getTo();
+        Date date = alert.getDate();
+        return new Ride(from, to, date);
+    }
 
     public Alerts(String from, String to, Date date) {
-
         this.from = from;
         this.to = to;
         this.date = date;
     }
 
     public Alerts(String from, String to, Date date, Traveler traveler) {
-
         this.from = from;
         this.to = to;
         this.date = date;
         this.traveler = traveler;
     }
 
-
-    public Alerts() {
-
-    }
-
-
-    @JoinColumn
-    public Alerts getAlert() {
-        return this;
-    }
-
-
-    public void setAlert(Alerts alert) {
-        this.from = alert.getFrom();
-        this.to = alert.getTo();
-        this.date = alert.getDate();
+    public Long getId() {
+        return id;
     }
 
     public String getFrom() {
@@ -100,6 +92,4 @@ public class Alerts {
                 ", date=" + date +
                 '}';
     }
-
-
 }

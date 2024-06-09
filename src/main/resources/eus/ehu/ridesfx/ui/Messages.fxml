@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
 <?import javafx.scene.control.TableColumn?>
 <?import javafx.scene.control.TableView?>
 <?import javafx.scene.control.TextArea?>
@@ -21,6 +22,6 @@
       <Button fx:id="seeMessageBttn" layoutX="171.0" layoutY="509.0" mnemonicParsing="false" onAction="#onClickSeeMessage" text="%SeeMessage" />
       <Button fx:id="sendNewMessageBttn" layoutX="539.0" layoutY="509.0" mnemonicParsing="false" onAction="#onClickSendNewMessage" text="%SendNewMessage" />
       <Text fx:id="errorM" layoutX="147.0" layoutY="325.0" strokeType="OUTSIDE" strokeWidth="0.0" />
-      <Text fx:id="errorMessage" layoutX="86.0" layoutY="493.0" strokeType="OUTSIDE" strokeWidth="0.0" text="%empty" textAlignment="CENTER" wrappingWidth="263.0" />
+      <Label fx:id="errorMessage" alignment="CENTER" contentDisplay="CENTER" layoutX="85.0" layoutY="480.0" prefHeight="17.0" prefWidth="266.0" text="%errorMessage" textAlignment="CENTER" />
    </children>
 </AnchorPane>

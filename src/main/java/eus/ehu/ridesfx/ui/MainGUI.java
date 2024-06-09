@@ -17,7 +17,7 @@ public class MainGUI {
 
     public MainGUIController mGUIC;
     private BlFacade businessLogic;
-    private Window createRideWin, queryRideWin, loginWin, signUWin, mainWin, logoutWin, alertWin, seeMessageWin, createMessageWin;
+    public Window createRideWin, queryRideWin, loginWin, signUWin, mainWin, logoutWin, alertWin, seeMessageWin, createMessageWin;
     private Stage stage;
     private Scene scene;
 
@@ -106,7 +106,6 @@ public class MainGUI {
     public void alertsShowHideButtons() {
         (alertWin.controller).showHide();
     }
-
 
     public static class Window {
 

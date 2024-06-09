@@ -1,9 +1,6 @@
 package eus.ehu.ridesfx.businessLogic;
 
-import eus.ehu.ridesfx.domain.Driver;
-import eus.ehu.ridesfx.domain.Alerts;
-import eus.ehu.ridesfx.domain.Ride;
-import eus.ehu.ridesfx.domain.User;
+import eus.ehu.ridesfx.domain.*;
 import eus.ehu.ridesfx.exceptions.RideAlreadyExistException;
 import eus.ehu.ridesfx.exceptions.RideMustBeLaterThanTodayException;
 import eus.ehu.ridesfx.exceptions.UnknownUser;
@@ -55,10 +52,9 @@ public interface BlFacade {
 
     public User getCurrentUser();
 
-    public boolean containsUser(User u);
-
-
     void setCurrentUser(User user);
+
+    public boolean containsUser(User u);
 
     void setCurrentDriver(Driver driver);
 
@@ -92,9 +88,9 @@ public interface BlFacade {
     public boolean logIn(String username, String password) throws UnknownUser;
 
     //void cancelAlert(TableColumn<String, Integer> alertID);
-    void cancelAlert(Ride ride);
+    void cancelAlert(Alerts ride);
 
-
+//    public void createAlert(String from, String to, Date date, Traveler traveler);
 
     void createRideClick(String from, String to, Date date, int nPlaces, float price, String driverEmail);
 
@@ -105,6 +101,6 @@ public interface BlFacade {
 
     public void takeRide(Ride selectedItem, int nP, float p);
 
-    public void sendMessage( String to, String subject, String message);
+    public void sendMessage(String to, String subject, String message);
 
 }
