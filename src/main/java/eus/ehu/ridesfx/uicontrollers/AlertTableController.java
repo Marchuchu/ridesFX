@@ -230,4 +230,8 @@ public class AlertTableController implements Controller {
         List<Alerts> alerts = businessLogic.getAllAlerts();
         observableArray.setAll(alerts);
     }
+    @Override
+    public void updateComboBoxes(String from) {
+
+    }
 }

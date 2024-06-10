@@ -183,6 +183,8 @@ public class CreateRideController implements Controller {
             businessLogic.addCitie(to);
         }
 
+        mainGUI.queryRideWin.controller.updateComboBoxes(from);
+
 
     }
 
@@ -269,5 +271,10 @@ public class CreateRideController implements Controller {
     @Override
     public TableView<Alerts> getTblAlerts() {
         return null;
+    }
+
+    @Override
+    public void updateComboBoxes(String from) {
+
     }
 }

@@ -240,4 +240,9 @@ public class SignUpController implements Controller {
         private Parent ui;
     }
 
+    @Override
+    public void updateComboBoxes(String from) {
+
+    }
+
 }

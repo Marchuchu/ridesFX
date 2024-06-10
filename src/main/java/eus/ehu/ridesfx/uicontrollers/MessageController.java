@@ -157,4 +157,9 @@ public class MessageController implements Controller {
     public TableView<Alerts> getTblAlerts() {
         return null;
     }
+
+    @Override
+    public void updateComboBoxes(String from) {
+
+    }
 }

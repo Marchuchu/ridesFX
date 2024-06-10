@@ -76,4 +76,9 @@ public class ExitController implements Controller {
         return null;
     }
 
+    @Override
+    public void updateComboBoxes(String from) {
+
+    }
+
 }

@@ -25,4 +25,6 @@ public interface Controller {
     void getAllAlerts();
 
     TableView<Alerts> getTblAlerts();
+
+    void updateComboBoxes(String from);
 }
