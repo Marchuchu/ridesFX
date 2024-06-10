@@ -13,7 +13,7 @@ public class Alerts {
 
     @ManyToOne
     @JoinColumn(name = "traveler_id") // Define la columna de unión para el viajero
-    private Traveler traveler;
+    private User user;
 
     @Column(name = "alert_from", nullable = false)
     private String from;
@@ -45,7 +45,7 @@ public class Alerts {
         this.from = from;
         this.to = to;
         this.date = date;
-        this.traveler = traveler;
+        this.user = traveler;
     }
 
     public Long getId() {
@@ -76,12 +76,12 @@ public class Alerts {
         this.date = date;
     }
 
-    public Traveler getTraveler() {
-        return traveler;
+    public User getUser() {
+        return user;
     }
 
-    public void setTraveler(Traveler traveler) {
-        this.traveler = traveler;
+    public void setUser(User user) {
+        this.user = user;
     }
 
     @Override

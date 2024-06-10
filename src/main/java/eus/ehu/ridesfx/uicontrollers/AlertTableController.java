@@ -9,45 +9,39 @@ import eus.ehu.ridesfx.domain.*;
 import eus.ehu.ridesfx.ui.MainGUI;
 import eus.ehu.ridesfx.utils.StringUtils;
 import javafx.application.Platform;
+import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
+import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.text.Text;
 
 public class AlertTableController implements Controller {
 
+    ObservableList<Alerts> observableArray = FXCollections.observableArrayList();
     @FXML
     private TableColumn<Alerts, Date> date;
-
     @FXML
-    private TableColumn<Ride, String> from;
-
+    private TableColumn<Alerts, String> from;
     @FXML
-    private TableColumn<Ride, String> to;
-
+    private TableColumn<Alerts, String> to;
     @FXML
-    private TableColumn<Ride, User> user;
-
+    private TableColumn<Alerts, String> user;
     @FXML
     private Button cancelAlertBttn;
-
     @FXML
     private AnchorPane mainWrapper;
-
     @FXML
     private Text setPriceTXT;
-
     @FXML
     private Label message;
-
     @FXML
     private Button takeRideBttn;
-
     @FXML
     private TableView<Alerts> tblAlerts;
-
     @FXML
     private TextField price;
 
@@ -180,26 +174,16 @@ public class AlertTableController implements Controller {
 
     }
 
+
     @FXML
     void initialize() {
-
         price.setText("0");
-        setAlertsList(tblAlerts);
+        tblAlerts.setItems(observableArray);
 
-        tblAlerts.getItems().clear();
-
-        List<Alerts> alerts = businessLogic.getAlerts();
-
+        setUpAlertsSelection();
         showHide();
         changeLanguage();
-
     }
-
-    public void setAlertsList(TableView<Alerts> tA) {
-        tblAlerts.setItems(FXCollections.observableArrayList(tA.getItems()));
-    }
-
-
 
     public void showHide() {
         if (businessLogic.getCurrentUser() instanceof Traveler) {
@@ -233,6 +217,22 @@ public class AlertTableController implements Controller {
             }
         });
         thread.start();
+
+    }
+
+    @Override
+    public void getAlerts(User u) {
+
+        List<Alerts> alerts = businessLogic.getAlerts();
+        observableArray.setAll(alerts);
+
+    }
+
+    @Override
+    public void getAllAlerts() {
+
+        List<Alerts> alerts = businessLogic.getAllAlerts();
+        observableArray.setAll(alerts);
 
     }
 

@@ -23,6 +23,10 @@ public class Traveler extends User {
         this.repPassword = repPassword;
     }
 
+    public Traveler(String email, String name, String password) {
+        super(email, name, password);
+    }
+
     public Traveler() {
 
     }

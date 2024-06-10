@@ -5,6 +5,8 @@ import java.util.ResourceBundle;
 import java.util.concurrent.atomic.AtomicReference;
 
 import eus.ehu.ridesfx.businessLogic.BlFacade;
+import eus.ehu.ridesfx.domain.Traveler;
+import eus.ehu.ridesfx.domain.User;
 import eus.ehu.ridesfx.ui.MainGUI;
 import eus.ehu.ridesfx.utils.StringUtils;
 import javafx.application.Platform;
@@ -139,6 +141,16 @@ public class CreateMessageController implements Controller {
 
         thread.start();
 
+
+    }
+
+    @Override
+    public void getAlerts(User t) {
+
+    }
+
+    @Override
+    public void getAllAlerts() {
 
     }
 }

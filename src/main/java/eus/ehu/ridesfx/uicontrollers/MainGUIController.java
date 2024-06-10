@@ -210,7 +210,7 @@ public class MainGUIController implements Controller {
         mGUI.showScene("Query Rides");
         queryRidesBtn.setVisible(false);
 
-        if (mGUI.getBusinessLogic().getCurrentUser() instanceof Driver ) {
+        if (mGUI.getBusinessLogic().getCurrentUser() instanceof Driver) {
             createRidesBtn.setVisible(true);
             queryRidesBtn.setVisible(true);
             exitBttn.setVisible(true);
@@ -219,7 +219,7 @@ public class MainGUIController implements Controller {
             seeAlertsBttn.setVisible(true);
             seeMessagesBttn.setVisible(true);
 
-        } else if (mGUI.getBusinessLogic().getCurrentUser() instanceof Traveler ) {
+        } else if (mGUI.getBusinessLogic().getCurrentUser() instanceof Traveler) {
             queryRidesBtn.setVisible(true);
             createRidesBtn.setVisible(false);
             exitBttn.setVisible(true);
@@ -263,17 +263,28 @@ public class MainGUIController implements Controller {
 
         mGUI.showScene("See Alerts");
 
+        if(mGUI.getBusinessLogic().getCurrentUser() != null){
+
+            User u = mGUI.getBusinessLogic().getCurrentUser();
+
+            if(u instanceof Driver){
+                mGUI.alertWin.controller.getAllAlerts();
+            }else if(u instanceof Traveler){
+                mGUI.alertWin.controller.getAlerts(u);
+            }
+
+        }
+
         if (mGUI.getBusinessLogic().getCurrentUser() instanceof Driver) {
             queryRidesBtn.setVisible(false);
             createRidesBtn.setVisible(true);
             seeMessagesBttn.setVisible(true);
             seeAlertsBttn.setVisible(true);
 
-        } else if (mGUI.getBusinessLogic().getCurrentUser() instanceof Traveler ) {
+        } else if (mGUI.getBusinessLogic().getCurrentUser() instanceof Traveler) {
             createRidesBtn.setVisible(false);
             seeMessagesBttn.setVisible(true);
             seeAlertsBttn.setVisible(true);
-
         }
 
 
@@ -350,6 +361,7 @@ public class MainGUIController implements Controller {
         seeAlertsBttn.setText(StringUtils.translate("SeeAlerts"));
         seeMessagesBttn.setText(StringUtils.translate("SeeMessages"));
         exitBttn.setText(StringUtils.translate("Exit"));
+        rolName.setText(StringUtils.translate("Guest"));
 
         mGUI.queryRideWin.controller.changeLanguage();
         mGUI.createRideWin.controller.changeLanguage();
@@ -393,4 +405,13 @@ public class MainGUIController implements Controller {
 
     }
 
+    @Override
+    public void getAlerts(User t) {
+
+    }
+
+    @Override
+    public void getAllAlerts() {
+
+    }
 }

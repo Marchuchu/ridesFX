@@ -6,6 +6,7 @@ import java.util.ResourceBundle;
 
 import eus.ehu.ridesfx.businessLogic.BlFacade;
 import eus.ehu.ridesfx.domain.Traveler;
+import eus.ehu.ridesfx.domain.User;
 import eus.ehu.ridesfx.exceptions.UnknownUser;
 import eus.ehu.ridesfx.ui.MainGUI;
 import eus.ehu.ridesfx.utils.StringUtils;
@@ -163,7 +164,17 @@ public class LoginController implements Controller {
     }
 
     @Override
+    public void getAlerts(User t) {
+
+    }
+
+    @Override
     public void showHide() {
+
+    }
+
+    @Override
+    public void getAllAlerts() {
 
     }
 

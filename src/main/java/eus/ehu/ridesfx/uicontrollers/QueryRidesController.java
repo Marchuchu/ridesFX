@@ -426,4 +426,14 @@ public class QueryRidesController implements Controller {
         thread.start();
 
     }
+
+    @Override
+    public void getAlerts(User t) {
+
+    }
+
+    @Override
+    public void getAllAlerts() {
+
+    }
 }

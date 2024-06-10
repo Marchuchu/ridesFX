@@ -222,6 +222,16 @@ public class SignUpController implements Controller {
 
     }
 
+    @Override
+    public void getAlerts(User t) {
+
+    }
+
+    @Override
+    public void getAllAlerts() {
+
+    }
+
     public class Window {
         private Controller controller;
         private Parent ui;

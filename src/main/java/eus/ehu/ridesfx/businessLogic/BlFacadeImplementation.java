@@ -44,14 +44,16 @@ public class BlFacadeImplementation implements BlFacade {
 
 
     @Override
-    public List<Ride> getAlerts(String origin, String destination, Date date) {
-        List<Ride> events = dbManager.getRides(origin, destination, date);
+    public List<Alerts> getAlerts() {
+        List<Alerts> events = dbManager.getAlerts(this.currentUser);
         return events;
     }
 
-
-
-
+    @Override
+    public List<Alerts> getAllAlerts() {
+        List<Alerts> events = dbManager.getAllAlerts();
+        return events;
+    }
 
 
     /**
@@ -81,12 +83,11 @@ public class BlFacadeImplementation implements BlFacade {
         return this.currentUser;
     }
 
-
-
     @Override
     public void setCurrentUser(User user) {
         this.currentUser = user;
     }
+
 
     @Override
     public void setCurrentDriver(Driver driver) {
@@ -116,7 +117,7 @@ public class BlFacadeImplementation implements BlFacade {
     }
 
 
-    public void addUser(User u){
+    public void addUser(User u) {
         dbManager.addUser(u);
     }
 
@@ -134,7 +135,7 @@ public class BlFacadeImplementation implements BlFacade {
     }
 
 
-    public List<String> getArrivalCities(String from){
+    public List<String> getArrivalCities(String from) {
 
         List<String> arrivalLocations = dbManager.getArrivalCities(from);
         return arrivalLocations;
@@ -180,10 +181,9 @@ public class BlFacadeImplementation implements BlFacade {
     }
 
 
-
     @Override
     public void takeRide(Ride selectedItem, int nP, float p) {
-        dbManager.takeRide(selectedItem, nP, p );
+        dbManager.takeRide(selectedItem, nP, p);
     }
 
     @Override
@@ -192,7 +192,7 @@ public class BlFacadeImplementation implements BlFacade {
     }
 
     @Override
-    public User getDriver(User u){
+    public User getDriver(User u) {
 
         return dbManager.getD(u);
 
@@ -200,13 +200,13 @@ public class BlFacadeImplementation implements BlFacade {
 
     @Override
 
-    public boolean containsUser(User u){
+    public boolean containsUser(User u) {
 
         return dbManager.containsUser(u);
 
     }
 
-    public void sendMessage( String to, String subject, String message){
+    public void sendMessage(String to, String subject, String message) {
 
         dbManager.sendMessage(to, subject, message);
 

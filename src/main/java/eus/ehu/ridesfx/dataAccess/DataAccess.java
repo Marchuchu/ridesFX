@@ -105,6 +105,21 @@ public class DataAccess {
         return query.getResultList();
     }
 
+    //TODO pasar user tmb
+    public List<Alerts> getAlerts(User user) {
+
+        TypedQuery<Alerts> query = db.createQuery("SELECT alerts FROM Alerts alerts WHERE alerts.user = :user", Alerts.class);
+        query.setParameter("user", user);
+
+        return query.getResultList();
+    }
+
+    public List<Alerts> getAllAlerts() {
+
+        TypedQuery<Alerts> query = db.createQuery("SELECT alerts FROM Alerts alerts", Alerts.class);
+
+        return query.getResultList();
+    }
 
     public Ride createRide(String from, String to, Date date, int nPlaces, float price, String driverEmail) throws RideAlreadyExistException, RideMustBeLaterThanTodayException {
         System.out.println(">> DataAccess: createRide=> from= " + from + " to= " + to + " driver=" + driverEmail + " date " + date);
@@ -127,11 +142,6 @@ public class DataAccess {
                 Ride ride = driver.addRide(from, to, date, nPlaces, price);
                 db.persist(ride);
                 db.getTransaction().commit();
-
-                ////
-
-                //quiero añadir la nueva cioudad al combo box de la clase QueryRidesController
-
 
             }
             Ride ride = driver.addRide(from, to, date, nPlaces, price);

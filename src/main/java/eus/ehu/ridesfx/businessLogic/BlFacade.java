@@ -24,6 +24,9 @@ public interface BlFacade {
      */
     List<Ride> getRides(String from, String to, Date date);
 
+    public List<Alerts> getAlerts();
+
+
     /**
      * This method retrieves from the database the dates a month for which there are events
      *
@@ -102,5 +105,7 @@ public interface BlFacade {
     public void takeRide(Ride selectedItem, int nP, float p);
 
     public void sendMessage(String to, String subject, String message);
+
+    List<Alerts>  getAllAlerts();
 
 }
