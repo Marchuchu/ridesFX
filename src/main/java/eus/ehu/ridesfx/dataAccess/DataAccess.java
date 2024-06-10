@@ -1,6 +1,5 @@
 package eus.ehu.ridesfx.dataAccess;
 
-import eus.ehu.ridesfx.businessLogic.BlFacadeImplementation;
 import eus.ehu.ridesfx.configuration.Config;
 import eus.ehu.ridesfx.configuration.UtilDate;
 import eus.ehu.ridesfx.domain.*;
@@ -107,17 +106,19 @@ public class DataAccess {
     }
 
 
-    public List<Alerts> getAlerts(User user) {
+    public List<Alert> getAlerts(User user) {
 
-        TypedQuery<Alerts> query = db.createQuery("SELECT alerts FROM Alerts alerts WHERE alerts.user = :user", Alerts.class);
+        TypedQuery<Alert> query = db.createQuery("""
+                SELECT alerts FROM Alert alerts WHERE alerts.user = :user""", Alert.class);
         query.setParameter("user", user);
 
         return query.getResultList();
     }
 
-    public Alerts getAlert(User user, int alertId) {
-        TypedQuery<Alerts> query = db.createQuery(
-                "SELECT a FROM Alerts a WHERE a.id = :alertId AND a.user = :user", Alerts.class);
+    public Alert getAlert(User user, int alertId) {
+        TypedQuery<Alert> query = db.createQuery(
+                """
+                        SELECT a FROM Alert a WHERE a.id = :alertId AND a.user = :user""", Alert.class);
         query.setParameter("alertId", alertId);
         query.setParameter("user", user);
 
@@ -129,9 +130,10 @@ public class DataAccess {
     }
 
 
-    public List<Alerts> getAllAlerts() {
+    public List<Alert> getAllAlerts() {
 
-        TypedQuery<Alerts> query = db.createQuery("SELECT alerts FROM Alerts alerts", Alerts.class);
+        TypedQuery<Alert> query = db.createQuery("""
+                SELECT alerts FROM Alert alerts""", Alert.class);
 
         return query.getResultList();
     }
@@ -198,7 +200,7 @@ public class DataAccess {
             Traveler traveler2 = new Traveler("traveler2@gmail.com", "Lius Fernando", "54321", "54321");
 
             // Create Alerts
-            Alerts alert1 = new Alerts("Donostia", "Bilbo", UtilDate.newDate(year, month + 1, 15), traveler1);
+            Alert alert1 = new Alert("Donostia", "Bilbo", UtilDate.newDate(year, month + 1, 15), traveler1);
             db.persist(alert1);
 
             // Create rides
@@ -238,9 +240,10 @@ public class DataAccess {
         }
     }
 
-    private boolean alertExists(Alerts alert) {
+    private boolean alertExists(Alert alert) {
         // Método para verificar si una alerta ya existe en la base de datos
-        return db.createQuery("SELECT COUNT(a) FROM Alerts a WHERE a.from = :departCity AND a.to = :arrivalCity AND a.date = :date", Long.class)
+        return db.createQuery("""
+                        SELECT COUNT(a) FROM Alert a WHERE a.from = :departCity AND a.to = :arrivalCity AND a.date = :date""", Long.class)
                 .setParameter("departCity", alert.getFrom())
                 .setParameter("arrivalCity", alert.getTo())
                 .setParameter("date", alert.getDate())
@@ -271,7 +274,7 @@ public class DataAccess {
         return query.getResultList().isEmpty();
     }
 
-    public Alerts addAlert(String from, String to, Date date, String travelerEmail) {
+    public Alert addAlert(String from, String to, Date date, String travelerEmail) {
         db.getTransaction().begin();
 
         try {
@@ -280,7 +283,7 @@ public class DataAccess {
                 throw new PersistenceException("Traveler not found: " + travelerEmail);
             }
 
-            Alerts alert = new Alerts(from, to, date);
+            Alert alert = new Alert(from, to, date);
             if (alertExists(alert)) {
                 throw new PersistenceException("Alert already exists.");
             }
@@ -435,7 +438,7 @@ public class DataAccess {
 
     }
 
-    public void takeRide(Alerts a, int nP, float p, User u) {
+    public void takeRide(Alert a, int nP, float p, User u) {
         db.getTransaction().begin();
 
         User user = db.find(User.class, u.getEmail());
@@ -455,7 +458,7 @@ public class DataAccess {
         db.merge(driver);
 
         // Elimina la alerta de la base de datos
-        Alerts alertToRemove = db.find(Alerts.class, a.getId());
+        Alert alertToRemove = db.find(Alert.class, a.getId());
         if (alertToRemove != null) {
             db.remove(alertToRemove);
         }
@@ -512,9 +515,10 @@ public class DataAccess {
 
     }
 
-    public Alerts getAlert(User user, Long alertId) {
-        TypedQuery<Alerts> query = db.createQuery(
-                "SELECT a FROM Alerts a WHERE a.id = :alertId AND a.user = :user", Alerts.class);
+    public Alert getAlert(User user, Long alertId) {
+        TypedQuery<Alert> query = db.createQuery(
+                """
+                        SELECT a FROM Alert a WHERE a.id = :alertId AND a.user = :user""", Alert.class);
         query.setParameter("alertId", alertId);
         query.setParameter("user", user);
 
@@ -529,7 +533,7 @@ public class DataAccess {
         db.getTransaction().begin();
 
         try {
-            Alerts alert = getAlert(user, alertId);
+            Alert alert = getAlert(user, alertId);
 
             if (alert == null) {
                 throw new IllegalArgumentException("Alert not found or does not belong to the user");
@@ -551,7 +555,7 @@ public class DataAccess {
                     .setParameter("email", email)
                     .getSingleResult();
 
-            Alerts alert = new Alerts(from, to, date, user);
+            Alert alert = new Alert(from, to, date, user);
             db.persist(alert);
             db.getTransaction().commit();
         } catch (Exception e) {

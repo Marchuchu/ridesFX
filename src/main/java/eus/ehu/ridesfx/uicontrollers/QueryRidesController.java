@@ -2,6 +2,7 @@ package eus.ehu.ridesfx.uicontrollers;
 
 import eus.ehu.ridesfx.businessLogic.BlFacade;
 import eus.ehu.ridesfx.domain.*;
+import eus.ehu.ridesfx.domain.Alert;
 import eus.ehu.ridesfx.utils.StringUtils;
 import javafx.application.Platform;
 import javafx.beans.property.SimpleStringProperty;
@@ -19,10 +20,7 @@ import javafx.scene.layout.AnchorPane;
 import javafx.util.Callback;
 import eus.ehu.ridesfx.ui.MainGUI;
 import eus.ehu.ridesfx.utils.Dates;
-import javafx.util.Duration;
 
-import java.io.IOException;
-import java.time.Instant;
 import java.time.LocalDate;
 import java.time.YearMonth;
 import java.time.format.DateTimeFormatter;
@@ -205,7 +203,7 @@ public class QueryRidesController implements Controller {
                 reservationMessage.setVisible(true);
 
                 // Añadir la nueva alerta a la tabla de alertas en la interfaz de usuario
-                addAlertToTable(new Alerts(from, to, date, user));
+                addAlertToTable(new Alert(from, to, date, user));
                 time(5, reservationMessage);
             } else {
                 reservationMessage.setText(StringUtils.translate("QueryRidesController.PleaseFillInAllFields"));
@@ -221,10 +219,10 @@ public class QueryRidesController implements Controller {
         }
     }
 
-    private void addAlertToTable(Alerts alert) {
+    private void addAlertToTable(Alert alert) {
 
         // Obtener la lista actual de alertas de la tabla
-        ObservableList<Alerts> alerts = mainGUI.alertWin.controller.getTblAlerts().getItems();
+        ObservableList<Alert> alerts = mainGUI.alertWin.controller.getTblAlerts().getItems();
 
         // Agregar la nueva alerta a la lista
         alerts.add(alert);
@@ -482,7 +480,7 @@ public class QueryRidesController implements Controller {
     }
 
     @Override
-    public TableView<Alerts> getTblAlerts() {
+    public TableView<Alert> getTblAlerts() {
         return null;
     }
 }

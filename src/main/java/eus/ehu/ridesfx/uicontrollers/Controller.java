@@ -1,14 +1,10 @@
 package eus.ehu.ridesfx.uicontrollers;
 
-import eus.ehu.ridesfx.domain.Alerts;
-import eus.ehu.ridesfx.domain.Traveler;
+import eus.ehu.ridesfx.domain.Alert;
 import eus.ehu.ridesfx.domain.User;
 import eus.ehu.ridesfx.ui.MainGUI;
-import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.TableView;
-
-import java.util.ResourceBundle;
 
 public interface Controller {
     void setMainApp(MainGUI mainGUI);
@@ -24,7 +20,7 @@ public interface Controller {
 
     void getAllAlerts();
 
-    TableView<Alerts> getTblAlerts();
+    TableView<Alert> getTblAlerts();
 
     void updateComboBoxes(String from);
 }

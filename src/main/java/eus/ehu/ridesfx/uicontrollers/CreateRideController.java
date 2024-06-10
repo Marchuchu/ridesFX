@@ -1,15 +1,12 @@
 package eus.ehu.ridesfx.uicontrollers;
 
 import eus.ehu.ridesfx.businessLogic.BlFacade;
-import eus.ehu.ridesfx.domain.Alerts;
-import eus.ehu.ridesfx.domain.Traveler;
+import eus.ehu.ridesfx.domain.Alert;
 import eus.ehu.ridesfx.domain.User;
 import eus.ehu.ridesfx.ui.MainGUI;
 import eus.ehu.ridesfx.utils.StringUtils;
 import eus.ehu.ridesfx.utils.Dates;
 import javafx.application.Platform;
-import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.Node;
@@ -269,7 +266,7 @@ public class CreateRideController implements Controller {
     }
 
     @Override
-    public TableView<Alerts> getTblAlerts() {
+    public TableView<Alert> getTblAlerts() {
         return null;
     }
 

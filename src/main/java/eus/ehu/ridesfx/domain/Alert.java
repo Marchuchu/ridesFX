@@ -6,7 +6,7 @@ import java.util.Date;
 
 @Entity
 @Table(name = "Alerts")
-public class Alerts {
+public class Alert {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY) // Usamos IDENTITY para generar el ID automáticamente
@@ -26,16 +26,16 @@ public class Alerts {
     @Column(name = "alert_date", nullable = false)
     private Date date;
 
-    public Alerts() {
+    public Alert() {
     }
 
-    public Alerts(String from, String to, Date date) {
+    public Alert(String from, String to, Date date) {
         this.from = from;
         this.to = to;
         this.date = date;
     }
 
-    public Alerts(String from, String to, Date date, User traveler) {
+    public Alert(String from, String to, Date date, User traveler) {
         this.from = from;
         this.to = to;
         this.date = date;
@@ -49,7 +49,7 @@ public class Alerts {
 //        this.user = traveler;
 //    }
 
-    public Ride getRideFromAlerts(Alerts alert) {
+    public Ride getRideFromAlerts(Alert alert) {
         String from = alert.getFrom();
         String to = alert.getTo();
         Date date = alert.getDate();

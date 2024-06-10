@@ -6,8 +6,6 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-import eus.ehu.ridesfx.domain.Alerts;
-
 @Entity
 public class Traveler extends User {
 
@@ -15,7 +13,7 @@ public class Traveler extends User {
     private String repPassword;
 
     @OneToMany (fetch = FetchType.EAGER, cascade = CascadeType.PERSIST)
-    private List<Alerts> alertsList = new ArrayList<Alerts>();
+    private List<Alert> alertList = new ArrayList<Alert>();
 
 
     public Traveler(String email, String name, String password, String repPassword) {
@@ -55,17 +53,17 @@ public class Traveler extends User {
         this.repPassword = repPassword;
     }
 
-    public List<Alerts> getAlertsList() {
-        return alertsList;
+    public List<Alert> getAlertsList() {
+        return alertList;
     }
 
-    public void setAlertsList(List<Alerts> alertsList) {
-        this.alertsList = alertsList;
+    public void setAlertsList(List<Alert> alertList) {
+        this.alertList = alertList;
     }
 
-    public Alerts addAlert(String from, String to, Date date) {
-        Alerts alert = new Alerts(from, to, date);
-        alertsList.add(alert);
+    public Alert addAlert(String from, String to, Date date) {
+        Alert alert = new Alert(from, to, date);
+        alertList.add(alert);
         return alert;
     }
 

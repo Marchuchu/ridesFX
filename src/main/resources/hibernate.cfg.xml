@@ -17,7 +17,7 @@
         <mapping class="eus.ehu.ridesfx.domain.Ride" />
         <mapping class="eus.ehu.ridesfx.domain.Messenger" />
         <mapping class="eus.ehu.ridesfx.domain.Traveler" />
-        <mapping class="eus.ehu.ridesfx.domain.Alerts" />
+        <mapping class="eus.ehu.ridesfx.domain.Alert" />
         <mapping class="eus.ehu.ridesfx.domain.Message" />
 
     </session-factory>

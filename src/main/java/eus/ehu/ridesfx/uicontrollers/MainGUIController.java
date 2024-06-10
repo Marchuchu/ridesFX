@@ -1,7 +1,7 @@
 package eus.ehu.ridesfx.uicontrollers;
 
 import eus.ehu.ridesfx.businessLogic.BlFacade;
-import eus.ehu.ridesfx.domain.Alerts;
+import eus.ehu.ridesfx.domain.Alert;
 import eus.ehu.ridesfx.domain.Driver;
 import eus.ehu.ridesfx.domain.Traveler;
 import eus.ehu.ridesfx.domain.User;
@@ -418,7 +418,7 @@ public class MainGUIController implements Controller {
     }
 
     @Override
-    public TableView<Alerts> getTblAlerts() {
+    public TableView<Alert> getTblAlerts() {
         return null;
     }
 

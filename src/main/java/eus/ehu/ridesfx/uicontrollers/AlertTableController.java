@@ -5,7 +5,7 @@ import java.util.List;
 import java.util.ResourceBundle;
 
 import eus.ehu.ridesfx.businessLogic.BlFacade;
-import eus.ehu.ridesfx.domain.Alerts;
+import eus.ehu.ridesfx.domain.Alert;
 import eus.ehu.ridesfx.domain.Driver;
 import eus.ehu.ridesfx.domain.Traveler;
 import eus.ehu.ridesfx.domain.User;
@@ -24,15 +24,15 @@ import javafx.scene.text.Text;
 
 public class AlertTableController implements Controller {
 
-    ObservableList<Alerts> observableArray = FXCollections.observableArrayList();
+    ObservableList<Alert> observableArray = FXCollections.observableArrayList();
     @FXML
-    private TableColumn<Alerts, Date> date;
+    private TableColumn<Alert, Date> date;
     @FXML
-    private TableColumn<Alerts, String> from;
+    private TableColumn<Alert, String> from;
     @FXML
-    private TableColumn<Alerts, String> to;
+    private TableColumn<Alert, String> to;
     @FXML
-    private TableColumn<Alerts, String> user;
+    private TableColumn<Alert, String> user;
     @FXML
     private Button cancelAlertBttn;
     @FXML
@@ -44,14 +44,14 @@ public class AlertTableController implements Controller {
     @FXML
     private Button takeRideBttn;
     @FXML
-    private TableView<Alerts> tblAlerts;
+    private TableView<Alert> tblAlerts;
     @FXML
     private TextField price;
 
     private MainGUI mGUI;
     private BlFacade businessLogic;
 
-    public TableView<Alerts> getTblAlerts() {
+    public TableView<Alert> getTblAlerts() {
         return tblAlerts;
     }
 
@@ -66,7 +66,7 @@ public class AlertTableController implements Controller {
 
     @FXML
     void onClickCancelAlert(ActionEvent event) {
-        Alerts r = tblAlerts.getSelectionModel().getSelectedItem();
+        Alert r = tblAlerts.getSelectionModel().getSelectedItem();
 
         takeRideBttn.setStyle("-fx-background-color: #f85774");
         cancelAlertBttn.setStyle("-fx-background-color: #f85774");
@@ -128,7 +128,7 @@ public class AlertTableController implements Controller {
 
     @FXML
     void onClickTakeRide(ActionEvent event) {
-        Alerts r = tblAlerts.getSelectionModel().getSelectedItem();
+        Alert r = tblAlerts.getSelectionModel().getSelectedItem();
 
         if (businessLogic.getCurrentUser() instanceof Driver && r != null) {
             businessLogic.takeRide(r, 1, Integer.parseInt(price.getText()));
@@ -221,13 +221,13 @@ public class AlertTableController implements Controller {
 
     @Override
     public void getAlerts(User u) {
-        List<Alerts> alerts = businessLogic.getAlerts(u);
+        List<Alert> alerts = businessLogic.getAlerts(u);
         observableArray.setAll(alerts);
     }
 
     @Override
     public void getAllAlerts() {
-        List<Alerts> alerts = businessLogic.getAllAlerts();
+        List<Alert> alerts = businessLogic.getAllAlerts();
         observableArray.setAll(alerts);
     }
     @Override

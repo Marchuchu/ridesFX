@@ -24,15 +24,15 @@ public interface BlFacade {
      */
     List<Ride> getRides(String from, String to, Date date);
 
-    public List<Alerts> getAlerts();
+    public List<Alert> getAlerts();
 
-    public List<Alerts> getAlerts(User u);
+    public List<Alert> getAlerts(User u);
 
-    void cancelAlert(Alerts alert);
+    void cancelAlert(Alert alert);
     User getCurrentUser();
 
     void createAlert(String from, String to, Date date, String email);
-    List<Alerts> getAlertsByUser(User user);
+    List<Alert> getAlertsByUser(User user);
 
     /**
      * This method retrieves from the database the dates a month for which there are events
@@ -46,7 +46,7 @@ public interface BlFacade {
 
     public void addUser(User user);
 
-    public Alerts createNewAlert(String from, String to, Date date, String email);
+    public Alert createNewAlert(String from, String to, Date date, String email);
 
     /**
      * This method retrieves from the database the dates in a month for which there are events
@@ -109,10 +109,10 @@ public interface BlFacade {
 
     void addCitie(String from);
 
-    public void takeRide(Alerts selectedItem, int nP, float p);
+    public void takeRide(Alert selectedItem, int nP, float p);
 
     public void sendMessage(String to, String subject, String message);
 
-    List<Alerts>  getAllAlerts();
+    List<Alert>  getAllAlerts();
 
 }

@@ -2,12 +2,10 @@ package eus.ehu.ridesfx.uicontrollers;
 
 import java.net.URL;
 import java.util.ResourceBundle;
-import java.util.concurrent.atomic.AtomicReference;
 
 import eus.ehu.ridesfx.businessLogic.BlFacade;
-import eus.ehu.ridesfx.domain.Alerts;
+import eus.ehu.ridesfx.domain.Alert;
 import eus.ehu.ridesfx.domain.Message;
-import eus.ehu.ridesfx.domain.Traveler;
 import eus.ehu.ridesfx.domain.User;
 import eus.ehu.ridesfx.ui.MainGUI;
 import eus.ehu.ridesfx.utils.StringUtils;
@@ -154,7 +152,7 @@ public class MessageController implements Controller {
     }
 
     @Override
-    public TableView<Alerts> getTblAlerts() {
+    public TableView<Alert> getTblAlerts() {
         return null;
     }
 

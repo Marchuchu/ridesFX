@@ -44,20 +44,20 @@ public class BlFacadeImplementation implements BlFacade {
 
 
     @Override
-    public List<Alerts> getAlerts() {
-        List<Alerts> events = dbManager.getAlerts(this.currentUser);
+    public List<Alert> getAlerts() {
+        List<Alert> events = dbManager.getAlerts(this.currentUser);
         return events;
     }
 
     @Override
-    public List<Alerts> getAlerts(User u) {
-        List<Alerts> events = dbManager.getAlerts(u);
+    public List<Alert> getAlerts(User u) {
+        List<Alert> events = dbManager.getAlerts(u);
         return events;
     }
 
     @Override
-    public List<Alerts> getAllAlerts() {
-        List<Alerts> events = dbManager.getAllAlerts();
+    public List<Alert> getAllAlerts() {
+        List<Alert> events = dbManager.getAllAlerts();
         return events;
     }
 
@@ -67,7 +67,7 @@ public class BlFacadeImplementation implements BlFacade {
     }
 
     @Override
-    public List<Alerts> getAlertsByUser(User user) {
+    public List<Alert> getAlertsByUser(User user) {
         return dbManager.getAlerts(user);
     }
 
@@ -138,7 +138,7 @@ public class BlFacadeImplementation implements BlFacade {
     }
 
     @Override
-    public Alerts createNewAlert(String from, String to, Date date, String email) {
+    public Alert createNewAlert(String from, String to, Date date, String email) {
 
         return dbManager.addAlert(from, to, date, email);
 
@@ -198,7 +198,7 @@ public class BlFacadeImplementation implements BlFacade {
 
 
     @Override
-    public void takeRide(Alerts selectedItem, int nP, float p) {
+    public void takeRide(Alert selectedItem, int nP, float p) {
         dbManager.takeRide(selectedItem, nP, p, this.currentUser);
 
     }
@@ -239,7 +239,7 @@ public class BlFacadeImplementation implements BlFacade {
 
 
     @Override
-    public void cancelAlert(Alerts alert) {
+    public void cancelAlert(Alert alert) {
         User currentUser = alert.getUser();
         dbManager.cancelAlert(currentUser, alert.getId());
     }

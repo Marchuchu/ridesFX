@@ -1,15 +1,10 @@
 package eus.ehu.ridesfx.uicontrollers;
 
-import java.io.IOException;
-import java.net.URL;
-import java.util.ResourceBundle;
-
 import eus.ehu.ridesfx.businessLogic.BlFacade;
-import eus.ehu.ridesfx.domain.Alerts;
+import eus.ehu.ridesfx.domain.Alert;
 import eus.ehu.ridesfx.domain.Driver;
 import eus.ehu.ridesfx.domain.Traveler;
 import eus.ehu.ridesfx.domain.User;
-import eus.ehu.ridesfx.exceptions.UnknownUser;
 import eus.ehu.ridesfx.ui.MainGUI;
 import eus.ehu.ridesfx.utils.StringUtils;
 import javafx.application.Platform;
@@ -20,7 +15,6 @@ import javafx.scene.Parent;
 import javafx.scene.control.*;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.text.Text;
-import javafx.util.Duration;
 
 public class SignUpController implements Controller {
 
@@ -231,7 +225,7 @@ public class SignUpController implements Controller {
     }
 
     @Override
-    public TableView<Alerts> getTblAlerts() {
+    public TableView<Alert> getTblAlerts() {
         return null;
     }
 
