@@ -1,5 +1,6 @@
 package eus.ehu.ridesfx.dataAccess;
 
+import eus.ehu.ridesfx.businessLogic.BlFacadeImplementation;
 import eus.ehu.ridesfx.configuration.Config;
 import eus.ehu.ridesfx.configuration.UtilDate;
 import eus.ehu.ridesfx.domain.*;
@@ -105,7 +106,7 @@ public class DataAccess {
         return query.getResultList();
     }
 
-    //TODO pasar user tmb
+
     public List<Alerts> getAlerts(User user) {
 
         TypedQuery<Alerts> query = db.createQuery("SELECT alerts FROM Alerts alerts WHERE alerts.user = :user", Alerts.class);
@@ -114,6 +115,20 @@ public class DataAccess {
         return query.getResultList();
     }
 
+    public Alerts getAlert(User user, int alertId) {
+        TypedQuery<Alerts> query = db.createQuery(
+                "SELECT a FROM Alerts a WHERE a.id = :alertId AND a.user = :user", Alerts.class);
+        query.setParameter("alertId", alertId);
+        query.setParameter("user", user);
+
+        try {
+            return query.getSingleResult();
+        } catch (NoResultException e) {
+            return null; // or handle as needed
+        }
+    }
+
+
     public List<Alerts> getAllAlerts() {
 
         TypedQuery<Alerts> query = db.createQuery("SELECT alerts FROM Alerts alerts", Alerts.class);
@@ -121,44 +136,44 @@ public class DataAccess {
         return query.getResultList();
     }
 
-    public Ride createRide(String from, String to, Date date, int nPlaces, float price, String driverEmail) throws RideAlreadyExistException, RideMustBeLaterThanTodayException {
+    public Ride createRide(String from, String to, Date date, int nPlaces, float price, String driverEmail)
+            throws RideAlreadyExistException, RideMustBeLaterThanTodayException {
         System.out.println(">> DataAccess: createRide=> from= " + from + " to= " + to + " driver=" + driverEmail + " date " + date);
         try {
             if (new Date().compareTo(date) > 0) {
-                throw new RideMustBeLaterThanTodayException(ResourceBundle.getBundle("Etiquetas").getString("CreateRideGUI.ErrorRideMustBeLaterThanToday"));
+                throw new RideMustBeLaterThanTodayException(
+                        ResourceBundle.getBundle("Etiquetas").getString("CreateRideGUI.ErrorRideMustBeLaterThanToday"));
             }
 
             db.getTransaction().begin();
 
             Driver driver = db.find(Driver.class, driverEmail);
 
-            if (driver.doesRideExists(from, to, date)) {
-                db.getTransaction().commit();
-                throw new RideAlreadyExistException(ResourceBundle.getBundle("Etiquetas").getString("DataAccess.RideAlreadyExist"));
-            } else {
-
-                //create new ride
-
-                Ride ride = driver.addRide(from, to, date, nPlaces, price);
-                db.persist(ride);
-                db.getTransaction().commit();
-
+            if (driver == null) {
+                db.getTransaction().rollback();
+                throw new PersistenceException("Driver not found: " + driverEmail);
             }
+
+            if (driver.doesRideExists(from, to, date)) {
+                db.getTransaction().rollback();
+                throw new RideAlreadyExistException(
+                        ResourceBundle.getBundle("Etiquetas").getString("DataAccess.RideAlreadyExist"));
+            }
+
+            // Create new ride
             Ride ride = driver.addRide(from, to, date, nPlaces, price);
-            //next instruction can be obviated
-            db.persist(driver);
+            db.persist(ride);
             db.getTransaction().commit();
 
             return ride;
         } catch (NullPointerException e) {
-            // TODO Auto-generated catch block
-            db.getTransaction().commit();
-            return null;
+            db.getTransaction().rollback();
+            throw e; // Optional: or handle the exception more gracefully
+        } catch (RideAlreadyExistException | RideMustBeLaterThanTodayException e) {
+            db.getTransaction().rollback();
+            throw e;
         }
-
-
     }
-
 
     public void initializeDB() {
         this.reset();
@@ -278,38 +293,6 @@ public class DataAccess {
         } catch (Exception e) {
             db.getTransaction().rollback();
             throw new PersistenceException("Error adding alert: " + e.getMessage(), e);
-        }
-    }
-
-    public Ride addRide(String from, String to, Date date, int availableSeats, float price, String driverEmail) throws RideAlreadyExistException, RideMustBeLaterThanTodayException {
-        if (date.before(UtilDate.today())) {
-            throw new RideMustBeLaterThanTodayException("Ride must be later than today.");
-        }
-
-        db.getTransaction().begin();
-
-        try {
-            Driver driver = db.find(Driver.class, driverEmail);
-            if (driver == null) {
-                throw new PersistenceException("Driver not found: " + driverEmail);
-            }
-
-            Ride ride = new Ride(from, to, date, availableSeats, price, driver);
-            if (rideExists(ride)) {
-                throw new RideAlreadyExistException("Ride already exists.");
-            }
-
-            driver.addRide(from, to, date, availableSeats, price);
-            db.persist(driver);
-            db.getTransaction().commit();
-
-            return ride;
-        } catch (RideAlreadyExistException e) {
-            db.getTransaction().rollback();
-            throw e;
-        } catch (Exception e) {
-            db.getTransaction().rollback();
-            throw new PersistenceException("Error adding ride: " + e.getMessage(), e);
         }
     }
 
@@ -452,15 +435,37 @@ public class DataAccess {
 
     }
 
-    public void takeRide(Ride r, int nP, float p) {
-
+    public void takeRide(Alerts a, int nP, float p, User u) {
         db.getTransaction().begin();
-        Driver driver = db.find(Driver.class, r.getDriver().getEmail());
-        driver.addRide(r.getFromLocation(), r.getToLocation(), r.getDate(), nP, p);
-        db.persist(r);
-        db.getTransaction().commit();
 
+        User user = db.find(User.class, u.getEmail());
+
+        Driver driver = (Driver) user;
+
+        // Si el Driver no está gestionado por la sesión, usa merge
+        driver = db.merge(driver);
+
+        // Usa el método addRide del driver para crear y añadir un nuevo Ride
+        Ride ride = driver.addRide(a.getFrom(), a.getTo(), a.getDate(), nP, p);
+
+        // Guarda el nuevo Ride en la base de datos
+        db.persist(ride);
+
+        // Actualiza el driver con el nuevo Ride añadido
+        db.merge(driver);
+
+        // Elimina la alerta de la base de datos
+        Alerts alertToRemove = db.find(Alerts.class, a.getId());
+        if (alertToRemove != null) {
+            db.remove(alertToRemove);
+        }
+
+        // Realiza el commit de la transacción
+        db.getTransaction().commit();
     }
+
+
+
 
     public User getD(User u) {
         return db.find(User.class, u.getEmail());
@@ -507,12 +512,60 @@ public class DataAccess {
 
     }
 
-    public void cancelAlert(Alerts r) {
+    public Alerts getAlert(User user, Long alertId) {
+        TypedQuery<Alerts> query = db.createQuery(
+                "SELECT a FROM Alerts a WHERE a.id = :alertId AND a.user = :user", Alerts.class);
+        query.setParameter("alertId", alertId);
+        query.setParameter("user", user);
 
-        db.getTransaction().begin();
-        db.remove(r);
-        db.getTransaction().commit();
-
+        try {
+            return query.getSingleResult();
+        } catch (NoResultException e) {
+            return null; // or handle as needed
+        }
     }
+
+    public void cancelAlert(User user, Long alertId) {
+        db.getTransaction().begin();
+
+        try {
+            Alerts alert = getAlert(user, alertId);
+
+            if (alert == null) {
+                throw new IllegalArgumentException("Alert not found or does not belong to the user");
+            }
+
+            db.remove(alert);
+            db.getTransaction().commit();
+
+        } catch (Exception e) {
+            db.getTransaction().rollback();
+            throw new PersistenceException("Error canceling alert: " + e.getMessage(), e);
+        }
+    }
+
+    public void createAlert(String from, String to, Date date, String email) {
+        db.getTransaction().begin();
+        try {
+            User user = db.createQuery("SELECT u FROM User u WHERE u.email = :email", User.class)
+                    .setParameter("email", email)
+                    .getSingleResult();
+
+            Alerts alert = new Alerts(from, to, date, user);
+            db.persist(alert);
+            db.getTransaction().commit();
+        } catch (Exception e) {
+            db.getTransaction().rollback();
+            throw new PersistenceException("Error creating alert: " + e.getMessage(), e);
+        }
+    }
+
+//    public void cancelAlert(Alerts r, Long id) {
+//
+//        db.getTransaction().begin();
+//        db.remove(r);
+//        db.getTransaction().commit();
+//
+//    }
 
 }

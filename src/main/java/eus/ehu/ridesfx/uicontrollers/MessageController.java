@@ -5,6 +5,7 @@ import java.util.ResourceBundle;
 import java.util.concurrent.atomic.AtomicReference;
 
 import eus.ehu.ridesfx.businessLogic.BlFacade;
+import eus.ehu.ridesfx.domain.Alerts;
 import eus.ehu.ridesfx.domain.Message;
 import eus.ehu.ridesfx.domain.Traveler;
 import eus.ehu.ridesfx.domain.User;
@@ -150,5 +151,10 @@ public class MessageController implements Controller {
     @Override
     public void getAllAlerts() {
 
+    }
+
+    @Override
+    public TableView<Alerts> getTblAlerts() {
+        return null;
     }
 }

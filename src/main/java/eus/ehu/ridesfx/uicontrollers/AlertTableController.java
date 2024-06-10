@@ -5,7 +5,10 @@ import java.util.List;
 import java.util.ResourceBundle;
 
 import eus.ehu.ridesfx.businessLogic.BlFacade;
-import eus.ehu.ridesfx.domain.*;
+import eus.ehu.ridesfx.domain.Alerts;
+import eus.ehu.ridesfx.domain.Driver;
+import eus.ehu.ridesfx.domain.Traveler;
+import eus.ehu.ridesfx.domain.User;
 import eus.ehu.ridesfx.ui.MainGUI;
 import eus.ehu.ridesfx.utils.StringUtils;
 import javafx.application.Platform;
@@ -48,115 +51,116 @@ public class AlertTableController implements Controller {
     private MainGUI mGUI;
     private BlFacade businessLogic;
 
-    public AlertTableController(BlFacade bl, MainGUI mainGUIC) {
+    public TableView<Alerts> getTblAlerts() {
+        return tblAlerts;
+    }
 
+    public AlertTableController(BlFacade bl, MainGUI mainGUIC) {
         this.businessLogic = bl;
         this.mGUI = mainGUIC;
-
     }
 
     public AlertTableController(BlFacade bl) {
-
         this.businessLogic = bl;
-
     }
 
     @FXML
     void onClickCancelAlert(ActionEvent event) {
-
         Alerts r = tblAlerts.getSelectionModel().getSelectedItem();
 
         takeRideBttn.setStyle("-fx-background-color: #f85774");
         cancelAlertBttn.setStyle("-fx-background-color: #f85774");
 
-        //ESTO ME LO PODRIA AHORRAR
-
         if (businessLogic.getCurrentUser() instanceof Traveler && r != null) {
-
-            businessLogic.cancelAlert(r);
-            takeRideBttn.setVisible(false);
-            cancelAlertBttn.setVisible(true);
-
-
+            try {
+                businessLogic.cancelAlert(r);
+                observableArray.remove(r);
+                message.setText(translate("AlertCanceledSuccessfully"));
+                time(5, message);
+            } catch (IllegalArgumentException e) {
+                message.setText(e.getMessage());
+                time(5, message);
+            }
         } else if (r == null) {
-
             message.setText(translate("YouMustSelectAnAlertToCancel"));
-
             time(5, message);
-
-
-            cancelAlertBttn.setVisible(true);
-            takeRideBttn.setVisible(false);
-
-
         } else if (businessLogic.getCurrentUser() instanceof Driver) {
-
             message.setText("Choose the ride you want to take");
-
             time(5, message);
-
-
-            cancelAlertBttn.setVisible(false);
-            takeRideBttn.setVisible(true);
-
-
         }
 
         takeRideBttn.setVisible(false);
         cancelAlertBttn.setStyle("-fx-background-color: #f85774");
         message.setText(translate("ChooseTheRideYouWantToTake"));
-
         time(5, message);
-
     }
+
+
+//
+//    @FXML
+//    void onClickCancelAlert(ActionEvent event) {
+//        Alerts r = tblAlerts.getSelectionModel().getSelectedItem();
+//
+//        takeRideBttn.setStyle("-fx-background-color: #f85774");
+//        cancelAlertBttn.setStyle("-fx-background-color: #f85774");
+//
+//        if (businessLogic.getCurrentUser() instanceof Traveler && r != null) {
+//            businessLogic.cancelAlert(r);
+//            takeRideBttn.setVisible(false);
+//            cancelAlertBttn.setVisible(true);
+//        } else if (r == null) {
+//            message.setText(translate("YouMustSelectAnAlertToCancel"));
+//            time(5, message);
+//            cancelAlertBttn.setVisible(true);
+//            takeRideBttn.setVisible(false);
+//        } else if (businessLogic.getCurrentUser() instanceof Driver) {
+//            message.setText("Choose the ride you want to take");
+//            time(5, message);
+//            cancelAlertBttn.setVisible(false);
+//            takeRideBttn.setVisible(true);
+//        }
+//
+//        takeRideBttn.setVisible(false);
+//        cancelAlertBttn.setStyle("-fx-background-color: #f85774");
+//        message.setText(translate("ChooseTheRideYouWantToTake"));
+//        time(5, message);
+//    }
 
     @FXML
     void onClickTakeRide(ActionEvent event) {
-
         Alerts r = tblAlerts.getSelectionModel().getSelectedItem();
 
         if (businessLogic.getCurrentUser() instanceof Driver && r != null) {
+            businessLogic.takeRide(r, 1, Integer.parseInt(price.getText()));
 
-            businessLogic.takeRide(r.getRideFromAlerts(r), 1, Integer.parseInt(price.getText()));
-
-        } else {
-
-            message.setText(translate("YouMustSelectARideToTake"));
-
+            cancelAlertBttn.setVisible(false);
+            takeRideBttn.setStyle("-fx-background-color: #f85774");
+            message.setText(translate("RideTakenSuccessfully"));
             time(5, message);
 
-
+        } else {
+            message.setText(translate("YouMustSelectARideToTake"));
+            time(5, message);
         }
 
-        cancelAlertBttn.setVisible(false);
-        takeRideBttn.setStyle("-fx-background-color: #f85774");
-        message.setText(translate("ChooseTheRideYouWantToTake"));
-
-        time(5, message);
 
     }
 
     private void setUpAlertsSelection() {
-
         tblAlerts.getSelectionModel().selectedItemProperty().addListener((obs, oldSelection, newSelection) -> {
             if (newSelection != null) {
                 System.out.println("Selected alert: " + newSelection);
             }
-
         });
-
     }
 
     @Override
     public void setMainApp(MainGUI mainGUI) {
-
         this.mGUI = mainGUI;
-
     }
 
     @Override
     public void changeLanguage() {
-
         takeRideBttn.setText(StringUtils.translate("TakeRide"));
         cancelAlertBttn.setText(StringUtils.translate("CancelAlert"));
         from.setText(StringUtils.translate("From"));
@@ -164,16 +168,11 @@ public class AlertTableController implements Controller {
         user.setText(StringUtils.translate("User"));
         date.setText(StringUtils.translate("Date"));
         price.setPromptText(StringUtils.translate("Price"));
-
-
     }
 
     String translate(String txt) {
-
         return ResourceBundle.getBundle("Etiquetas").getString(txt);
-
     }
-
 
     @FXML
     void initialize() {
@@ -183,31 +182,32 @@ public class AlertTableController implements Controller {
         setUpAlertsSelection();
         showHide();
         changeLanguage();
+
+        // Configurar las columnas de la tabla
+        date.setCellValueFactory(new PropertyValueFactory<>("date"));
+        from.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getFrom()));
+        to.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getTo()));
+        user.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getUser().getName()));
     }
 
     public void showHide() {
         if (businessLogic.getCurrentUser() instanceof Traveler) {
-
             takeRideBttn.setVisible(false);
             cancelAlertBttn.setVisible(true);
             price.setVisible(false);
             setPriceTXT.setVisible(false);
             cancelAlertBttn.setStyle("-fx-background-color: #f85774");
-
         } else if (businessLogic.getCurrentUser() instanceof Driver) {
-
             cancelAlertBttn.setVisible(false);
             takeRideBttn.setVisible(true);
             price.setVisible(true);
             setPriceTXT.setVisible(true);
             takeRideBttn.setStyle("-fx-background-color: #f85774");
-
         }
     }
 
     @Override
     public void time(int s, Label msg) {
-
         Thread thread = new Thread(() -> {
             try {
                 Thread.sleep(s * 1000);
@@ -217,23 +217,17 @@ public class AlertTableController implements Controller {
             }
         });
         thread.start();
-
     }
 
     @Override
     public void getAlerts(User u) {
-
-        List<Alerts> alerts = businessLogic.getAlerts();
+        List<Alerts> alerts = businessLogic.getAlerts(u);
         observableArray.setAll(alerts);
-
     }
 
     @Override
     public void getAllAlerts() {
-
         List<Alerts> alerts = businessLogic.getAllAlerts();
         observableArray.setAll(alerts);
-
     }
-
 }

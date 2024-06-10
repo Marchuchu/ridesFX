@@ -1,12 +1,14 @@
 package eus.ehu.ridesfx.uicontrollers;
 
 import eus.ehu.ridesfx.businessLogic.BlFacade;
+import eus.ehu.ridesfx.domain.Alerts;
 import eus.ehu.ridesfx.domain.Traveler;
 import eus.ehu.ridesfx.domain.User;
 import eus.ehu.ridesfx.ui.MainGUI;
 import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;
+import javafx.scene.control.TableView;
 
 import java.util.ResourceBundle;
 
@@ -67,6 +69,11 @@ public class ExitController implements Controller {
     @Override
     public void getAllAlerts() {
 
+    }
+
+    @Override
+    public TableView<Alerts> getTblAlerts() {
+        return null;
     }
 
 }

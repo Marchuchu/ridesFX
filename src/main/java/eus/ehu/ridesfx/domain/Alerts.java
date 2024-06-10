@@ -1,6 +1,7 @@
 package eus.ehu.ridesfx.domain;
 
 import jakarta.persistence.*;
+
 import java.util.Date;
 
 @Entity
@@ -28,24 +29,31 @@ public class Alerts {
     public Alerts() {
     }
 
-    public Ride getRideFromAlerts(Alerts alert) {
-        String from = alert.getFrom();
-        String to = alert.getTo();
-        Date date = alert.getDate();
-        return new Ride(from, to, date);
-    }
-
     public Alerts(String from, String to, Date date) {
         this.from = from;
         this.to = to;
         this.date = date;
     }
 
-    public Alerts(String from, String to, Date date, Traveler traveler) {
+    public Alerts(String from, String to, Date date, User traveler) {
         this.from = from;
         this.to = to;
         this.date = date;
         this.user = traveler;
+    }
+
+//    public Alerts(String from, String to, Date date, Traveler traveler) {
+//        this.from = from;
+//        this.to = to;
+//        this.date = date;
+//        this.user = traveler;
+//    }
+
+    public Ride getRideFromAlerts(Alerts alert) {
+        String from = alert.getFrom();
+        String to = alert.getTo();
+        Date date = alert.getDate();
+        return new Ride(from, to, date);
     }
 
     public Long getId() {
@@ -83,6 +91,7 @@ public class Alerts {
     public void setUser(User user) {
         this.user = user;
     }
+
 
     @Override
     public String toString() {

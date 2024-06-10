@@ -189,48 +189,92 @@ public class QueryRidesController implements Controller {
         });
     }
 
-
     @FXML
     public void onClickCreateAlert(ActionEvent event) {
-
-
-        Alerts ride = new Alerts(comboDepartCity.getValue(), comboArrivalCity.getValue(), Dates.convertToDate(datepicker.getValue()));
+        String from = comboDepartCity.getValue();
+        String to = comboArrivalCity.getValue();
+        LocalDate localDate = datepicker.getValue();
+        Date date = Dates.convertToDate(localDate);
         User user = mainGUI.getBusinessLogic().getCurrentUser();
 
         if (user instanceof Traveler) {
-
-            if (ride.getFrom() != null && ride.getTo() != null && ride.getDate() != null) {
-
-                businessLogic.createAlert(ride.getFrom(), ride.getTo(), ride.getDate(), user.getEmail());
+            if (from != null && to != null && date != null) {
+                businessLogic.createAlert(from, to, date, user.getEmail());
                 reservationMessage.setStyle("-fx-text-fill: #188a2e");
                 reservationMessage.setText(StringUtils.translate("AlertCreated"));
+                reservationMessage.setVisible(true);
 
+                // Añadir la nueva alerta a la tabla de alertas en la interfaz de usuario
+                addAlertToTable(new Alerts(from, to, date, user));
                 time(5, reservationMessage);
-
-
             } else {
-
                 reservationMessage.setText(StringUtils.translate("QueryRidesController.PleaseFillInAllFields"));
                 reservationMessage.setVisible(true);
                 reservationMessage.setStyle("-fx-text-fill: #d54242");
                 time(5, reservationMessage);
-
             }
-
-
         } else {
-
             reservationMessage.setText(StringUtils.translate("QueryRidesController.PleaseLogInOrSignUp"));
-
-            time(5, reservationMessage);
-
-
-            reservationMessage.setStyle("-fx-text-fill: #d54242");
             reservationMessage.setVisible(true);
-
-
+            reservationMessage.setStyle("-fx-text-fill: #d54242");
+            time(5, reservationMessage);
         }
     }
+
+    private void addAlertToTable(Alerts alert) {
+
+        // Obtener la lista actual de alertas de la tabla
+        ObservableList<Alerts> alerts = mainGUI.alertWin.controller.getTblAlerts().getItems();
+
+        // Agregar la nueva alerta a la lista
+        alerts.add(alert);
+
+        // Establecer la lista actualizada de alertas en la tabla
+        mainGUI.alertWin.controller.getTblAlerts().setItems(alerts);
+    }
+
+
+//
+//    @FXML
+//    public void onClickCreateAlert(ActionEvent event) {
+//
+//        Alerts ride = new Alerts(comboDepartCity.getValue(), comboArrivalCity.getValue(), Dates.convertToDate(datepicker.getValue()));
+//        User user = mainGUI.getBusinessLogic().getCurrentUser();
+//
+//        if (user instanceof Traveler) {
+//
+//            if (ride.getFrom() != null && ride.getTo() != null && ride.getDate() != null) {
+//
+//                businessLogic.createNewAlert(ride.getFrom(), ride.getTo(), ride.getDate(), user.getEmail());
+//                reservationMessage.setStyle("-fx-text-fill: #188a2e");
+//                reservationMessage.setText(StringUtils.translate("AlertCreated"));
+//
+//                time(5, reservationMessage);
+//
+//
+//            } else {
+//
+//                reservationMessage.setText(StringUtils.translate("QueryRidesController.PleaseFillInAllFields"));
+//                reservationMessage.setVisible(true);
+//                reservationMessage.setStyle("-fx-text-fill: #d54242");
+//                time(5, reservationMessage);
+//
+//            }
+//
+//
+//        } else {
+//
+//            reservationMessage.setText(StringUtils.translate("QueryRidesController.PleaseLogInOrSignUp"));
+//
+//            time(5, reservationMessage);
+//
+//
+//            reservationMessage.setStyle("-fx-text-fill: #d54242");
+//            reservationMessage.setVisible(true);
+//
+//
+//        }
+//    }
 
 
     @FXML
@@ -435,5 +479,10 @@ public class QueryRidesController implements Controller {
     @Override
     public void getAllAlerts() {
 
+    }
+
+    @Override
+    public TableView<Alerts> getTblAlerts() {
+        return null;
     }
 }
