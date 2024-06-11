@@ -27,7 +27,6 @@ public class SignUpController implements Controller {
     @FXML
     private Label hasLogin;
 
-
     @FXML
     private AnchorPane mainWrapper;
     @FXML
@@ -56,8 +55,6 @@ public class SignUpController implements Controller {
     @FXML
     private Text rolTXT;
 
-    private MainGUI.Window queryRideWin;
-
     public SignUpController(BlFacade bl) {
         this.businessLogic = bl;
     }
@@ -73,6 +70,25 @@ public class SignUpController implements Controller {
         this.mainGUI = mainGUI;
     }
 
+    @FXML
+    void initialize() {
+
+        hasLogin.setVisible(false);
+
+        role.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
+            r = newValue;
+
+        });
+
+        role.setItems(FXCollections.observableArrayList("Driver", "Traveler"));
+
+        signUpButt.setStyle("-fx-background-color: #f85774");
+        signUpButt.setText(StringUtils.translate("SignUpController.SignUp"));
+
+
+    }
+
+    //Buttons methods
 
     @FXML
     void onClickSignUp(ActionEvent event) {
@@ -163,23 +179,7 @@ public class SignUpController implements Controller {
         }
     }
 
-    @FXML
-    void initialize() {
-
-        hasLogin.setVisible(false);
-
-        role.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
-            r = newValue;
-
-        });
-
-        role.setItems(FXCollections.observableArrayList("Driver", "Traveler"));
-
-        signUpButt.setStyle("-fx-background-color: #f85774");
-        signUpButt.setText(StringUtils.translate("SignUpController.SignUp"));
-
-
-    }
+    //Auxiliary methods
 
     @Override
     public void changeLanguage() {
@@ -194,10 +194,6 @@ public class SignUpController implements Controller {
 
     }
 
-    @Override
-    public void showHide() {
-
-    }
 
     @Override
     public void time(int s, Label mssg) {
@@ -214,6 +210,9 @@ public class SignUpController implements Controller {
 
     }
 
+
+    //Unused methods
+
     @Override
     public void getAlerts(User t) {
 
@@ -229,13 +228,29 @@ public class SignUpController implements Controller {
         return null;
     }
 
-    public class Window {
-        private Controller controller;
-        private Parent ui;
-    }
 
     @Override
     public void updateComboBoxes(String from) {
+
+    }
+
+    @Override
+    public void clearData() {
+
+    }
+
+    @Override
+    public void showHide() {
+
+    }
+
+    @Override
+    public void loadMessages() {
+
+    }
+
+    @Override
+    public void loadMessages(User u) {
 
     }
 

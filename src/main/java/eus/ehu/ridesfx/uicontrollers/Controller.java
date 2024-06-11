@@ -13,7 +13,6 @@ public interface Controller {
 
     void showHide();
 
-//    void time(String txt, int s, Label mssg);
     void time(int s, Label msg);
 
     void getAlerts(User t);
@@ -22,5 +21,11 @@ public interface Controller {
 
     TableView<Alert> getTblAlerts();
 
+    void loadMessages();
+
+    void loadMessages(User  u);
+
     void updateComboBoxes(String from);
+
+    void clearData();
 }

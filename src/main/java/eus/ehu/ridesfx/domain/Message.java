@@ -1,50 +1,59 @@
 package eus.ehu.ridesfx.domain;
 
-
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
 
 @Entity
 public class Message {
 
-    @Id @GeneratedValue
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
-    private String from;
-    private String to;
+
+    @ManyToOne
+    @JoinColumn(name = "from_user_id")
+    private User from;
+
+    @ManyToOne
+    @JoinColumn(name = "to_user_id")
+    private User to;
+
     private String message;
     private String subject;
 
-    public Message(String from, String to, String message, String subject) {
+    public Message() {
+
+    }
+
+    public Message(User from, User to, String message, String subject) {
         this.from = from;
         this.to = to;
         this.message = message;
         this.subject = subject;
     }
 
-    public Message(String from, String message, String subject) {
-        this.from = from;
-        this.message = message;
-        this.subject = subject;
+    // Getters and Setters
+
+    public int getId() {
+        return id;
     }
 
-    public Message() {
-
+    public void setId(int id) {
+        this.id = id;
     }
 
-    public String getFrom() {
+    public User getFrom() {
         return from;
     }
 
-    public void setFrom(String from) {
+    public void setFrom(User from) {
         this.from = from;
     }
 
-    public String getTo() {
+    public User getTo() {
         return to;
     }
 
-    public void setTo(String to) {
+    public void setTo(User to) {
         this.to = to;
     }
 
@@ -67,11 +76,11 @@ public class Message {
     @Override
     public String toString() {
         return "Message{" +
-                "from='" + from + '\'' +
-                ", to='" + to + '\'' +
+                "id=" + id +
+                ", from=" + from +
+                ", to=" + to +
                 ", message='" + message + '\'' +
                 ", subject='" + subject + '\'' +
                 '}';
     }
-
 }

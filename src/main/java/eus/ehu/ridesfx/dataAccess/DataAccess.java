@@ -75,6 +75,13 @@ public class DataAccess {
         }
     }
 
+    public void reset() {
+        db.getTransaction().begin();
+        db.createQuery("DELETE FROM Ride").executeUpdate();
+        db.createQuery("DELETE FROM Driver").executeUpdate();
+        db.getTransaction().commit();
+    }
+
     public User login(String username, String password) throws UnknownUser {
         TypedQuery<User> query = db.createQuery("SELECT u FROM User u WHERE u.name = :username AND u.password = :password", User.class);
         query.setParameter("username", username);
@@ -86,294 +93,19 @@ public class DataAccess {
         }
     }
 
-    public void reset() {
-        db.getTransaction().begin();
-        db.createQuery("DELETE FROM Ride").executeUpdate();
-        db.createQuery("DELETE FROM Driver").executeUpdate();
-        db.getTransaction().commit();
-    }
-
-    public List<Ride> getRides(String origin, String destination, Date date) {
-        System.out.println(">> DataAccess: getRides origin/dest/date");
-        Vector<Ride> res = new Vector<>();
-
-        TypedQuery<Ride> query = db.createQuery("SELECT ride FROM Ride ride "
-                + "WHERE ride.date=?1 ", Ride.class);
-        query.setParameter(1, date);
-
-
-        return query.getResultList();
-    }
-
-
-    public List<Alert> getAlerts(User user) {
-
-        TypedQuery<Alert> query = db.createQuery("""
-                SELECT alerts FROM Alert alerts WHERE alerts.user = :user""", Alert.class);
-        query.setParameter("user", user);
-
-        return query.getResultList();
-    }
-
-    public Alert getAlert(User user, int alertId) {
-        TypedQuery<Alert> query = db.createQuery(
-                """
-                        SELECT a FROM Alert a WHERE a.id = :alertId AND a.user = :user""", Alert.class);
-        query.setParameter("alertId", alertId);
-        query.setParameter("user", user);
+    public User logIn(String email, String password) throws UnknownUser {
+        User driver;
+        TypedQuery<User> query = db.createQuery("SELECT d FROM User d WHERE d.email =?1 AND d.password =?2",
+                User.class);
+        query.setParameter(1, email);
+        query.setParameter(2, password);
 
         try {
-            return query.getSingleResult();
-        } catch (NoResultException e) {
-            return null; // or handle as needed
-        }
-    }
-
-
-    public List<Alert> getAllAlerts() {
-
-        TypedQuery<Alert> query = db.createQuery("""
-                SELECT alerts FROM Alert alerts""", Alert.class);
-
-        return query.getResultList();
-    }
-
-    public Ride createRide(String from, String to, Date date, int nPlaces, float price, String driverEmail)
-            throws RideAlreadyExistException, RideMustBeLaterThanTodayException {
-        System.out.println(">> DataAccess: createRide=> from= " + from + " to= " + to + " driver=" + driverEmail + " date " + date);
-        try {
-            if (new Date().compareTo(date) > 0) {
-                throw new RideMustBeLaterThanTodayException(
-                        ResourceBundle.getBundle("Etiquetas").getString("CreateRideGUI.ErrorRideMustBeLaterThanToday"));
-            }
-
-            db.getTransaction().begin();
-
-            Driver driver = db.find(Driver.class, driverEmail);
-
-            if (driver == null) {
-                db.getTransaction().rollback();
-                throw new PersistenceException("Driver not found: " + driverEmail);
-            }
-
-            if (driver.doesRideExists(from, to, date)) {
-                db.getTransaction().rollback();
-                throw new RideAlreadyExistException(
-                        ResourceBundle.getBundle("Etiquetas").getString("DataAccess.RideAlreadyExist"));
-            }
-
-            // Create new ride
-            Ride ride = driver.addRide(from, to, date, nPlaces, price);
-            db.persist(ride);
-            db.getTransaction().commit();
-
-            return ride;
-        } catch (NullPointerException e) {
-            db.getTransaction().rollback();
-            throw e; // Optional: or handle the exception more gracefully
-        } catch (RideAlreadyExistException | RideMustBeLaterThanTodayException e) {
-            db.getTransaction().rollback();
-            throw e;
-        }
-    }
-
-    public void initializeDB() {
-        this.reset();
-        db.getTransaction().begin();
-
-        try {
-            Calendar today = Calendar.getInstance();
-            int month = today.get(Calendar.MONTH);
-            int year = today.get(Calendar.YEAR);
-            if (month == 12) {
-                month = 1;
-                year += 1;
-            }
-
-            // Create drivers
-            Driver driver1 = new Driver("driver1@gmail.com", "Aitor Fernandez", "12345", "12345");
-            Driver driver2 = new Driver("driver2@gmail.com", "Ane Gaztañaga", "54321", "54321");
-            Driver driver3 = new Driver("driver3@gmail.com", "Test driver", "12345", "12345");
-
-            // Create travelers
-            Traveler traveler1 = new Traveler("traveler1@gmail.com", "Jose Antonio", "amorch1", "amorch");
-            Traveler traveler2 = new Traveler("traveler2@gmail.com", "Lius Fernando", "54321", "54321");
-
-            // Create Alerts
-            Alert alert1 = new Alert("Donostia", "Bilbo", UtilDate.newDate(year, month + 1, 15), traveler1);
-            db.persist(alert1);
-
-            // Create rides
-            driver1.addRide("Donostia", "Bilbo", UtilDate.newDate(year, month + 1, 15), 4, 7);
-            driver1.addRide("Donostia", "Bilbo", UtilDate.newDate(year, month + 1, 15), 4, 7);
-            driver1.addRide("Donostia", "Gasteiz", UtilDate.newDate(year, month + 1, 6), 4, 8);
-            driver1.addRide("Bilbo", "Donostia", UtilDate.newDate(year, month + 1, 25), 4, 4);
-            driver1.addRide("Donostia", "Iruña", UtilDate.newDate(year, month + 1, 7), 4, 8);
-
-            driver2.addRide("Donostia", "Bilbo", UtilDate.newDate(year, month + 1, 15), 3, 3);
-            driver2.addRide("Bilbo", "Donostia", UtilDate.newDate(year, month + 1, 25), 2, 5);
-            driver2.addRide("Eibar", "Gasteiz", UtilDate.newDate(year, month + 1, 6), 2, 5);
-
-            driver3.addRide("Bilbo", "Donostia", UtilDate.newDate(year, month + 1, 14), 1, 3);
-
-            db.persist(driver1);
-            db.persist(driver2);
-            db.persist(driver3);
-            db.persist(traveler1);
-            db.persist(traveler2);
-
-            db.getTransaction().commit();
-
-            System.out.println("Db initialized");
-        } catch (ConstraintViolationException e) {
-            System.err.println("Constraint violation: " + e.getConstraintName());
-            e.printStackTrace();
-            db.getTransaction().rollback();
-        } catch (PersistenceException e) {
-            System.err.println("Persistence exception: " + e.getMessage());
-            e.printStackTrace();
-            db.getTransaction().rollback();
+            driver = query.getSingleResult();
         } catch (Exception e) {
-            System.err.println("General exception: " + e.getMessage());
-            e.printStackTrace();
-            db.getTransaction().rollback();
+            throw new UnknownUser();
         }
-    }
-
-    private boolean alertExists(Alert alert) {
-        // Método para verificar si una alerta ya existe en la base de datos
-        return db.createQuery("""
-                        SELECT COUNT(a) FROM Alert a WHERE a.from = :departCity AND a.to = :arrivalCity AND a.date = :date""", Long.class)
-                .setParameter("departCity", alert.getFrom())
-                .setParameter("arrivalCity", alert.getTo())
-                .setParameter("date", alert.getDate())
-                .getSingleResult() > 0;
-    }
-
-    public Vector<Date> getEventsMonth(Date date) {
-        System.out.println(">> DataAccess: getEventsMonth");
-        Vector<Date> res = new Vector<>();
-
-        Date firstDayMonthDate = UtilDate.firstDayMonth(date);
-        Date lastDayMonthDate = UtilDate.lastDayMonth(date);
-
-        TypedQuery<Date> query = db.createQuery("SELECT DISTINCT ride.date FROM Ride ride WHERE ride.date BETWEEN :firstDay AND :lastDay", Date.class);
-        query.setParameter("firstDay", firstDayMonthDate);
-        query.setParameter("lastDay", lastDayMonthDate);
-        List<Date> dates = query.getResultList();
-        for (Date d : dates) {
-            System.out.println(d.toString());
-            res.add(d);
-        }
-        return res;
-    }
-
-    public boolean checkComboBox(String city) {
-        TypedQuery<String> query = db.createQuery("SELECT DISTINCT r.toLocation FROM Ride r WHERE r.fromLocation = :city OR r.toLocation = :city ORDER BY r.toLocation", String.class);
-        query.setParameter("city", city);
-        return query.getResultList().isEmpty();
-    }
-
-    public Alert addAlert(String from, String to, Date date, String travelerEmail) {
-        db.getTransaction().begin();
-
-        try {
-            Traveler traveler = db.find(Traveler.class, travelerEmail);
-            if (traveler == null) {
-                throw new PersistenceException("Traveler not found: " + travelerEmail);
-            }
-
-            Alert alert = new Alert(from, to, date);
-            if (alertExists(alert)) {
-                throw new PersistenceException("Alert already exists.");
-            }
-
-            traveler.addAlert(from, to, date);
-            db.persist(traveler);
-            db.getTransaction().commit();
-
-            return alert;
-        } catch (Exception e) {
-            db.getTransaction().rollback();
-            throw new PersistenceException("Error adding alert: " + e.getMessage(), e);
-        }
-    }
-
-    public List<Date> getThisMonthDatesWithRides(String from, String to, Date date) {
-        System.out.println(">> DataAccess: getEventsMonth");
-        List<Date> res = new ArrayList<>();
-
-        Date firstDayMonthDate = UtilDate.firstDayMonth(date);
-        Date lastDayMonthDate = UtilDate.lastDayMonth(date);
-
-
-        TypedQuery<Date> query = db.createQuery("SELECT DISTINCT r.date FROM Ride r WHERE r.fromLocation=?1 AND r.toLocation=?2 AND r.date BETWEEN ?3 and ?4", Date.class);
-
-        query.setParameter(1, from);
-        query.setParameter(2, to);
-        query.setParameter(3, firstDayMonthDate);
-        query.setParameter(4, lastDayMonthDate);
-        List<Date> dates = query.getResultList();
-        for (Date d : dates) {
-            res.add(d);
-        }
-        return res;
-    }
-
-    public void addCitie(String c) {
-        if (c != null) {
-            List<String> departLocations = getDepartCities();
-            departLocations.add(c);
-        }
-    }
-
-    public List<Date> getDatesWithRides(String from, String to) {
-        System.out.println(">> DataAccess: getEventsFromTo");
-        List<Date> res = new ArrayList<>();
-
-        TypedQuery<Date> query = db.createQuery("SELECT DISTINCT r.date FROM Ride r WHERE r.fromLocation=?1 AND r.toLocation=?2", Date.class);
-
-        query.setParameter(1, from);
-        query.setParameter(2, to);
-        List<Date> dates = query.getResultList();
-        for (Date d : dates) {
-            res.add(d);
-        }
-        return res;
-    }
-
-    public void addUser(User user) {
-
-        db.getTransaction().begin();
-        db.persist(user);
-        db.getTransaction().commit();
-
-    }
-
-
-    /**
-     * This method returns all the cities where rides depart
-     *
-     * @return collection of cities
-     */
-    public List<String> getDepartCities() {
-        TypedQuery<String> query = db.createQuery("SELECT DISTINCT r.fromLocation FROM Ride r ORDER BY r.fromLocation", String.class);
-        List<String> cities = query.getResultList();
-        return cities;
-
-    }
-
-    /**
-     * This method returns all the arrival destinations, from all rides that depart from a given city
-     *
-     * @param from the departure location of a ride
-     * @return all the arrival destinations
-     */
-    public List<String> getArrivalCities(String from) {
-        TypedQuery<String> query = db.createQuery("SELECT DISTINCT r.toLocation FROM Ride r WHERE r.fromLocation=?1 ORDER BY r.toLocation", String.class);
-        query.setParameter(1, from);
-        List<String> arrivingCities = query.getResultList();
-        return arrivingCities;
+        return driver;
 
     }
 
@@ -421,21 +153,80 @@ public class DataAccess {
 
     }
 
-    public User logIn(String email, String password) throws UnknownUser {
-        User driver;
-        TypedQuery<User> query = db.createQuery("SELECT d FROM User d WHERE d.email =?1 AND d.password =?2",
+    public void addUser(User user) {
+
+        db.getTransaction().begin();
+        db.persist(user);
+        db.getTransaction().commit();
+
+    }
+
+    public User getD(User u) {
+        return db.find(User.class, u.getEmail());
+    }
+
+    public boolean containsUser(User u) {
+
+        TypedQuery<User> query = db.createQuery("SELECT u FROM User u WHERE u.email =?1",
                 User.class);
-        query.setParameter(1, email);
-        query.setParameter(2, password);
-
-        try {
-            driver = query.getSingleResult();
-        } catch (Exception e) {
-            throw new UnknownUser();
+        query.setParameter(1, u.getEmail());
+        List<User> users = query.getResultList();
+        if (users.size() > 0) {
+            return true;
+        } else {
+            return false;
         }
-        return driver;
+
+    }
+
+    public List<Ride> getRides(String origin, String destination, Date date) {
+        System.out.println(">> DataAccess: getRides origin/dest/date");
+        Vector<Ride> res = new Vector<>();
+
+        TypedQuery<Ride> query = db.createQuery("SELECT ride FROM Ride ride "
+                + "WHERE ride.date=?1 ", Ride.class);
+        query.setParameter(1, date);
 
 
+        return query.getResultList();
+    }
+
+    public Ride createRide(String from, String to, Date date, int nPlaces, float price, String driverEmail) throws RideAlreadyExistException, RideMustBeLaterThanTodayException {
+        System.out.println(">> DataAccess: createRide=> from= " + from + " to= " + to + " driver=" + driverEmail + " date " + date);
+        try {
+            if (new Date().compareTo(date) > 0) {
+                throw new RideMustBeLaterThanTodayException(
+                        ResourceBundle.getBundle("Etiquetas").getString("CreateRideGUI.ErrorRideMustBeLaterThanToday"));
+            }
+
+            db.getTransaction().begin();
+
+            Driver driver = db.find(Driver.class, driverEmail);
+
+            if (driver == null) {
+                db.getTransaction().rollback();
+                throw new PersistenceException("Driver not found: " + driverEmail);
+            }
+
+            if (driver.doesRideExists(from, to, date)) {
+                db.getTransaction().rollback();
+                throw new RideAlreadyExistException(
+                        ResourceBundle.getBundle("Etiquetas").getString("DataAccess.RideAlreadyExist"));
+            }
+
+            // Create new ride
+            Ride ride = driver.addRide(from, to, date, nPlaces, price);
+            db.persist(ride);
+            db.getTransaction().commit();
+
+            return ride;
+        } catch (NullPointerException e) {
+            db.getTransaction().rollback();
+            throw e; // Optional: or handle the exception more gracefully
+        } catch (RideAlreadyExistException | RideMustBeLaterThanTodayException e) {
+            db.getTransaction().rollback();
+            throw e;
+        }
     }
 
     public void takeRide(Alert a, int nP, float p, User u) {
@@ -445,37 +236,23 @@ public class DataAccess {
 
         Driver driver = (Driver) user;
 
-        // Si el Driver no está gestionado por la sesión, usa merge
         driver = db.merge(driver);
 
-        // Usa el método addRide del driver para crear y añadir un nuevo Ride
         Ride ride = driver.addRide(a.getFrom(), a.getTo(), a.getDate(), nP, p);
 
-        // Guarda el nuevo Ride en la base de datos
         db.persist(ride);
-
-        // Actualiza el driver con el nuevo Ride añadido
         db.merge(driver);
 
-        // Elimina la alerta de la base de datos
         Alert alertToRemove = db.find(Alert.class, a.getId());
         if (alertToRemove != null) {
             db.remove(alertToRemove);
         }
 
-        // Realiza el commit de la transacción
         db.getTransaction().commit();
     }
 
-
-
-
-    public User getD(User u) {
-        return db.find(User.class, u.getEmail());
-    }
-
     private boolean rideExists(Ride ride) {
-        // Método para verificar si un ride ya existe en la base de datos
+
         return db.createQuery("SELECT COUNT(r) FROM Ride r WHERE r.fromLocation = :from AND r.toLocation = :to AND r.date = :date AND r.driver = :driver", Long.class)
                 .setParameter("from", ride.getFromLocation())
                 .setParameter("to", ride.getToLocation())
@@ -493,32 +270,109 @@ public class DataAccess {
 
     }
 
-    public boolean containsUser(User u) {
 
-        TypedQuery<User> query = db.createQuery("SELECT u FROM User u WHERE u.email =?1",
-                User.class);
-        query.setParameter(1, u.getEmail());
-        List<User> users = query.getResultList();
-        if (users.size() > 0) {
-            return true;
-        } else {
-            return false;
+    /**
+     * This method returns all the cities where rides depart
+     *
+     * @return collection of cities
+     */
+
+    public List<String> getDepartCities() {
+        TypedQuery<String> query = db.createQuery("SELECT DISTINCT r.fromLocation FROM Ride r ORDER BY r.fromLocation", String.class);
+        List<String> cities = query.getResultList();
+        return cities;
+
+    }
+
+    /**
+     * This method returns all the arrival destinations, from all rides that depart from a given city
+     *
+     * @param from the departure location of a ride
+     * @return all the arrival destinations
+     */
+    public List<String> getArrivalCities(String from) {
+        TypedQuery<String> query = db.createQuery("SELECT DISTINCT r.toLocation FROM Ride r WHERE r.fromLocation=?1 ORDER BY r.toLocation", String.class);
+        query.setParameter(1, from);
+        List<String> arrivingCities = query.getResultList();
+        return arrivingCities;
+
+    }
+
+    public void addCitie(String c) {
+        if (c != null) {
+            List<String> departLocations = getDepartCities();
+            departLocations.add(c);
         }
-
     }
 
-    public void sendMessage(String to, String subject, String message) {
-
+    public Alert addAlert(String from, String to, Date date, String travelerEmail) {
         db.getTransaction().begin();
-        db.persist(new Message(to, subject, message));
-        db.getTransaction().commit();
 
+        try {
+            Traveler traveler = db.find(Traveler.class, travelerEmail);
+            if (traveler == null) {
+                throw new PersistenceException("Traveler not found: " + travelerEmail);
+            }
+
+            Alert alert = new Alert(from, to, date);
+            if (alertExists(alert)) {
+                throw new PersistenceException("Alert already exists.");
+            }
+
+            traveler.addAlert(from, to, date);
+            db.persist(traveler);
+            db.getTransaction().commit();
+
+            return alert;
+        } catch (Exception e) {
+            db.getTransaction().rollback();
+            throw new PersistenceException("Error adding alert: " + e.getMessage(), e);
+        }
     }
 
-    public Alert getAlert(User user, Long alertId) {
+    public List<Alert> getAlerts(User user) {
+
+        TypedQuery<Alert> query = db.createQuery("""
+                SELECT alerts FROM Alert alerts WHERE alerts.user = :user""", Alert.class);
+        query.setParameter("user", user);
+
+        return query.getResultList();
+    }
+
+    public Alert getAlert(User user, int alertId) {
         TypedQuery<Alert> query = db.createQuery(
                 """
                         SELECT a FROM Alert a WHERE a.id = :alertId AND a.user = :user""", Alert.class);
+        query.setParameter("alertId", alertId);
+        query.setParameter("user", user);
+
+        try {
+            return query.getSingleResult();
+        } catch (NoResultException e) {
+            return null; // or handle as needed
+        }
+    }
+
+    public List<Alert> getAllAlerts() {
+
+        TypedQuery<Alert> query = db.createQuery("""
+                SELECT alerts FROM Alert alerts""", Alert.class);
+
+        return query.getResultList();
+    }
+
+    private boolean alertExists(Alert alert) {
+        // Método para verificar si una alerta ya existe en la base de datos
+        return db.createQuery("""
+                        SELECT COUNT(a) FROM Alert a WHERE a.from = :departCity AND a.to = :arrivalCity AND a.date = :date""", Long.class)
+                .setParameter("departCity", alert.getFrom())
+                .setParameter("arrivalCity", alert.getTo())
+                .setParameter("date", alert.getDate())
+                .getSingleResult() > 0;
+    }
+
+    public Alert getAlert(User user, Long alertId) {
+        TypedQuery<Alert> query = db.createQuery("SELECT a FROM Alert a WHERE a.id = :alertId AND a.user = :user", Alert.class);
         query.setParameter("alertId", alertId);
         query.setParameter("user", user);
 
@@ -564,12 +418,140 @@ public class DataAccess {
         }
     }
 
-//    public void cancelAlert(Alerts r, Long id) {
-//
-//        db.getTransaction().begin();
-//        db.remove(r);
-//        db.getTransaction().commit();
-//
-//    }
+    public Vector<Date> getEventsMonth(Date date) {
+        System.out.println(">> DataAccess: getEventsMonth");
+        Vector<Date> res = new Vector<>();
 
+        Date firstDayMonthDate = UtilDate.firstDayMonth(date);
+        Date lastDayMonthDate = UtilDate.lastDayMonth(date);
+
+        TypedQuery<Date> query = db.createQuery("SELECT DISTINCT ride.date FROM Ride ride WHERE ride.date BETWEEN :firstDay AND :lastDay", Date.class);
+        query.setParameter("firstDay", firstDayMonthDate);
+        query.setParameter("lastDay", lastDayMonthDate);
+        List<Date> dates = query.getResultList();
+        for (Date d : dates) {
+            System.out.println(d.toString());
+            res.add(d);
+        }
+        return res;
+    }
+
+    public boolean checkComboBox(String city) {
+        TypedQuery<String> query = db.createQuery("SELECT DISTINCT r.toLocation FROM Ride r WHERE r.fromLocation = :city OR r.toLocation = :city ORDER BY r.toLocation", String.class);
+        query.setParameter("city", city);
+        return query.getResultList().isEmpty();
+    }
+
+    public List<Date> getThisMonthDatesWithRides(String from, String to, Date date) {
+        System.out.println(">> DataAccess: getEventsMonth");
+        List<Date> res = new ArrayList<>();
+
+        Date firstDayMonthDate = UtilDate.firstDayMonth(date);
+        Date lastDayMonthDate = UtilDate.lastDayMonth(date);
+
+
+        TypedQuery<Date> query = db.createQuery("SELECT DISTINCT r.date FROM Ride r WHERE r.fromLocation=?1 AND r.toLocation=?2 AND r.date BETWEEN ?3 and ?4", Date.class);
+
+        query.setParameter(1, from);
+        query.setParameter(2, to);
+        query.setParameter(3, firstDayMonthDate);
+        query.setParameter(4, lastDayMonthDate);
+        List<Date> dates = query.getResultList();
+        for (Date d : dates) {
+            res.add(d);
+        }
+        return res;
+    }
+
+    public List<Date> getDatesWithRides(String from, String to) {
+        System.out.println(">> DataAccess: getEventsFromTo");
+        List<Date> res = new ArrayList<>();
+
+        TypedQuery<Date> query = db.createQuery("SELECT DISTINCT r.date FROM Ride r WHERE r.fromLocation=?1 AND r.toLocation=?2", Date.class);
+
+        query.setParameter(1, from);
+        query.setParameter(2, to);
+        List<Date> dates = query.getResultList();
+        for (Date d : dates) {
+            res.add(d);
+        }
+        return res;
+    }
+
+    public void sendMessage(User from, User to, String subject, String message) {
+
+        db.getTransaction().begin();
+        db.persist(new Message(from, to, subject, message));
+        db.getTransaction().commit();
+
+    }
+
+    public void initializeDB() {
+        this.reset();
+        db.getTransaction().begin();
+
+        Calendar today = Calendar.getInstance();
+        int month = today.get(Calendar.MONTH);
+        int year = today.get(Calendar.YEAR);
+        if (month == 12) {
+            month = 1;
+            year += 1;
+        }
+
+        // Create drivers
+        Driver driver1 = new Driver("driver1@gmail.com", "Aitor Fernandez", "12345", "12345");
+        Driver driver2 = new Driver("driver2@gmail.com", "Ane Gaztañaga", "54321", "54321");
+        Driver driver3 = new Driver("driver3@gmail.com", "Test driver", "12345", "12345");
+
+        // Create travelers
+        Traveler traveler1 = new Traveler("traveler1@gmail.com", "Jose Antonio", "amorch1", "amorch");
+        Traveler traveler2 = new Traveler("traveler2@gmail.com", "Lius Fernando", "54321", "54321");
+
+        // Create Alerts
+        Alert alert1 = new Alert("Donostia", "Bilbo", UtilDate.newDate(year, month + 1, 15), traveler1);
+        db.persist(alert1);
+
+        // Create rides
+        driver1.addRide("Donostia", "Bilbo", UtilDate.newDate(year, month + 1, 15), 4, 7);
+        driver1.addRide("Donostia", "Bilbo", UtilDate.newDate(year, month + 1, 15), 4, 7);
+        driver1.addRide("Donostia", "Gasteiz", UtilDate.newDate(year, month + 1, 6), 4, 8);
+        driver1.addRide("Bilbo", "Donostia", UtilDate.newDate(year, month + 1, 25), 4, 4);
+        driver1.addRide("Donostia", "Iruña", UtilDate.newDate(year, month + 1, 7), 4, 8);
+
+        driver2.addRide("Donostia", "Bilbo", UtilDate.newDate(year, month + 1, 15), 3, 3);
+        driver2.addRide("Bilbo", "Donostia", UtilDate.newDate(year, month + 1, 25), 2, 5);
+        driver2.addRide("Eibar", "Gasteiz", UtilDate.newDate(year, month + 1, 6), 2, 5);
+
+        driver3.addRide("Bilbo", "Donostia", UtilDate.newDate(year, month + 1, 14), 1, 3);
+
+        Message message = new Message(traveler2, driver1, "Hello, can i take my car with me in the car?", "Doubt");
+
+        db.persist(message);
+        db.persist(driver1);
+        db.persist(driver2);
+        db.persist(driver3);
+        db.persist(traveler1);
+        db.persist(traveler2);
+
+        db.getTransaction().commit();
+    }
+
+
+    public List<Message> getMessages(){
+        TypedQuery<Message> query = db.createQuery("SELECT m FROM Message m", Message.class);
+        return query.getResultList();
+    }
+
+    public User getUserByEmail(String email) {
+
+        TypedQuery<User> query = db.createQuery("SELECT u FROM User u WHERE u.email = :email", User.class);
+        return query.getSingleResult();
+
+    }
+
+    public List<Message> getMessagesFromUser(User u){
+        TypedQuery<Message> query = db.createQuery("SELECT m FROM Message m WHERE m.to = :u", Message.class);
+        query.setParameter("u", u);
+        return query.getResultList();
+    }
 }

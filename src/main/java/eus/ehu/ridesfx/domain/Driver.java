@@ -23,7 +23,7 @@ public class Driver extends User implements Serializable {
     public Driver(String email, String name) {
 
         super(name, email);
-        
+
     }
 
     public Driver(String email, String name, String password) {
@@ -59,8 +59,13 @@ public class Driver extends User implements Serializable {
         this.rides = rides;
     }
 
+    public String getRepPassword() {
+        return repPassword;
+    }
 
-    //public String toString() {        return email + ";" + rides;    }
+    public void setRepPassword(String repPassword) {
+        this.repPassword = repPassword;
+    }
 
     /**
      * This method creates a new ride for the driver
@@ -74,7 +79,6 @@ public class Driver extends User implements Serializable {
         rides.add(ride);
         return ride;
     }
-
 
 
     /**

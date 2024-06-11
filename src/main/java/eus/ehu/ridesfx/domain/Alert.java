@@ -42,20 +42,6 @@ public class Alert {
         this.user = traveler;
     }
 
-//    public Alerts(String from, String to, Date date, Traveler traveler) {
-//        this.from = from;
-//        this.to = to;
-//        this.date = date;
-//        this.user = traveler;
-//    }
-
-    public Ride getRideFromAlerts(Alert alert) {
-        String from = alert.getFrom();
-        String to = alert.getTo();
-        Date date = alert.getDate();
-        return new Ride(from, to, date);
-    }
-
     public Long getId() {
         return id;
     }

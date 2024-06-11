@@ -49,6 +49,24 @@ public class LoginController implements Controller {
     }
 
     @FXML
+    void initialize() {
+
+        logInButt.setStyle("-fx-background-color: #f85774;");
+        hasLogin.setVisible(false);
+        EmailTXT.setText(StringUtils.translate("Email"));
+        PasswordTXT.setText(StringUtils.translate("Password"));
+
+    }
+
+
+    @Override
+    public void setMainApp(MainGUI mainGUI) {
+        this.mGUI = mainGUI;
+    }
+
+    //Buttons methods
+
+    @FXML
     void onClickLogIn(ActionEvent event) {
 
         if (logInButt.getText() == null || password.getText() == null) {
@@ -89,7 +107,7 @@ public class LoginController implements Controller {
 
                         mGUI.mGUIC.getQueryRidesBtn().setVisible(false);
                         mGUI.mGUIC.getSeeAlertsBttn().setVisible(true);
-                        mGUI.mGUIC.getCreateRidesBtn().setVisible(false);
+                        mGUI.mGUIC.getCreateRidesBtn().setVisible(true);
                         mGUI.mGUIC.getLogInButton().setVisible(false);
                         mGUI.mGUIC.getSignUpButton().setVisible(false);
                         mGUI.mGUIC.getExitBttn().setVisible(true);
@@ -117,22 +135,7 @@ public class LoginController implements Controller {
 
     }
 
-
-    @FXML
-    void initialize() {
-
-        logInButt.setStyle("-fx-background-color: #f85774;");
-        hasLogin.setVisible(false);
-        EmailTXT.setText(StringUtils.translate("Email"));
-        PasswordTXT.setText(StringUtils.translate("Password"));
-
-    }
-
-
-    @Override
-    public void setMainApp(MainGUI mainGUI) {
-        this.mGUI = mainGUI;
-    }
+    //Auxiliar methods
 
     @Override
     public void changeLanguage() {
@@ -145,12 +148,12 @@ public class LoginController implements Controller {
     }
 
     @Override
-    public void time(int s, Label mssg) {
+    public void time(int s, Label msg) {
 
         Thread thread = new Thread(() -> {
             try {
                 Thread.sleep(s * 1000);
-                Platform.runLater(() -> mssg.setVisible(false));
+                Platform.runLater(() -> msg.setVisible(false));
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
@@ -158,6 +161,8 @@ public class LoginController implements Controller {
         thread.start();
 
     }
+
+    //Unused methods
 
     @Override
     public void getAlerts(User t) {
@@ -181,6 +186,21 @@ public class LoginController implements Controller {
 
     @Override
     public void updateComboBoxes(String from) {
+
+    }
+
+    @Override
+    public void clearData() {
+
+    }
+
+    @Override
+    public void loadMessages() {
+
+    }
+
+    @Override
+    public void loadMessages(User u) {
 
     }
 

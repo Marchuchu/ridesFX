@@ -51,9 +51,6 @@ public class AlertTableController implements Controller {
     private MainGUI mGUI;
     private BlFacade businessLogic;
 
-    public TableView<Alert> getTblAlerts() {
-        return tblAlerts;
-    }
 
     public AlertTableController(BlFacade bl, MainGUI mainGUIC) {
         this.businessLogic = bl;
@@ -63,6 +60,31 @@ public class AlertTableController implements Controller {
     public AlertTableController(BlFacade bl) {
         this.businessLogic = bl;
     }
+
+    @Override
+    public void setMainApp(MainGUI mainGUI) {
+        this.mGUI = mainGUI;
+    }
+
+
+    @FXML
+    void initialize() {
+        price.setText("0");
+        tblAlerts.setItems(observableArray);
+
+        setUpAlertsSelection();
+        showHide();
+        changeLanguage();
+
+        // Configurar las columnas de la tabla
+        date.setCellValueFactory(new PropertyValueFactory<>("date"));
+        from.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getFrom()));
+        to.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getTo()));
+        user.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getUser().getName()));
+    }
+
+
+    //Buttons methods
 
     @FXML
     void onClickCancelAlert(ActionEvent event) {
@@ -95,37 +117,6 @@ public class AlertTableController implements Controller {
         time(5, message);
     }
 
-
-//
-//    @FXML
-//    void onClickCancelAlert(ActionEvent event) {
-//        Alerts r = tblAlerts.getSelectionModel().getSelectedItem();
-//
-//        takeRideBttn.setStyle("-fx-background-color: #f85774");
-//        cancelAlertBttn.setStyle("-fx-background-color: #f85774");
-//
-//        if (businessLogic.getCurrentUser() instanceof Traveler && r != null) {
-//            businessLogic.cancelAlert(r);
-//            takeRideBttn.setVisible(false);
-//            cancelAlertBttn.setVisible(true);
-//        } else if (r == null) {
-//            message.setText(translate("YouMustSelectAnAlertToCancel"));
-//            time(5, message);
-//            cancelAlertBttn.setVisible(true);
-//            takeRideBttn.setVisible(false);
-//        } else if (businessLogic.getCurrentUser() instanceof Driver) {
-//            message.setText("Choose the ride you want to take");
-//            time(5, message);
-//            cancelAlertBttn.setVisible(false);
-//            takeRideBttn.setVisible(true);
-//        }
-//
-//        takeRideBttn.setVisible(false);
-//        cancelAlertBttn.setStyle("-fx-background-color: #f85774");
-//        message.setText(translate("ChooseTheRideYouWantToTake"));
-//        time(5, message);
-//    }
-
     @FXML
     void onClickTakeRide(ActionEvent event) {
         Alert r = tblAlerts.getSelectionModel().getSelectedItem();
@@ -146,18 +137,8 @@ public class AlertTableController implements Controller {
 
     }
 
-    private void setUpAlertsSelection() {
-        tblAlerts.getSelectionModel().selectedItemProperty().addListener((obs, oldSelection, newSelection) -> {
-            if (newSelection != null) {
-                System.out.println("Selected alert: " + newSelection);
-            }
-        });
-    }
 
-    @Override
-    public void setMainApp(MainGUI mainGUI) {
-        this.mGUI = mainGUI;
-    }
+    //Auxiliar methods
 
     @Override
     public void changeLanguage() {
@@ -172,22 +153,6 @@ public class AlertTableController implements Controller {
 
     String translate(String txt) {
         return ResourceBundle.getBundle("Etiquetas").getString(txt);
-    }
-
-    @FXML
-    void initialize() {
-        price.setText("0");
-        tblAlerts.setItems(observableArray);
-
-        setUpAlertsSelection();
-        showHide();
-        changeLanguage();
-
-        // Configurar las columnas de la tabla
-        date.setCellValueFactory(new PropertyValueFactory<>("date"));
-        from.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getFrom()));
-        to.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getTo()));
-        user.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getUser().getName()));
     }
 
     public void showHide() {
@@ -219,6 +184,14 @@ public class AlertTableController implements Controller {
         thread.start();
     }
 
+    private void setUpAlertsSelection() {
+        tblAlerts.getSelectionModel().selectedItemProperty().addListener((obs, oldSelection, newSelection) -> {
+            if (newSelection != null) {
+                System.out.println("Selected alert: " + newSelection);
+            }
+        });
+    }
+
     @Override
     public void getAlerts(User u) {
         List<Alert> alerts = businessLogic.getAlerts(u);
@@ -230,8 +203,32 @@ public class AlertTableController implements Controller {
         List<Alert> alerts = businessLogic.getAllAlerts();
         observableArray.setAll(alerts);
     }
+
+    public TableView<Alert> getTblAlerts() {
+        return tblAlerts;
+    }
+
+
+
+    //Unused methods
+
     @Override
     public void updateComboBoxes(String from) {
+
+    }
+
+    @Override
+    public void clearData() {
+
+    }
+
+    @Override
+    public void loadMessages() {
+
+    }
+
+    @Override
+    public void loadMessages(User u) {
 
     }
 }

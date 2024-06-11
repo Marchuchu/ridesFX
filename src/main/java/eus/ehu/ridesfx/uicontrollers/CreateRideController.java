@@ -67,6 +67,49 @@ public class CreateRideController implements Controller {
         this.businessLogic = bl;
     }
 
+    @FXML
+    void initialize() {
+        btnCreateRide.setStyle("-fx-background-color: #f85774");
+        lblErrorMessage.setText("");
+
+        datePicker.setOnMouseClicked(e -> {
+            DatePickerSkin skin = (DatePickerSkin) datePicker.getSkin();
+            skin.getPopupContent().lookupAll(".button").forEach(node -> {
+                node.setOnMouseClicked(event -> {
+                    List<Node> labels = skin.getPopupContent().lookupAll(".label").stream().toList();
+                    String month = ((Label) (labels.get(0))).getText();
+                    String year = ((Label) (labels.get(1))).getText();
+                    YearMonth ym = Dates.getYearMonth(month + " " + year);
+                });
+            });
+        });
+
+        datePicker.setDayCellFactory(new Callback<DatePicker, DateCell>() {
+            @Override
+            public DateCell call(DatePicker param) {
+                return new DateCell() {
+                    @Override
+                    public void updateItem(LocalDate item, boolean empty) {
+                        super.updateItem(item, empty);
+                        if (!empty && item != null) {
+                            if (holidays.contains(item)) {
+                                this.setStyle("-fx-background-color: #f85774");
+                            }
+                        }
+                    }
+                };
+            }
+        });
+
+        datePicker.setOnAction(actionEvent -> {
+        });
+    }
+
+    @Override
+    public void setMainApp(MainGUI mainGUI) {
+        this.mainGUI = mainGUI;
+    }
+
     private void clearErrorLabels() {
         lblErrorMessage.setText("");
         lblErrorMessage.getStyleClass().clear();
@@ -78,6 +121,7 @@ public class CreateRideController implements Controller {
         lblErrorMessage.setText(message);
     }
 
+    //Buttons methods
 
     @FXML
     void createRideClick(ActionEvent e) {
@@ -185,48 +229,8 @@ public class CreateRideController implements Controller {
 
     }
 
-    @FXML
-    void initialize() {
-        btnCreateRide.setStyle("-fx-background-color: #f85774");
-        lblErrorMessage.setText("");
 
-        datePicker.setOnMouseClicked(e -> {
-            DatePickerSkin skin = (DatePickerSkin) datePicker.getSkin();
-            skin.getPopupContent().lookupAll(".button").forEach(node -> {
-                node.setOnMouseClicked(event -> {
-                    List<Node> labels = skin.getPopupContent().lookupAll(".label").stream().toList();
-                    String month = ((Label) (labels.get(0))).getText();
-                    String year = ((Label) (labels.get(1))).getText();
-                    YearMonth ym = Dates.getYearMonth(month + " " + year);
-                });
-            });
-        });
-
-        datePicker.setDayCellFactory(new Callback<DatePicker, DateCell>() {
-            @Override
-            public DateCell call(DatePicker param) {
-                return new DateCell() {
-                    @Override
-                    public void updateItem(LocalDate item, boolean empty) {
-                        super.updateItem(item, empty);
-                        if (!empty && item != null) {
-                            if (holidays.contains(item)) {
-                                this.setStyle("-fx-background-color: #f85774");
-                            }
-                        }
-                    }
-                };
-            }
-        });
-
-        datePicker.setOnAction(actionEvent -> {
-        });
-    }
-
-    @Override
-    public void setMainApp(MainGUI mainGUI) {
-        this.mainGUI = mainGUI;
-    }
+    //Auxiliar methods
 
     @Override
     public void changeLanguage() {
@@ -238,22 +242,21 @@ public class CreateRideController implements Controller {
         arrivalCity.setText(StringUtils.translate("ArrivalCity"));
     }
 
-    @Override
-    public void showHide() {
-    }
 
     @Override
-    public void time(int s, Label mssg) {
+    public void time(int s, Label msg) {
         Thread thread = new Thread(() -> {
             try {
                 Thread.sleep(s * 1000);
-                Platform.runLater(() -> mssg.setVisible(false));
+                Platform.runLater(() -> msg.setVisible(false));
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
         });
         thread.start();
     }
+
+    //Unused methods
 
     @Override
     public void getAlerts(User t) {
@@ -271,7 +274,27 @@ public class CreateRideController implements Controller {
     }
 
     @Override
+    public void showHide() {
+
+    }
+
+    @Override
     public void updateComboBoxes(String from) {
+
+    }
+
+    @Override
+    public void clearData() {
+
+    }
+
+    @Override
+    public void loadMessages() {
+
+    }
+
+    @Override
+    public void loadMessages(User u) {
 
     }
 }

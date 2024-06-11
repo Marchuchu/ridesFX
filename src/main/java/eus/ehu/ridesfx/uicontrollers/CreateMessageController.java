@@ -49,43 +49,6 @@ public class CreateMessageController implements Controller {
         this.mainGUI = mainGUI;
     }
 
-
-    @FXML
-    void onClickSendMessage(ActionEvent event) {
-
-
-        if (toBox.getText().isEmpty() || subjectBox.getText().isEmpty() || messageField.getText().isEmpty()) {
-            errorMessage.setVisible(true);
-            errorMessage.setText(StringUtils.translate("CreateMessageController.EmptyFields"));
-
-            time(5, errorMessage);
-
-
-            return;
-        } else if (!toBox.getText().contains("@")) {
-
-            errorMessage.setText(StringUtils.translate("CreateMessageController.InvalidEmail"));
-
-            time(5, errorMessage);
-
-
-        } else {
-
-
-            businessLogic.sendMessage(toBox.getText(), subjectBox.getText(), messageField.getText());
-            errorMessage.setText(StringUtils.translate("CreateMessageController.MessageSent"));
-
-            toBox.setText("");
-            subjectBox.setText("");
-            messageField.setText("");
-
-            time(5, errorMessage);
-
-        }
-
-
-    }
-
     @FXML
     void initialize() {
 
@@ -101,6 +64,42 @@ public class CreateMessageController implements Controller {
 
     }
 
+    //Buttons methods
+
+    @FXML
+    void onClickSendMessage(ActionEvent event) {
+
+
+        if (toBox.getText().isEmpty() || subjectBox.getText().isEmpty() || messageField.getText().isEmpty()) {
+            errorMessage.setVisible(true);
+            errorMessage.setText(StringUtils.translate("CreateMessageController.EmptyFields"));
+
+            time(5, errorMessage);
+
+        } else if (!toBox.getText().contains("@")) {
+
+            errorMessage.setText(StringUtils.translate("CreateMessageController.InvalidEmail"));
+
+            time(5, errorMessage);
+
+
+        } else {
+
+            businessLogic.sendMessage(businessLogic.getCurrentUser().getEmail(), toBox.getText(), subjectBox.getText(), messageField.getText());
+            errorMessage.setText(StringUtils.translate("CreateMessageController.MessageSent"));
+
+            toBox.setText("");
+            subjectBox.setText("");
+            messageField.setText("");
+
+            time(5, errorMessage);
+
+        }
+
+
+    }
+
+    //Other methods
 
     @Override
     public void changeLanguage() {
@@ -115,10 +114,6 @@ public class CreateMessageController implements Controller {
 
     }
 
-    @Override
-    public void showHide() {
-
-    }
 
     @Override
     public void time(int s, Label msg) {
@@ -137,6 +132,8 @@ public class CreateMessageController implements Controller {
 
     }
 
+    //Unused methods
+
     @Override
     public void getAlerts(User t) {
 
@@ -153,7 +150,27 @@ public class CreateMessageController implements Controller {
     }
 
     @Override
+    public void showHide() {
+
+    }
+
+    @Override
     public void updateComboBoxes(String from) {
+
+    }
+
+    @Override
+    public void clearData() {
+
+    }
+
+    @Override
+    public void loadMessages() {
+
+    }
+
+    @Override
+    public void loadMessages(User u) {
 
     }
 }

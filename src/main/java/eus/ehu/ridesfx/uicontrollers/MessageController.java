@@ -13,33 +13,33 @@ import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
+import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.AnchorPane;
+import java.util.List;
+
 import javafx.scene.text.Text;
 
 public class MessageController implements Controller {
 
     BlFacade businessLogic;
     MainGUI mainGUI;
-    @FXML
-    private ResourceBundle resources;
-    @FXML
-    private URL location;
+
     @FXML
     private AnchorPane mainWrapper;
-    @FXML
-    private Text errorM;
     @FXML
     private Label errorMessage;
     @FXML
     private TextArea messageTXT;
     @FXML
+    private TableColumn<Message, Integer> idColumn;
+    @FXML
     private TableView<Message> messageTable;
     @FXML
-    private TableColumn<Message, String> From;
+    private TableColumn<Message, String> fromColumn;
     @FXML
-    private TableColumn<Message, String> Message;
+    private TableColumn<Message, String> messageColumn;
     @FXML
-    private TableColumn<Message, String> Subject;
+    private TableColumn<Message, String> subjectColumn;
     @FXML
     private Button seeMessageBttn;
     @FXML
@@ -56,50 +56,37 @@ public class MessageController implements Controller {
     }
 
     @FXML
-    void onClickSeeMessage(ActionEvent event) {
-
-        Message message = messageTable.getSelectionModel().getSelectedItem();
-
-        if (message == null) {
-            errorMessage.setText(StringUtils.translate("MessageController.selectMessage"));
-
-            time(5,errorMessage);
-//
-//            Thread thread = new Thread(() -> {
-//                try {
-//                    Thread.sleep(5000);
-//                    Platform.runLater(() -> errorMessage.setVisible(false));
-//                } catch (InterruptedException e) {
-//                    e.printStackTrace();
-//                }
-//            });
-//            thread.start();
-
-
-            errorMessage.setVisible(true);
-            return;
-        } else {
-
-            messageTXT.setText(message.getMessage());
-
-        }
-
-    }
-
-    @FXML
-    void onClickSendNewMessage(ActionEvent event) {
-
-        mainGUI.showScene("Send Message");
-
-    }
-
-    @FXML
     void initialize() {
+
+        idColumn.setCellValueFactory(new PropertyValueFactory<>("id"));
+        fromColumn.setCellValueFactory(new PropertyValueFactory<>("from"));
+        subjectColumn.setCellValueFactory(new PropertyValueFactory<>("subject"));
+        messageColumn.setCellValueFactory(new PropertyValueFactory<>("message"));
+
 
         seeMessageBttn.setStyle("-fx-background-color: #f85774");
         sendNewMessageBttn.setStyle("-fx-background-color: #f85774");
         errorMessage.setVisible(false);
 
+        messageTXT.setEditable(false);
+
+        loadMessages();
+
+
+    }
+
+    @Override
+    public void loadMessages() {
+
+        List<Message> messages = businessLogic.getAllMessages();
+        messageTable.getItems().setAll(messages);
+    }
+
+    @Override
+    public void loadMessages(User u) {
+
+        List<Message> messages = businessLogic.getAllMessagesFromUser(u);
+        messageTable.getItems().setAll(messages);
 
     }
 
@@ -110,24 +97,51 @@ public class MessageController implements Controller {
 
     }
 
+    //Buttons methods
+
+    @FXML
+    void onClickSeeMessage(ActionEvent event) {
+        Message selectedMessage = messageTable.getSelectionModel().getSelectedItem();
+        if (selectedMessage == null) {
+            errorMessage.setText(StringUtils.translate("MessageController.selectMessage"));
+            time(5, errorMessage);
+            errorMessage.setVisible(true);
+        } else {
+            messageTXT.setText(selectedMessage.getMessage());
+        }
+    }
+
+
+
+    @FXML
+    void onClickSendNewMessage(ActionEvent event) {
+
+        mainGUI.showScene("Send Message");
+
+        mainGUI.mGUIC.getSeeMessagesBttn().setVisible(true);
+        mainGUI.mGUIC.getCreateRidesBtn().setVisible(false);
+        mainGUI.mGUIC.getSeeAlertsBttn().setVisible(false);
+
+
+    }
+
+    //Auxiliar methods
+
     @Override
     public void changeLanguage() {
 
         seeMessageBttn.setText(StringUtils.translate("SeeMessage"));
         sendNewMessageBttn.setText(StringUtils.translate("SendNewMessage"));
         errorMessage.setText(StringUtils.translate("MessageController.selectMessage"));
-        From.setText(StringUtils.translate("From"));
-        Message.setText(StringUtils.translate("Message"));
-        Subject.setText(StringUtils.translate("Subject"));
+        fromColumn.setText(StringUtils.translate("From"));
+        messageColumn.setText(StringUtils.translate("Message"));
+        subjectColumn.setText(StringUtils.translate("Subject"));
 
     }
+
 
     @Override
-    public void showHide() {
-
-    }
-
-    @Override    public void time(int s, Label msg) {
+    public void time(int s, Label msg) {
 
         Thread thread = new Thread(() -> {
             try {
@@ -140,6 +154,8 @@ public class MessageController implements Controller {
         thread.start();
 
     }
+
+    //Unused methods
 
     @Override
     public void getAlerts(User t) {
@@ -160,4 +176,16 @@ public class MessageController implements Controller {
     public void updateComboBoxes(String from) {
 
     }
+
+    @Override
+    public void clearData() {
+
+    }
+
+    @Override
+    public void showHide() {
+
+    }
+
+
 }

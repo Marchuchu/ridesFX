@@ -33,23 +33,15 @@ public class ExitController implements Controller {
         this.mainGUI = mainGUI;
     }
 
-    @Override
-    public void changeLanguage() {
 
-    }
 
     @Override
-    public void showHide() {
-
-    }
-
-    @Override
-    public void time(int s, Label mssg) {
+    public void time(int s, Label msg) {
 
         Thread thread = new Thread(() -> {
             try {
                 Thread.sleep(s * 1000);
-                Platform.runLater(() -> mssg.setVisible(false));
+                Platform.runLater(() -> msg.setVisible(false));
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
@@ -75,6 +67,31 @@ public class ExitController implements Controller {
 
     @Override
     public void updateComboBoxes(String from) {
+
+    }
+
+    @Override
+    public void changeLanguage() {
+
+    }
+
+    @Override
+    public void showHide() {
+
+    }
+
+    @Override
+    public void clearData() {
+
+    }
+
+    @Override
+    public void loadMessages() {
+
+    }
+
+    @Override
+    public void loadMessages(User u) {
 
     }
 

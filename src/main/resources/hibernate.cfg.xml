@@ -15,7 +15,6 @@
         <property name="hibernate.physical_naming_strategy">org.hibernate.boot.model.naming.PhysicalNamingStrategyStandardImpl</property>
         <mapping class="eus.ehu.ridesfx.domain.Driver" />
         <mapping class="eus.ehu.ridesfx.domain.Ride" />
-        <mapping class="eus.ehu.ridesfx.domain.Messenger" />
         <mapping class="eus.ehu.ridesfx.domain.Traveler" />
         <mapping class="eus.ehu.ridesfx.domain.Alert" />
         <mapping class="eus.ehu.ridesfx.domain.Message" />

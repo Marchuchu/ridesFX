@@ -80,6 +80,38 @@ public class MainGUIController implements Controller {
         businessLogic = blFacade;
     }
 
+    @FXML
+    public void initialize() throws IOException {
+
+        createRidesBtn.setVisible(false);
+
+        exitBttn.setVisible(false);
+        seeAlertsBttn.setVisible(false);
+        seeMessagesBttn.setVisible(false);
+
+
+        exitBttn.setStyle("-fx-background-color: #f85774");
+        logInButton.setStyle("-fx-background-color: #f85774");
+        signUpButton.setStyle("-fx-background-color: #f85774");
+        queryRidesBtn.setStyle("-fx-background-color: #f85774");
+        createRidesBtn.setStyle("-fx-background-color: #f85774");
+        seeAlertsBttn.setStyle("-fx-background-color: #f85774");
+        seeMessagesBttn.setStyle("-fx-background-color: #f85774");
+        es.setStyle("-fx-background-color: #f85774");
+        en.setStyle("-fx-background-color: #f85774");
+        eus.setStyle("-fx-background-color: #f85774");
+
+        businessLogic.setCurrentUser(new User());
+        rolName.setText(ResourceBundle.getBundle("Etiquetas", Locale.getDefault()).getString("Guest"));
+
+    }
+
+
+    @Override
+    public void setMainApp(MainGUI mainGUI) {
+        this.mGUI = mainGUI;
+    }
+
     public BlFacade getBusinessLogic() {
         return businessLogic;
     }
@@ -137,6 +169,8 @@ public class MainGUIController implements Controller {
         return mainWrapper;
     }
 
+    //Buttons methods
+
     @FXML
     void logIn(ActionEvent event) {
 
@@ -149,7 +183,7 @@ public class MainGUIController implements Controller {
         seeMessagesBttn.setVisible(false);
         seeAlertsBttn.setVisible(false);
 
-        if (businessLogic.getCurrentUser().getClass().equals(Traveler.class) || businessLogic.getCurrentUser().getClass().equals(Driver.class)) {
+        if (businessLogic.getCurrentUser() instanceof Traveler || businessLogic.getCurrentUser() instanceof Driver) {
 
             rolName.setText(businessLogic.getCurrentUser().getName());
 
@@ -205,9 +239,13 @@ public class MainGUIController implements Controller {
 
     }
 
-
     @FXML
     void queryRides(ActionEvent event) {
+
+        mGUI.queryRideWin.controller.getTblAlerts();
+
+        mGUI.queryRideWin.controller.clearData();
+
 
         mGUI.showScene("Query Rides");
         queryRidesBtn.setVisible(false);
@@ -297,6 +335,7 @@ public class MainGUIController implements Controller {
     void seeMessages(ActionEvent event) {
 
         mGUI.showScene("See Messages");
+        mGUI.seeMessageWin.controller.loadMessages(businessLogic.getCurrentUser());
 
         if (mGUI.getBusinessLogic().getCurrentUser() instanceof Driver) {
             queryRidesBtn.setVisible(false);
@@ -306,6 +345,7 @@ public class MainGUIController implements Controller {
             logInButton.setVisible(false);
             signUpButton.setVisible(false);
             exitBttn.setVisible(true);
+
 
         } else if (mGUI.getBusinessLogic().getCurrentUser() instanceof Traveler) {
             createRidesBtn.setVisible(false);
@@ -320,37 +360,8 @@ public class MainGUIController implements Controller {
 
     }
 
-    @FXML
-    public void initialize() throws IOException {
 
-        createRidesBtn.setVisible(false);
-
-        exitBttn.setVisible(false);
-        seeAlertsBttn.setVisible(false);
-        seeMessagesBttn.setVisible(false);
-
-
-        exitBttn.setStyle("-fx-background-color: #f85774");
-        logInButton.setStyle("-fx-background-color: #f85774");
-        signUpButton.setStyle("-fx-background-color: #f85774");
-        queryRidesBtn.setStyle("-fx-background-color: #f85774");
-        createRidesBtn.setStyle("-fx-background-color: #f85774");
-        seeAlertsBttn.setStyle("-fx-background-color: #f85774");
-        seeMessagesBttn.setStyle("-fx-background-color: #f85774");
-        es.setStyle("-fx-background-color: #f85774");
-        en.setStyle("-fx-background-color: #f85774");
-        eus.setStyle("-fx-background-color: #f85774");
-
-        businessLogic.setCurrentUser(new User());
-        rolName.setText(ResourceBundle.getBundle("Etiquetas", Locale.getDefault()).getString("Guest"));
-
-    }
-
-
-    @Override
-    public void setMainApp(MainGUI mainGUI) {
-        this.mGUI = mainGUI;
-    }
+    //Auxiliar methods
 
     @Override
     public void changeLanguage() {
@@ -377,10 +388,6 @@ public class MainGUIController implements Controller {
 
     }
 
-    @Override
-    public void showHide() {
-
-    }
 
     @FXML
     public void changeLanguage(ActionEvent event) {
@@ -407,6 +414,8 @@ public class MainGUIController implements Controller {
 
     }
 
+    //Unused methods
+
     @Override
     public void getAlerts(User t) {
 
@@ -424,6 +433,27 @@ public class MainGUIController implements Controller {
 
     @Override
     public void updateComboBoxes(String from) {
+
+    }
+
+    @Override
+    public void showHide() {
+
+    }
+
+
+    @Override
+    public void clearData() {
+
+    }
+
+    @Override
+    public void loadMessages() {
+
+    }
+
+    @Override
+    public void loadMessages(User u) {
 
     }
 }

@@ -30,7 +30,6 @@ import java.util.*;
 public class QueryRidesController implements Controller {
 
 
-
     @FXML
     private Button btnClose;
 
@@ -70,9 +69,6 @@ public class QueryRidesController implements Controller {
     private BlFacade bl;
 
     @FXML
-    private TableView<Event> tblEvents;
-
-    @FXML
     private TableView<Ride> tblRides;
 
     @FXML
@@ -101,183 +97,8 @@ public class QueryRidesController implements Controller {
         this.mainGUI = mainGUI;
     }
 
-
-    public ComboBox<String> getComboArrivalCity() {
-        return comboArrivalCity;
-    }
-
-    public ComboBox<String> getComboDepartCity() {
-        return comboDepartCity;
-    }
-
-
-    public void addArrivalCity(String c) {
-
-        comboArrivalCity.getItems().add(c);
-
-    }
-
-    public void addDepartCity(String c) {
-
-        comboDepartCity.getItems().add(c);
-
-    }
-
-    public void updateComboBoxes(String originCity) {
-        // Obtener las ciudades de origen y destino
-        List<String> departCities = businessLogic.getDepartCities();
-        List<String> arrivalCities = businessLogic.getArrivalCities(originCity);
-
-        // Actualizar ComboBox de ciudades de origen
-        ObservableList<String> departCitiesObservable = FXCollections.observableArrayList(departCities);
-        comboDepartCity.setItems(departCitiesObservable);
-
-        // Actualizar ComboBox de ciudades de destino
-        ObservableList<String> arrivalCitiesObservable = FXCollections.observableArrayList(arrivalCities);
-        comboArrivalCity.setItems(arrivalCitiesObservable);
-    }
-
-
-    private void setEvents(int year, int month) {
-        Date date = Dates.toDate(year, month);
-
-        for (Date day : businessLogic.getEventsMonth(date)) {
-            datesWithBooking.add(Dates.convertToLocalDateViaInstant(day));
-        }
-    }
-
-    // we need to mark (highlight in pink) the events for the previous, current and next month
-    // this method will be called when the user clicks on the << or >> buttons
-    private void setEventsPrePost(int year, int month) {
-        LocalDate date = LocalDate.of(year, month, 1);
-        setEvents(date.getYear(), date.getMonth().getValue());
-        setEvents(date.plusMonths(1).getYear(), date.plusMonths(1).getMonth().getValue());
-        setEvents(date.plusMonths(-1).getYear(), date.plusMonths(-1).getMonth().getValue());
-    }
-
-
-    private void updateDatePickerCellFactory(DatePicker datePicker) {
-
-        List<Date> dates = businessLogic.getDatesWithRides(comboDepartCity.getValue(), comboArrivalCity.getValue());
-
-        // extract datesWithBooking from rides
-        datesWithBooking.clear();
-        for (Date day : dates) {
-            datesWithBooking.add(Dates.convertToLocalDateViaInstant(day));
-        }
-
-        datePicker.setDayCellFactory(new Callback<>() {
-            @Override
-            public DateCell call(DatePicker param) {
-                return new DateCell() {
-                    @Override
-                    public void updateItem(LocalDate item, boolean empty) {
-                        super.updateItem(item, empty);
-
-                        if (!empty && item != null) {
-                            if (datesWithBooking.contains(item)) {
-                                this.setStyle("-fx-background-color: pink");
-                            } else {
-                                this.setStyle("-fx-background-color: rgb(235, 235, 235)");
-                            }
-                        }
-                    }
-                };
-            }
-        });
-    }
-
-    @FXML
-    public void onClickCreateAlert(ActionEvent event) {
-        String from = comboDepartCity.getValue();
-        String to = comboArrivalCity.getValue();
-        LocalDate localDate = datepicker.getValue();
-        Date date = Dates.convertToDate(localDate);
-        User user = mainGUI.getBusinessLogic().getCurrentUser();
-
-        if (user instanceof Traveler) {
-            if (from != null && to != null && date != null) {
-                businessLogic.createAlert(from, to, date, user.getEmail());
-                reservationMessage.setStyle("-fx-text-fill: #188a2e");
-                reservationMessage.setText(StringUtils.translate("AlertCreated"));
-                reservationMessage.setVisible(true);
-
-                // Añadir la nueva alerta a la tabla de alertas en la interfaz de usuario
-                addAlertToTable(new Alert(from, to, date, user));
-                time(5, reservationMessage);
-            } else {
-                reservationMessage.setText(StringUtils.translate("QueryRidesController.PleaseFillInAllFields"));
-                reservationMessage.setVisible(true);
-                reservationMessage.setStyle("-fx-text-fill: #d54242");
-                time(5, reservationMessage);
-            }
-        } else {
-            reservationMessage.setText(StringUtils.translate("QueryRidesController.PleaseLogInOrSignUp"));
-            reservationMessage.setVisible(true);
-            reservationMessage.setStyle("-fx-text-fill: #d54242");
-            time(5, reservationMessage);
-        }
-    }
-
-    private void addAlertToTable(Alert alert) {
-
-        // Obtener la lista actual de alertas de la tabla
-        ObservableList<Alert> alerts = mainGUI.alertWin.controller.getTblAlerts().getItems();
-
-        // Agregar la nueva alerta a la lista
-        alerts.add(alert);
-
-        // Establecer la lista actualizada de alertas en la tabla
-        mainGUI.alertWin.controller.getTblAlerts().setItems(alerts);
-    }
-
-
-//
-//    @FXML
-//    public void onClickCreateAlert(ActionEvent event) {
-//
-//        Alerts ride = new Alerts(comboDepartCity.getValue(), comboArrivalCity.getValue(), Dates.convertToDate(datepicker.getValue()));
-//        User user = mainGUI.getBusinessLogic().getCurrentUser();
-//
-//        if (user instanceof Traveler) {
-//
-//            if (ride.getFrom() != null && ride.getTo() != null && ride.getDate() != null) {
-//
-//                businessLogic.createNewAlert(ride.getFrom(), ride.getTo(), ride.getDate(), user.getEmail());
-//                reservationMessage.setStyle("-fx-text-fill: #188a2e");
-//                reservationMessage.setText(StringUtils.translate("AlertCreated"));
-//
-//                time(5, reservationMessage);
-//
-//
-//            } else {
-//
-//                reservationMessage.setText(StringUtils.translate("QueryRidesController.PleaseFillInAllFields"));
-//                reservationMessage.setVisible(true);
-//                reservationMessage.setStyle("-fx-text-fill: #d54242");
-//                time(5, reservationMessage);
-//
-//            }
-//
-//
-//        } else {
-//
-//            reservationMessage.setText(StringUtils.translate("QueryRidesController.PleaseLogInOrSignUp"));
-//
-//            time(5, reservationMessage);
-//
-//
-//            reservationMessage.setStyle("-fx-text-fill: #d54242");
-//            reservationMessage.setVisible(true);
-//
-//
-//        }
-//    }
-
-
     @FXML
     void initialize() {
-
 
         bookButtn.setStyle("-fx-background-color: #f85774");
         createAlertBut.setStyle("-fx-background-color: #f85774");
@@ -384,6 +205,40 @@ public class QueryRidesController implements Controller {
 
     }
 
+    //Buttons methods
+
+    @FXML
+    public void onClickCreateAlert(ActionEvent event) {
+        String from = comboDepartCity.getValue();
+        String to = comboArrivalCity.getValue();
+        LocalDate localDate = datepicker.getValue();
+        Date date = Dates.convertToDate(localDate);
+        User user = mainGUI.getBusinessLogic().getCurrentUser();
+
+        if (user instanceof Traveler) {
+            if (from != null && to != null && date != null) {
+                businessLogic.createAlert(from, to, date, user.getEmail());
+                reservationMessage.setStyle("-fx-text-fill: #188a2e");
+                reservationMessage.setText(StringUtils.translate("AlertCreated"));
+                reservationMessage.setVisible(true);
+
+                // Añadir la nueva alerta a la tabla de alertas en la interfaz de usuario
+                addAlertToTable(new Alert(from, to, date, user));
+                time(5, reservationMessage);
+            } else {
+                reservationMessage.setText(StringUtils.translate("QueryRidesController.PleaseFillInAllFields"));
+                reservationMessage.setVisible(true);
+                reservationMessage.setStyle("-fx-text-fill: #d54242");
+                time(5, reservationMessage);
+            }
+        } else {
+            reservationMessage.setText(StringUtils.translate("QueryRidesController.PleaseLogInOrSignUp"));
+            reservationMessage.setVisible(true);
+            reservationMessage.setStyle("-fx-text-fill: #d54242");
+            time(5, reservationMessage);
+        }
+    }
+
     @FXML
 
     public void onClickBook(ActionEvent event) {
@@ -433,6 +288,114 @@ public class QueryRidesController implements Controller {
 
     }
 
+    //Auxiliar methods
+
+    private void addAlertToTable(Alert alert) {
+
+        // Obtener la lista actual de alertas de la tabla
+        ObservableList<Alert> alerts = mainGUI.alertWin.controller.getTblAlerts().getItems();
+
+        // Agregar la nueva alerta a la lista
+        alerts.add(alert);
+
+        // Establecer la lista actualizada de alertas en la tabla
+        mainGUI.alertWin.controller.getTblAlerts().setItems(alerts);
+    }
+
+    public void clearData() {
+
+        comboDepartCity.setValue(null);
+        comboArrivalCity.setValue(null);
+        datepicker.getEditor().clear();
+
+    }
+
+    public ComboBox<String> getComboArrivalCity() {
+        return comboArrivalCity;
+    }
+
+    public ComboBox<String> getComboDepartCity() {
+        return comboDepartCity;
+    }
+
+
+    public void addArrivalCity(String c) {
+
+        comboArrivalCity.getItems().add(c);
+
+    }
+
+    public void addDepartCity(String c) {
+
+        comboDepartCity.getItems().add(c);
+
+    }
+
+
+    public void updateComboBoxes(String originCity) {
+        // Obtener las ciudades de origen y destino
+        List<String> departCities = businessLogic.getDepartCities();
+        List<String> arrivalCities = businessLogic.getArrivalCities(originCity);
+
+        // Actualizar ComboBox de ciudades de origen
+        ObservableList<String> departCitiesObservable = FXCollections.observableArrayList(departCities);
+        comboDepartCity.setItems(departCitiesObservable);
+
+        // Actualizar ComboBox de ciudades de destino
+        ObservableList<String> arrivalCitiesObservable = FXCollections.observableArrayList(arrivalCities);
+        comboArrivalCity.setItems(arrivalCitiesObservable);
+    }
+
+
+    private void setEvents(int year, int month) {
+        Date date = Dates.toDate(year, month);
+
+        for (Date day : businessLogic.getEventsMonth(date)) {
+            datesWithBooking.add(Dates.convertToLocalDateViaInstant(day));
+        }
+    }
+
+    // we need to mark (highlight in pink) the events for the previous, current and next month
+    // this method will be called when the user clicks on the << or >> buttons
+    private void setEventsPrePost(int year, int month) {
+        LocalDate date = LocalDate.of(year, month, 1);
+        setEvents(date.getYear(), date.getMonth().getValue());
+        setEvents(date.plusMonths(1).getYear(), date.plusMonths(1).getMonth().getValue());
+        setEvents(date.plusMonths(-1).getYear(), date.plusMonths(-1).getMonth().getValue());
+    }
+
+
+    private void updateDatePickerCellFactory(DatePicker datePicker) {
+
+        List<Date> dates = businessLogic.getDatesWithRides(comboDepartCity.getValue(), comboArrivalCity.getValue());
+
+        // extract datesWithBooking from rides
+        datesWithBooking.clear();
+        for (Date day : dates) {
+            datesWithBooking.add(Dates.convertToLocalDateViaInstant(day));
+        }
+
+        datePicker.setDayCellFactory(new Callback<>() {
+            @Override
+            public DateCell call(DatePicker param) {
+                return new DateCell() {
+                    @Override
+                    public void updateItem(LocalDate item, boolean empty) {
+                        super.updateItem(item, empty);
+
+                        if (!empty && item != null) {
+                            if (datesWithBooking.contains(item)) {
+                                this.setStyle("-fx-background-color: pink");
+                            } else {
+                                this.setStyle("-fx-background-color: rgb(235, 235, 235)");
+                            }
+                        }
+                    }
+                };
+            }
+        });
+    }
+
     @Override
     public void changeLanguage() {
 
@@ -448,10 +411,6 @@ public class QueryRidesController implements Controller {
 
     }
 
-    @Override
-    public void showHide() {
-
-    }
 
     @Override
     public void time(int s, Label msg) {
@@ -469,6 +428,8 @@ public class QueryRidesController implements Controller {
 
     }
 
+    //Unused methods
+
     @Override
     public void getAlerts(User t) {
 
@@ -480,7 +441,22 @@ public class QueryRidesController implements Controller {
     }
 
     @Override
+    public void showHide() {
+
+    }
+
+    @Override
     public TableView<Alert> getTblAlerts() {
         return null;
+    }
+
+    @Override
+    public void loadMessages() {
+
+    }
+
+    @Override
+    public void loadMessages(User u) {
+
     }
 }

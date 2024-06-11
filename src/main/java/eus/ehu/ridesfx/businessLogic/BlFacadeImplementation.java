@@ -31,17 +31,27 @@ public class BlFacadeImplementation implements BlFacade {
 
     }
 
-    public Ride createRide(String from, String to, Date date, int nPlaces, float price, String driverEmail) throws RideMustBeLaterThanTodayException, RideAlreadyExistException {
-        Ride ride = dbManager.createRide(from, to, date, nPlaces, price, driverEmail);
-        return ride;
-    }
-
     @Override
     public List<Ride> getRides(String origin, String destination, Date date) {
         List<Ride> events = dbManager.getRides(origin, destination, date);
         return events;
     }
 
+    public Ride createRide(String from, String to, Date date, int nPlaces, float price, String driverEmail) throws RideMustBeLaterThanTodayException, RideAlreadyExistException {
+        Ride ride = dbManager.createRide(from, to, date, nPlaces, price, driverEmail);
+        return ride;
+    }
+
+    @Override
+    public void createRideClick(String from, String to, Date date, int nPlaces, float price, String driverEmail) {
+        dbManager.createRideClick(from, to, date, nPlaces, price, driverEmail);
+    }
+
+    @Override
+    public void takeRide(Alert selectedItem, int nP, float p) {
+        dbManager.takeRide(selectedItem, nP, p, this.currentUser);
+
+    }
 
     @Override
     public List<Alert> getAlerts() {
@@ -62,6 +72,12 @@ public class BlFacadeImplementation implements BlFacade {
     }
 
     @Override
+    public void cancelAlert(Alert alert) {
+        User currentUser = alert.getUser();
+        dbManager.cancelAlert(currentUser, alert.getId());
+    }
+
+    @Override
     public void createAlert(String from, String to, Date date, String email) {
         dbManager.createAlert(from, to, date, email);
     }
@@ -71,6 +87,50 @@ public class BlFacadeImplementation implements BlFacade {
         return dbManager.getAlerts(user);
     }
 
+    @Override
+    public Alert createNewAlert(String from, String to, Date date, String email) {
+
+        return dbManager.addAlert(from, to, date, email);
+
+    }
+
+    @Override
+    public User getCurrentUser() {
+        return this.currentUser;
+    }
+
+    public User getUserByEmail(String email) {
+        return dbManager.getUserByEmail(email);
+    }
+
+    @Override
+    public void setCurrentUser(User user) {
+        this.currentUser = user;
+    }
+
+    @Override
+    public void addUser(User u) {
+        dbManager.addUser(u);
+    }
+
+    @Override
+    public boolean containsUser(User u) {
+
+        return dbManager.containsUser(u);
+
+    }
+
+    @Override
+    public User getDriver(User u) {
+
+        return dbManager.getD(u);
+
+    }
+
+    @Override
+    public void setCurrentDriver(Driver driver) {
+        this.currentUser = driver;
+    }
 
     /**
      * {@inheritDoc}
@@ -80,7 +140,6 @@ public class BlFacadeImplementation implements BlFacade {
         List<Date> dates = dbManager.getThisMonthDatesWithRides(from, to, date);
         return dates;
     }
-
 
     /**
      * This method invokes the data access to retrieve the dates a month for which there are events
@@ -95,29 +154,21 @@ public class BlFacadeImplementation implements BlFacade {
     }
 
     @Override
-    public User getCurrentUser() {
-        return this.currentUser;
+    public List<String> getDepartCities() {
+        List<String> departLocations = dbManager.getDepartCities();
+        return departLocations;
+
     }
 
     @Override
-    public void setCurrentUser(User user) {
-        this.currentUser = user;
-    }
+    public List<String> getArrivalCities(String from) {
 
+        List<String> arrivalLocations = dbManager.getArrivalCities(from);
+        return arrivalLocations;
+
+    }
 
     @Override
-    public void setCurrentDriver(Driver driver) {
-        this.currentUser = driver;
-    }
-
-//    public void addCitie(String c){
-//
-//        List<String> departLocations = dbManager.getDepartCities();
-//        departLocations.add(c);
-//        dbManager.addCitie(c);
-//
-//    }
-
     public void addCitie(String c) {
         try {
             dbManager.addCitie(c);
@@ -131,33 +182,6 @@ public class BlFacadeImplementation implements BlFacade {
             throw new RuntimeException(StringUtils.translate("BIFacadeImplementation.ErrorToAddCitie") + e.getMessage());
         }
     }
-
-
-    public void addUser(User u) {
-        dbManager.addUser(u);
-    }
-
-    @Override
-    public Alert createNewAlert(String from, String to, Date date, String email) {
-
-        return dbManager.addAlert(from, to, date, email);
-
-    }
-
-    public List<String> getDepartCities() {
-        List<String> departLocations = dbManager.getDepartCities();
-        return departLocations;
-
-    }
-
-
-    public List<String> getArrivalCities(String from) {
-
-        List<String> arrivalLocations = dbManager.getArrivalCities(from);
-        return arrivalLocations;
-
-    }
-
 
     /**
      * {@inheritDoc}
@@ -196,52 +220,22 @@ public class BlFacadeImplementation implements BlFacade {
 
     }
 
-
     @Override
-    public void takeRide(Alert selectedItem, int nP, float p) {
-        dbManager.takeRide(selectedItem, nP, p, this.currentUser);
+    public void sendMessage(String from, String to, String subject, String message) {
 
-    }
-
-    public User currentUser(User u) {
-        return this.currentUser;
-    }
-
-    @Override
-    public void createRideClick(String from, String to, Date date, int nPlaces, float price, String driverEmail) {
-        dbManager.createRideClick(from, to, date, nPlaces, price, driverEmail);
-    }
-
-    @Override
-    public User getDriver(User u) {
-
-        return dbManager.getD(u);
+        dbManager.sendMessage(dbManager.getUserByEmail(from), dbManager.getUserByEmail(to), subject, message);
 
     }
 
     @Override
 
-    public boolean containsUser(User u) {
+    public List<Message> getAllMessages(){
 
-        return dbManager.containsUser(u);
-
-    }
-
-    public void sendMessage(String to, String subject, String message) {
-
-        dbManager.sendMessage(to, subject, message);
+        return dbManager.getMessages();
 
     }
 
-//    public void createAlert(String from, String to, Date date, Traveler traveler) {
-//        dbManager.createAlert(from, to, date, traveler);
-//    }
-
-
-    @Override
-    public void cancelAlert(Alert alert) {
-        User currentUser = alert.getUser();
-        dbManager.cancelAlert(currentUser, alert.getId());
+    public List<Message> getAllMessagesFromUser(User u) {
+        return dbManager.getMessagesFromUser(u);
     }
-
 }

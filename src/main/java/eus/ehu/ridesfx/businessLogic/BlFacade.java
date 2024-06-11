@@ -14,6 +14,7 @@ import java.util.Vector;
  */
 
 public interface BlFacade {
+
     /**
      * This method retrieves the rides from two locations on a given date
      *
@@ -24,15 +25,39 @@ public interface BlFacade {
      */
     List<Ride> getRides(String from, String to, Date date);
 
-    public List<Alert> getAlerts();
+    Ride createRide(String text, String text1, Date date, int inputSeats, float price, String email) throws RideMustBeLaterThanTodayException, RideAlreadyExistException;
 
-    public List<Alert> getAlerts(User u);
+    void createRideClick(String from, String to, Date date, int nPlaces, float price, String driverEmail);
+
+    void takeRide(Alert selectedItem, int nP, float p);
+
+    List<Alert> getAlerts();
+
+    List<Alert> getAlerts(User u);
+
+    List<Alert> getAllAlerts();
 
     void cancelAlert(Alert alert);
-    User getCurrentUser();
 
     void createAlert(String from, String to, Date date, String email);
+
     List<Alert> getAlertsByUser(User user);
+
+    Alert createNewAlert(String from, String to, Date date, String email);
+
+    User getCurrentUser();
+
+    void setCurrentUser(User user);
+
+    void addUser(User user);
+
+    boolean containsUser(User u);
+
+    User getDriver(User u);
+
+    User getUserByEmail(String email);
+
+    void setCurrentDriver(Driver driver);
 
     /**
      * This method retrieves from the database the dates a month for which there are events
@@ -44,10 +69,6 @@ public interface BlFacade {
      */
     public List<Date> getThisMonthDatesWithRides(String from, String to, Date date);
 
-    public void addUser(User user);
-
-    public Alert createNewAlert(String from, String to, Date date, String email);
-
     /**
      * This method retrieves from the database the dates in a month for which there are events
      *
@@ -56,30 +77,17 @@ public interface BlFacade {
      */
     public Vector<Date> getEventsMonth(Date date);
 
-    //ArrayList<User> getCurrentUser();
-
-    //ArrayList<User> getCurrentUser(User u);
-
-//    public User getCurrentUser();
-
-    void setCurrentUser(User user);
-
-    public boolean containsUser(User u);
-
-    void setCurrentDriver(Driver driver);
-
-    Ride createRide(String text, String text1, Date date, int inputSeats, float price, String email) throws RideMustBeLaterThanTodayException, RideAlreadyExistException;
-
-
     /**
      * This method returns all the cities where rides depart
      *
      * @return collection of cities
      */
 
-    public List<String> getDepartCities();
+    List<String> getDepartCities();
 
-    public List<String> getArrivalCities(String from);
+    List<String> getArrivalCities(String from);
+
+    void addCitie(String from);
 
     /**
      * This method returns all the arrival destinations, from all rides that depart from a given city
@@ -88,31 +96,18 @@ public interface BlFacade {
      * @return all the arrival destinations
      */
 
-    public List<String> getDestinationCities(String from);
-
+    List<String> getDestinationCities(String from);
 
     List<Date> getDatesWithRides(String value, String value1);
 
-    public boolean signUp(String name, String email, String password, String repeatpassword, String role);
+    boolean signUp(String name, String email, String password, String repeatpassword, String role);
 
-    public boolean logIn(String username, String password) throws UnknownUser;
+    boolean logIn(String username, String password) throws UnknownUser;
 
-    //void cancelAlert(TableColumn<String, Integer> alertID);
-//    void cancelAlert(Alerts ride);
+    void sendMessage(String from, String to, String subject, String message);
 
-//    public void createAlert(String from, String to, Date date, Traveler traveler);
-
-    void createRideClick(String from, String to, Date date, int nPlaces, float price, String driverEmail);
+    List<Message> getAllMessages();
 
 
-    User getDriver(User u);
-
-    void addCitie(String from);
-
-    public void takeRide(Alert selectedItem, int nP, float p);
-
-    public void sendMessage(String to, String subject, String message);
-
-    List<Alert>  getAllAlerts();
-
+    List<Message> getAllMessagesFromUser(User u);
 }
