@@ -12,7 +12,6 @@ import java.util.Date;
 import java.util.List;
 import java.util.Vector;
 
-
 /**
  * Implements the business logic as a web service.
  */

@@ -82,7 +82,7 @@ public class SignUpController implements Controller {
     @FXML
     void onClickSignUp(ActionEvent event) {
 
-        if (name.getText() == null || email.getText() == null || password.getText() == null || repPas.getText() == null || role.getValue() == null) {
+        if (name.getText().isEmpty() || email.getText().isEmpty() || password.getText().isEmpty() || repPas.getText().isEmpty() ||  role.getValue() == null) {
 
             mainGUI.mGUIC.getSeeAlertsBttn().setVisible(false);
 
