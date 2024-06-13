@@ -11,9 +11,7 @@ import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.scene.Parent;
 import javafx.scene.control.*;
-import javafx.scene.layout.AnchorPane;
 import javafx.scene.text.Text;
 
 public class SignUpController implements Controller {
@@ -26,9 +24,6 @@ public class SignUpController implements Controller {
     private TextField email;
     @FXML
     private Label hasLogin;
-
-    @FXML
-    private AnchorPane mainWrapper;
     @FXML
     private TextField name;
     @FXML
@@ -39,19 +34,14 @@ public class SignUpController implements Controller {
     private Button signUpButt;
     @FXML
     private ComboBox<String> role;
-
     @FXML
     private Text emailTXT;
-
     @FXML
     private Text nameTXT;
-
     @FXML
     private Text passTXT;
-
     @FXML
     private Text repPassTXT;
-
     @FXML
     private Text rolTXT;
 
@@ -220,7 +210,6 @@ public class SignUpController implements Controller {
     public TableView<Alert> getTblAlerts() {
         return null;
     }
-
 
     @Override
     public void updateComboBoxes(String from) {

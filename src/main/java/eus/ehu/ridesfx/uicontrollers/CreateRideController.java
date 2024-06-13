@@ -22,13 +22,12 @@ import java.util.List;
 public class CreateRideController implements Controller {
 
     private BlFacade businessLogic;
+    private MainGUI mainGUI;
+
     @FXML
     private DatePicker datePicker;
-    private MainGUI mainGUI;
     @FXML
     private Label lblErrorMessage;
-    @FXML
-    private Label lblErrorMinBet;
     @FXML
     private Button btnCreateRide;
     @FXML
@@ -39,19 +38,14 @@ public class CreateRideController implements Controller {
     private TextField txtNumberOfSeats;
     @FXML
     private TextField txtPrice;
-
     @FXML
     private Label arrivalCity;
-
     @FXML
     private Label departCity;
-
     @FXML
     private Label nrSeats;
-
     @FXML
     private Label price;
-
     @FXML
     private Label rideDate;
 
@@ -64,6 +58,11 @@ public class CreateRideController implements Controller {
 
     public CreateRideController(BlFacade bl) {
         this.businessLogic = bl;
+    }
+
+    @Override
+    public void setMainApp(MainGUI mainGUI) {
+        this.mainGUI = mainGUI;
     }
 
     @FXML
@@ -105,22 +104,6 @@ public class CreateRideController implements Controller {
         });
     }
 
-    @Override
-    public void setMainApp(MainGUI mainGUI) {
-        this.mainGUI = mainGUI;
-    }
-
-    private void clearErrorLabels() {
-        lblErrorMessage.setText("");
-        lblErrorMessage.getStyleClass().clear();
-    }
-
-    void displayMessage(String message, String label) {
-        lblErrorMessage.getStyleClass().clear();
-        lblErrorMessage.getStyleClass().setAll("lbl", "lbl-" + label);
-        lblErrorMessage.setText(message);
-    }
-
     //Buttons methods
 
     @FXML
@@ -133,62 +116,55 @@ public class CreateRideController implements Controller {
         if (date == null) {
 
             showErrorMessage("CreateRideGUI.FillDate", lblErrorMessage, "-fx-text-fill: #d54242", 5);
-
             return;
         }
 
         if (date.isBefore(LocalDate.now())) {
 
             showErrorMessage("CreateRideGUI.DateMustBeLaterThanToday", lblErrorMessage, "-fx-text-fill: #d54242", 5);
-
             return;
         }
 
         if (from.isEmpty()) {
 
             showErrorMessage("CreateRideGUI.FillDepartureCity", lblErrorMessage, "-fx-text-fill: #d54242", 5);
-
             return;
         }
 
         if (to.isEmpty()) {
 
             showErrorMessage("CreateRideGUI.FillArrivalCity", lblErrorMessage,"-fx-text-fill: #d54242", 5);
-
             return;
         }
 
         if (txtNumberOfSeats.getText() == null) {
 
             showErrorMessage("CreateRideGUI.FillNumberOfSeats", lblErrorMessage,"-fx-text-fill: #d54242", 5);
-
-
             return;
         }
 
         int numPlaces;
+
         try {
             numPlaces = Integer.parseInt(txtNumberOfSeats.getText());
         } catch (NumberFormatException e1) {
 
             showErrorMessage("CreateRideGUI.NumberOfSeatsMustBeANumber", lblErrorMessage,"-fx-text-fill: #d54242", 5);
-
             return;
         }
 
         if (txtPrice.getText() == null) {
 
             showErrorMessage("CreateRideGUI.FillPrice", lblErrorMessage, "-fx-text-fill: #d54242", 5);
-
             return;
         }
 
         float price;
+
         try {
             price = Float.parseFloat(txtPrice.getText());
         } catch (NumberFormatException e1) {
             showErrorMessage("CreateRideGUI.PriceMustBeANumber", lblErrorMessage,"-fx-text-fill: #d54242", 5);
-
             return;
         }
 
@@ -220,7 +196,6 @@ public class CreateRideController implements Controller {
         }
 
         mainGUI.queryRideWin.controller.updateComboBoxes(from);
-
 
     }
 

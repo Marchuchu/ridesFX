@@ -111,28 +111,6 @@ public class Driver extends User implements Serializable {
         return true;
     }
 
-    public Ride removeRide(String from, String to, Date date) {
-        boolean found = false;
-        int index = 0;
-        Ride r = null;
-        while (!found && index < rides.size()) {
-            r = rides.get(index);
-            if ((java.util.Objects.equals(r.getFromLocation(), from)) && (java.util.Objects.equals(r.getToLocation(), to)) && (java.util.Objects.equals(r.getDate(), date)))
-                found = true;
-            else
-                index++;
-        }
-
-        if (found) {
-            rides.remove(index);
-            return r;
-        } else
-            return null;
-    }
-
-
-    //toString
-
     @Override
     public String toString() {
         return this.getName();

@@ -2,7 +2,6 @@ package eus.ehu.ridesfx.uicontrollers;
 
 import java.util.Date;
 import java.util.List;
-import java.util.ResourceBundle;
 
 import eus.ehu.ridesfx.businessLogic.BlFacade;
 import eus.ehu.ridesfx.domain.Alert;
@@ -19,7 +18,6 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
-import javafx.scene.layout.AnchorPane;
 import javafx.scene.text.Text;
 
 public class AlertTableController implements Controller {
@@ -35,8 +33,6 @@ public class AlertTableController implements Controller {
     private TableColumn<Alert, String> user;
     @FXML
     private Button cancelAlertBttn;
-    @FXML
-    private AnchorPane mainWrapper;
     @FXML
     private Text setPriceTXT;
     @FXML

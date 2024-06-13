@@ -29,12 +29,11 @@ public class ExitController implements Controller {
     void initialize() {
 
     }
+
     @Override
     public void setMainApp(MainGUI mainGUI) {
         this.mainGUI = mainGUI;
     }
-
-
 
     @Override
     public void time(int s, Label msg) {

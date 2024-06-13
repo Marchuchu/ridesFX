@@ -9,11 +9,11 @@ import java.util.Date;
 public class Alert {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY) // Usamos IDENTITY para generar el ID automáticamente
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @ManyToOne
-    @JoinColumn(name = "traveler_id") // Define la columna de unión para el viajero
+    @JoinColumn(name = "traveler_id")
     private User user;
 
     @Column(name = "alert_from", nullable = false)

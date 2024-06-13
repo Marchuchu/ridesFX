@@ -168,16 +168,6 @@ public class Ride implements Serializable {
     }
 
     /**
-     * Set the free places of the ride
-     *
-     * @param numPlaces places to be set
-     */
-
-    public void setBetMinimum(int numPlaces) {
-        this.numPlaces = numPlaces;
-    }
-
-    /**
      * Get the driver associated to the ride
      *
      * @return the associated driver
@@ -208,10 +198,4 @@ public class Ride implements Serializable {
         return rideNumber + ";" + ";" + fromLocation + ";" + toLocation + ";" + date;
     }
 
-
-    public int getAvailableSeats() {
-
-        return this.numPlaces;
-
-    }
 }

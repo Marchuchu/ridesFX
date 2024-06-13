@@ -1,8 +1,5 @@
 package eus.ehu.ridesfx.uicontrollers;
 
-import java.net.URL;
-import java.util.ResourceBundle;
-
 import eus.ehu.ridesfx.businessLogic.BlFacade;
 import eus.ehu.ridesfx.domain.*;
 import eus.ehu.ridesfx.domain.Alert;
@@ -13,20 +10,14 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
-import javafx.scene.layout.AnchorPane;
 
 import java.util.List;
-
-import javafx.scene.text.Text;
-import org.h2.store.DataReader;
 
 public class MessageController implements Controller {
 
     BlFacade businessLogic;
     MainGUI mainGUI;
 
-    @FXML
-    private AnchorPane mainWrapper;
     @FXML
     private Label errorMessage;
     @FXML
@@ -37,14 +28,10 @@ public class MessageController implements Controller {
     private TableView<Message> messageTable;
     @FXML
     private TableColumn<Message, String> fromColumn;
-    //    @FXML
-//    private TableColumn<Message, String> messageColumn;
     @FXML
     private TableColumn<Message, String> subjectColumn;
-
     @FXML
     private TableColumn<Message, String> toColumn;
-
     @FXML
     private Button seeMessageBttn;
     @FXML
@@ -66,7 +53,6 @@ public class MessageController implements Controller {
         idColumn.setCellValueFactory(new PropertyValueFactory<>("id"));
         fromColumn.setCellValueFactory(new PropertyValueFactory<>("from"));
         subjectColumn.setCellValueFactory(new PropertyValueFactory<>("subject"));
-//        messageColumn.setCellValueFactory(new PropertyValueFactory<>("message"));
         toColumn.setCellValueFactory(new PropertyValueFactory<>("to"));
 
         seeMessageBttn.setStyle("-fx-background-color: #f85774");
@@ -77,7 +63,6 @@ public class MessageController implements Controller {
         messageTXT.setText(" ");
 
         loadMessages();
-
 
     }
 
@@ -148,7 +133,6 @@ public class MessageController implements Controller {
         sendNewMessageBttn.setText(StringUtils.translate("SendNewMessage"));
         errorMessage.setText(StringUtils.translate("MessageController.selectMessage"));
         fromColumn.setText(StringUtils.translate("From"));
-//        messageColumn.setText(StringUtils.translate("Message"));
         subjectColumn.setText(StringUtils.translate("Subject"));
         toColumn.setText(StringUtils.translate("To"));
 
@@ -211,6 +195,5 @@ public class MessageController implements Controller {
     public void showHide() {
 
     }
-
 
 }

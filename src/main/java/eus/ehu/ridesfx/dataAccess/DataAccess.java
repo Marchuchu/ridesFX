@@ -6,11 +6,11 @@ import eus.ehu.ridesfx.domain.*;
 import eus.ehu.ridesfx.exceptions.RideAlreadyExistException;
 import eus.ehu.ridesfx.exceptions.RideMustBeLaterThanTodayException;
 import eus.ehu.ridesfx.exceptions.UnknownUser;
+import eus.ehu.ridesfx.utils.StringUtils;
 import jakarta.persistence.*;
 import org.hibernate.boot.MetadataSources;
 import org.hibernate.boot.registry.StandardServiceRegistry;
 import org.hibernate.boot.registry.StandardServiceRegistryBuilder;
-import org.hibernate.exception.ConstraintViolationException;
 
 import java.util.*;
 
@@ -82,17 +82,6 @@ public class DataAccess {
         db.getTransaction().commit();
     }
 
-    public User login(String username, String password) throws UnknownUser {
-        TypedQuery<User> query = db.createQuery("SELECT u FROM User u WHERE u.name = :username AND u.password = :password", User.class);
-        query.setParameter("username", username);
-        query.setParameter("password", password);
-        try {
-            return query.getSingleResult();
-        } catch (NoResultException e) {
-            throw new UnknownUser();
-        }
-    }
-
     public User logIn(String email, String password) throws UnknownUser {
         User driver;
         TypedQuery<User> query = db.createQuery("SELECT d FROM User d WHERE d.email =?1 AND d.password =?2",
@@ -161,8 +150,8 @@ public class DataAccess {
 
     }
 
-    public User getD(User u) {
-        return db.find(User.class, u.getEmail());
+    public User getDriver(User user) {
+        return db.find(User.class, user.getEmail());
     }
 
     public boolean containsUser(User u) {
@@ -171,32 +160,26 @@ public class DataAccess {
                 User.class);
         query.setParameter(1, u.getEmail());
         List<User> users = query.getResultList();
-        if (users.size() > 0) {
-            return true;
-        } else {
-            return false;
-        }
+
+        return !users.isEmpty();
 
     }
 
     public List<Ride> getRides(String origin, String destination, Date date) {
-        System.out.println(">> DataAccess: getRides origin/dest/date");
-        Vector<Ride> res = new Vector<>();
 
-        TypedQuery<Ride> query = db.createQuery("SELECT ride FROM Ride ride "
-                + "WHERE ride.date=?1 ", Ride.class);
+        TypedQuery<Ride> query = db.createQuery("SELECT ride FROM Ride ride WHERE ride.date=?1 AND ride.fromLocation =?2 AND ride.toLocation = ?3", Ride.class);
         query.setParameter(1, date);
-
+        query.setParameter(2, origin);
+        query.setParameter(3, destination);
 
         return query.getResultList();
     }
 
     public Ride createRide(String from, String to, Date date, int nPlaces, float price, String driverEmail) throws RideAlreadyExistException, RideMustBeLaterThanTodayException {
-        System.out.println(">> DataAccess: createRide=> from= " + from + " to= " + to + " driver=" + driverEmail + " date " + date);
+
         try {
             if (new Date().compareTo(date) > 0) {
-                throw new RideMustBeLaterThanTodayException(
-                        ResourceBundle.getBundle("Etiquetas").getString("CreateRideGUI.ErrorRideMustBeLaterThanToday"));
+                throw new RideMustBeLaterThanTodayException(StringUtils.translate("CreateRideGUI.ErrorRideMustBeLaterThanToday"));
             }
 
             db.getTransaction().begin();
@@ -210,8 +193,7 @@ public class DataAccess {
 
             if (driver.doesRideExists(from, to, date)) {
                 db.getTransaction().rollback();
-                throw new RideAlreadyExistException(
-                        ResourceBundle.getBundle("Etiquetas").getString("DataAccess.RideAlreadyExist"));
+                throw new RideAlreadyExistException(StringUtils.translate("DataAccess.RideAlreadyExist"));
             }
 
             // Create new ride
@@ -230,6 +212,7 @@ public class DataAccess {
     }
 
     public void takeRide(Alert a, int nP, float p, User u) {
+
         db.getTransaction().begin();
 
         User user = db.find(User.class, u.getEmail());
@@ -249,16 +232,6 @@ public class DataAccess {
         }
 
         db.getTransaction().commit();
-    }
-
-    private boolean rideExists(Ride ride) {
-
-        return db.createQuery("SELECT COUNT(r) FROM Ride r WHERE r.fromLocation = :from AND r.toLocation = :to AND r.date = :date AND r.driver = :driver", Long.class)
-                .setParameter("from", ride.getFromLocation())
-                .setParameter("to", ride.getToLocation())
-                .setParameter("date", ride.getDate())
-                .setParameter("driver", ride.getDriver())
-                .getSingleResult() > 0;
     }
 
     public void createRideClick(String from, String to, Date date, int nPlaces, float price, String driverEmail) {
@@ -339,20 +312,6 @@ public class DataAccess {
         return query.getResultList();
     }
 
-    public Alert getAlert(User user, int alertId) {
-        TypedQuery<Alert> query = db.createQuery(
-                """
-                        SELECT a FROM Alert a WHERE a.id = :alertId AND a.user = :user""", Alert.class);
-        query.setParameter("alertId", alertId);
-        query.setParameter("user", user);
-
-        try {
-            return query.getSingleResult();
-        } catch (NoResultException e) {
-            return null; // or handle as needed
-        }
-    }
-
     public List<Alert> getAllAlerts() {
 
         TypedQuery<Alert> query = db.createQuery("""
@@ -362,7 +321,6 @@ public class DataAccess {
     }
 
     private boolean alertExists(Alert alert) {
-        // Método para verificar si una alerta ya existe en la base de datos
         return db.createQuery("""
                         SELECT COUNT(a) FROM Alert a WHERE a.from = :departCity AND a.to = :arrivalCity AND a.date = :date""", Long.class)
                 .setParameter("departCity", alert.getFrom())
@@ -379,7 +337,7 @@ public class DataAccess {
         try {
             return query.getSingleResult();
         } catch (NoResultException e) {
-            return null; // or handle as needed
+            return null;
         }
     }
 
@@ -436,12 +394,6 @@ public class DataAccess {
         return res;
     }
 
-    public boolean checkComboBox(String city) {
-        TypedQuery<String> query = db.createQuery("SELECT DISTINCT r.toLocation FROM Ride r WHERE r.fromLocation = :city OR r.toLocation = :city ORDER BY r.toLocation", String.class);
-        query.setParameter("city", city);
-        return query.getResultList().isEmpty();
-    }
-
     public List<Date> getThisMonthDatesWithRides(String from, String to, Date date) {
         System.out.println(">> DataAccess: getEventsMonth");
         List<Date> res = new ArrayList<>();
@@ -483,6 +435,31 @@ public class DataAccess {
         db.getTransaction().begin();
         db.persist(new Message(from, to, subject, message));
         db.getTransaction().commit();
+
+    }
+
+    public List<Message> getMessages(){
+        TypedQuery<Message> query = db.createQuery("SELECT m FROM Message m", Message.class);
+        return query.getResultList();
+    }
+
+    public User getUserByEmail(String e) {
+
+        return db.find(User.class, e);
+
+    }
+
+    public List<Message> getMessagesFromUser(User u){
+        TypedQuery<Message> query = db.createQuery("SELECT m FROM Message m WHERE m.to = :u", Message.class);
+        query.setParameter("u", u);
+        return query.getResultList();
+    }
+
+    public List<Message> getMessagesToUser(User u){
+
+        TypedQuery<Message> query = db.createQuery("SELECT m FROM Message m WHERE m.from = :u", Message.class);
+        query.setParameter("u", u);
+        return query.getResultList();
 
     }
 
@@ -539,29 +516,5 @@ public class DataAccess {
     }
 
 
-    public List<Message> getMessages(){
-        TypedQuery<Message> query = db.createQuery("SELECT m FROM Message m", Message.class);
-        return query.getResultList();
-    }
-
-    public User getUserByEmail(String e) {
-
-         return db.find(User.class, e);
-
-    }
-
-    public List<Message> getMessagesFromUser(User u){
-        TypedQuery<Message> query = db.createQuery("SELECT m FROM Message m WHERE m.to = :u", Message.class);
-        query.setParameter("u", u);
-        return query.getResultList();
-    }
-
-    public List<Message> getMessagesToUser(User u){
-
-        TypedQuery<Message> query = db.createQuery("SELECT m FROM Message m WHERE m.from = :u", Message.class);
-        query.setParameter("u", u);
-        return query.getResultList();
-
-    }
 
 }

@@ -58,7 +58,6 @@ public class LoginController implements Controller {
 
     }
 
-
     @Override
     public void setMainApp(MainGUI mainGUI) {
         this.mGUI = mainGUI;

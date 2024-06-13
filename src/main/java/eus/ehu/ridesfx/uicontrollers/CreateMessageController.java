@@ -9,7 +9,6 @@ import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
-import javafx.scene.layout.AnchorPane;
 import javafx.scene.text.Text;
 
 public class CreateMessageController implements Controller {
@@ -20,8 +19,6 @@ public class CreateMessageController implements Controller {
     @FXML
     private Label errorMessage;
     @FXML
-    private AnchorPane mainWrapper;
-    @FXML
     private TextArea messageField;
     @FXML
     private Button sendMessageBttn;
@@ -29,13 +26,10 @@ public class CreateMessageController implements Controller {
     private TextField subjectBox;
     @FXML
     private TextField toBox;
-
     @FXML
     private Text subTXT;
-
     @FXML
     private Text msgTXT;
-
     @FXML
     private Text toTXT;
 
@@ -49,6 +43,13 @@ public class CreateMessageController implements Controller {
         this.mainGUI = mainGUI;
     }
 
+    @Override
+    public void setMainApp(MainGUI mainGUI) {
+
+        this.mainGUI = mainGUI;
+
+    }
+
     @FXML
     void initialize() {
 
@@ -58,13 +59,6 @@ public class CreateMessageController implements Controller {
         toBox.setText("");
         subjectBox.setText("");
         messageField.setText("");
-
-    }
-
-    @Override
-    public void setMainApp(MainGUI mainGUI) {
-
-        this.mainGUI = mainGUI;
 
     }
 
@@ -110,7 +104,6 @@ public class CreateMessageController implements Controller {
         subTXT.setText(StringUtils.translate("Subject"));
         msgTXT.setText(StringUtils.translate("Message"));
         toTXT.setText(StringUtils.translate("CreateMessageController.to"));
-
 
     }
 

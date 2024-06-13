@@ -31,8 +31,6 @@ public class Message {
         this.subject = subject;
     }
 
-    // Getters and Setters
-
     public int getId() {
         return id;
     }

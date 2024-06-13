@@ -10,13 +10,11 @@ import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
-import javafx.event.Event;
 import javafx.fxml.FXML;
 import javafx.scene.Node;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.control.skin.DatePickerSkin;
-import javafx.scene.layout.AnchorPane;
 import javafx.util.Callback;
 import eus.ehu.ridesfx.ui.MainGUI;
 import eus.ehu.ridesfx.utils.Dates;
@@ -29,56 +27,35 @@ import java.util.*;
 
 public class QueryRidesController implements Controller {
 
-
-    @FXML
-    private Button btnClose;
-
     @FXML
     private DatePicker datepicker;
-
     @FXML
     private Button bookButtn;
-
     @FXML
     private TableColumn<Ride, String> qc1;
-
     @FXML
     private TableColumn<Ride, Integer> qc2;
-
     @FXML
     private TableColumn<Ride, Float> qc3;
-
     @FXML
     private ComboBox<String> comboArrivalCity;
-
     @FXML
     private ComboBox<String> comboDepartCity;
-
     @FXML
     private Label ArrivalCity;
-
     @FXML
     private Label DepartCity;
-
     @FXML
     private Label EventDate;
-
-    @FXML
-    private AnchorPane mainAncor;
-
-    private BlFacade bl;
-
     @FXML
     private TableView<Ride> tblRides;
-
     @FXML
     private Button createAlertBut;
-
     @FXML
     private Label rideDate;
-
     @FXML
     private Label reservationMessage;
+
     private MainGUI mainGUI;
     private List<LocalDate> datesWithBooking = new ArrayList<>();
     private BlFacade businessLogic;
@@ -170,14 +147,12 @@ public class QueryRidesController implements Controller {
                     String year = ((Label) (labels.get(1))).getText();
                     YearMonth ym = Dates.getYearMonth(month + " " + year);
 
-                    // print month value
                     System.out.println("Month:" + ym.getMonthValue());
 
                 });
             });
         });
 
-        // show just the driver's name in column1
         qc1.setCellValueFactory(new Callback<>() {
             @Override
             public ObservableValue<String> call(TableColumn.CellDataFeatures<Ride, String> data) {
@@ -265,14 +240,10 @@ public class QueryRidesController implements Controller {
 
     private void addAlertToTable(Alert alert) {
 
-        // Obtener la lista actual de alertas de la tabla
         ObservableList<Alert> alerts = mainGUI.alertWin.controller.getTblAlerts().getItems();
-
-        // Agregar la nueva alerta a la lista
         alerts.add(alert);
-
-        // Establecer la lista actualizada de alertas en la tabla
         mainGUI.alertWin.controller.getTblAlerts().setItems(alerts);
+
     }
 
     public void clearData() {
@@ -291,34 +262,16 @@ public class QueryRidesController implements Controller {
         return comboDepartCity;
     }
 
-
-    public void addArrivalCity(String c) {
-
-        comboArrivalCity.getItems().add(c);
-
-    }
-
-    public void addDepartCity(String c) {
-
-        comboDepartCity.getItems().add(c);
-
-    }
-
-
     public void updateComboBoxes(String originCity) {
-        // Obtener las ciudades de origen y destino
         List<String> departCities = businessLogic.getDepartCities();
         List<String> arrivalCities = businessLogic.getArrivalCities(originCity);
 
-        // Actualizar ComboBox de ciudades de origen
         ObservableList<String> departCitiesObservable = FXCollections.observableArrayList(departCities);
         comboDepartCity.setItems(departCitiesObservable);
 
-        // Actualizar ComboBox de ciudades de destino
         ObservableList<String> arrivalCitiesObservable = FXCollections.observableArrayList(arrivalCities);
         comboArrivalCity.setItems(arrivalCitiesObservable);
     }
-
 
     private void setEvents(int year, int month) {
         Date date = Dates.toDate(year, month);
@@ -328,8 +281,6 @@ public class QueryRidesController implements Controller {
         }
     }
 
-    // we need to mark (highlight in pink) the events for the previous, current and next month
-    // this method will be called when the user clicks on the << or >> buttons
     private void setEventsPrePost(int year, int month) {
         LocalDate date = LocalDate.of(year, month, 1);
         setEvents(date.getYear(), date.getMonth().getValue());

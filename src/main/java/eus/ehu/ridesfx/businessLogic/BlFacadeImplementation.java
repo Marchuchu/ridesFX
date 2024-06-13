@@ -123,7 +123,7 @@ public class BlFacadeImplementation implements BlFacade {
     @Override
     public User getDriver(User u) {
 
-        return dbManager.getD(u);
+        return dbManager.getDriver(u);
 
     }
 

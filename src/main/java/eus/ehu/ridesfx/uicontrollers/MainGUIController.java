@@ -18,51 +18,37 @@ import javafx.scene.text.Text;
 
 import java.io.IOException;
 import java.util.Locale;
-import java.util.ResourceBundle;
 
 public class MainGUIController implements Controller {
 
     @FXML
     private Button en;
-
     @FXML
     private Button es;
-
     @FXML
     private Button eus;
-
     @FXML
     private Label rolName;
-
     @FXML
     private Button seeMessagesBttn;
-
     @FXML
     private Button signUpButton;
-
     @FXML
     private Button exitBttn;
-
     @FXML
     private Button createRidesBtn;
-
     @FXML
     private Button queryRidesBtn;
-
     @FXML
     private Button logInButton;
-
     @FXML
     private Button seeAlertsBttn;
-
     @FXML
     private Text userNames;
-
-    private BlFacade businessLogic;
-
     @FXML
     private BorderPane mainWrapper;
 
+    private BlFacade businessLogic;
     private MainGUI mGUI;
 
 
@@ -94,7 +80,6 @@ public class MainGUIController implements Controller {
         eus.setStyle("-fx-background-color: #f85774");
 
         businessLogic.setCurrentUser(new User());
-
         rolName.setText(StringUtils.translate("Guest"));
 
     }
@@ -111,10 +96,6 @@ public class MainGUIController implements Controller {
 
     public void setBusinessLogic(BlFacade businessLogic) {
         this.businessLogic = businessLogic;
-    }
-
-    public Label getRolName() {
-        return rolName;
     }
 
     public void setRolName(String name) {
@@ -345,7 +326,6 @@ public class MainGUIController implements Controller {
         mGUI.seeMessageWin.controller.changeLanguage();
         mGUI.createMessageWin.controller.changeLanguage();
         mGUI.logoutWin.controller.changeLanguage();
-
 
     }
 
