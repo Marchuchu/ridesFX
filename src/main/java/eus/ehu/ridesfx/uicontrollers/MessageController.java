@@ -4,9 +4,8 @@ import java.net.URL;
 import java.util.ResourceBundle;
 
 import eus.ehu.ridesfx.businessLogic.BlFacade;
+import eus.ehu.ridesfx.domain.*;
 import eus.ehu.ridesfx.domain.Alert;
-import eus.ehu.ridesfx.domain.Message;
-import eus.ehu.ridesfx.domain.User;
 import eus.ehu.ridesfx.ui.MainGUI;
 import eus.ehu.ridesfx.utils.StringUtils;
 import javafx.application.Platform;
@@ -18,6 +17,7 @@ import javafx.scene.layout.AnchorPane;
 import java.util.List;
 
 import javafx.scene.text.Text;
+import org.h2.store.DataReader;
 
 public class MessageController implements Controller {
 
@@ -63,7 +63,6 @@ public class MessageController implements Controller {
         subjectColumn.setCellValueFactory(new PropertyValueFactory<>("subject"));
         messageColumn.setCellValueFactory(new PropertyValueFactory<>("message"));
 
-
         seeMessageBttn.setStyle("-fx-background-color: #f85774");
         sendNewMessageBttn.setStyle("-fx-background-color: #f85774");
         errorMessage.setVisible(false);
@@ -101,11 +100,17 @@ public class MessageController implements Controller {
 
     @FXML
     void onClickSeeMessage(ActionEvent event) {
+
+        mainGUI.mGUIC.getSeeMessagesBttn().setVisible(true);
+        mainGUI.mGUIC.getSeeAlertsBttn().setVisible(true);
+        mainGUI.mGUIC.getQueryRidesBtn().setVisible(!(businessLogic.getCurrentUser() instanceof Driver));
+        mainGUI.mGUIC.getCreateRidesBtn().setVisible(!(businessLogic.getCurrentUser() instanceof Traveler));
+
         Message selectedMessage = messageTable.getSelectionModel().getSelectedItem();
         if (selectedMessage == null) {
-            errorMessage.setText(StringUtils.translate("MessageController.selectMessage"));
-            time(5, errorMessage);
-            errorMessage.setVisible(true);
+
+            showErrorMessage("MessageController.selectMessage", errorMessage, "-fx-text-fill: #d54242;", 5);
+
         } else {
             messageTXT.setText(selectedMessage.getMessage());
         }
@@ -121,6 +126,7 @@ public class MessageController implements Controller {
         mainGUI.mGUIC.getSeeMessagesBttn().setVisible(true);
         mainGUI.mGUIC.getCreateRidesBtn().setVisible(false);
         mainGUI.mGUIC.getSeeAlertsBttn().setVisible(false);
+        mainGUI.mGUIC.getQueryRidesBtn().setVisible(false);
 
 
     }
@@ -152,6 +158,16 @@ public class MessageController implements Controller {
             }
         });
         thread.start();
+
+    }
+
+    @Override
+    public void showErrorMessage(String txt, Label label, String style, int t){
+
+        label.setText(StringUtils.translate(txt));
+        label.setStyle(style);
+        label.setVisible(true);
+        time(t, label);
 
     }
 

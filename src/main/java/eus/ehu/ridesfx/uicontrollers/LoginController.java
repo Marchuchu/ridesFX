@@ -72,17 +72,13 @@ public class LoginController implements Controller {
         if (logInButt.getText() == null || password.getText() == null) {
 
             mGUI.mGUIC.getSeeAlertsBttn().setVisible(false);
-            hasLogin.setText(StringUtils.translate("LoginController.LoginFailed"));
-            hasLogin.setVisible(true);
+            showErrorMessage("LoginController.LoginFailed", hasLogin, "-fx-text-fill: #d54242", 5);
 
-            return;
         } else {
 
             try {
 
                 if ((businessLogic.logIn(email.getText(), password.getText()))) {
-
-                    //hasLogin.setText("Login successful");
 
                     email.setText("");
                     password.setText("");
@@ -122,11 +118,7 @@ public class LoginController implements Controller {
 
             } catch (UnknownUser unknownUser) {
 
-                hasLogin.setStyle("-fx-text-fill: #d54242");
-                hasLogin.setVisible(true);
-
-                time(5, hasLogin);
-
+                showErrorMessage("LoginController.LoginFailed", hasLogin, "-fx-text-fill: #d54242", 5);
 
             }
 
@@ -161,6 +153,17 @@ public class LoginController implements Controller {
         thread.start();
 
     }
+
+    @Override
+    public void showErrorMessage(String txt, Label label, String style, int t){
+
+        label.setText(StringUtils.translate(txt));
+        label.setStyle(style);
+        label.setVisible(true);
+        time(t, label);
+
+    }
+
 
     //Unused methods
 

@@ -40,8 +40,8 @@
                <VBox.margin>
                   <Insets left="15.0" right="15.0" />
                </VBox.margin></Button>
-            <Text fx:id="userNames" strokeType="OUTSIDE" strokeWidth="0.0" text="Name:" />
-            <Label fx:id="rolName" contentDisplay="CENTER" prefHeight="17.0" prefWidth="113.0" textAlignment="CENTER" />
+            <Text fx:id="userNames" strokeType="OUTSIDE" strokeWidth="0.0" text="%Name" />
+            <Label fx:id="rolName" alignment="CENTER" contentDisplay="CENTER" prefHeight="17.0" prefWidth="124.0" textAlignment="CENTER" />
             <AnchorPane prefHeight="316.0" prefWidth="485.0" />
          </children>
       </VBox>

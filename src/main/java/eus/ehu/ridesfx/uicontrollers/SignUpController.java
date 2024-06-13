@@ -85,7 +85,6 @@ public class SignUpController implements Controller {
         signUpButt.setStyle("-fx-background-color: #f85774");
         signUpButt.setText(StringUtils.translate("SignUpController.SignUp"));
 
-
     }
 
     //Buttons methods
@@ -96,10 +95,8 @@ public class SignUpController implements Controller {
         if (name.getText() == null || email.getText() == null || password.getText() == null || repPas.getText() == null || role.getValue() == null) {
 
             mainGUI.mGUIC.getSeeAlertsBttn().setVisible(false);
-            hasLogin.setStyle("-fx-text-fill: #d54242");
-            hasLogin.setText(StringUtils.translate("SignUpController.EmptyFields"));
-            hasLogin.setVisible(true);
 
+            showErrorMessage("SignUpController.EmptyFields", hasLogin, "-fx-text-fill: #d54242", 5);
 
         } else {
 
@@ -149,30 +146,17 @@ public class SignUpController implements Controller {
 
                 } else if (!email.getText().contains("@")) {
 
-                    hasLogin.setText(StringUtils.translate("SignUpController.ValidEmail"));
-                    hasLogin.setStyle("-fx-text-fill: #d54242");
-                    hasLogin.setVisible(true);
-
-                    time(5, hasLogin);
+                    showErrorMessage("SignUpController.ValidEmail", hasLogin, "-fx-text-fill: #d54242", 5);
 
                 } else {
 
-                    hasLogin.setText(StringUtils.translate("SignUpController.UserExists"));
-                    hasLogin.setStyle("-fx-text-fill: #d54242");
-                    hasLogin.setVisible(true);
-
-                    time(5, hasLogin);
+                    showErrorMessage("SignUpController.UserExists", hasLogin, "-fx-text-fill: #d54242", 5);
 
                 }
 
             } else {
 
-                hasLogin.setText(StringUtils.translate("SignUpController.PasswordsDontMatch"));
-
-                hasLogin.setStyle("-fx-text-fill: #d54242");
-                hasLogin.setVisible(true);
-
-                time(5, hasLogin);
+                showErrorMessage("SignUpController.PasswordsDontMatch", hasLogin, "-fx-text-fill: #d54242", 5);
 
             }
 
@@ -210,6 +194,15 @@ public class SignUpController implements Controller {
 
     }
 
+    @Override
+    public void showErrorMessage(String txt, Label label, String style, int t){
+
+        label.setText(StringUtils.translate(txt));
+        label.setStyle(style);
+        label.setVisible(true);
+        time(t, label);
+
+    }
 
     //Unused methods
 

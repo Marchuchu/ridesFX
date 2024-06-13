@@ -71,31 +71,23 @@ public class CreateMessageController implements Controller {
 
 
         if (toBox.getText().isEmpty() || subjectBox.getText().isEmpty() || messageField.getText().isEmpty()) {
-            errorMessage.setVisible(true);
-            errorMessage.setText(StringUtils.translate("CreateMessageController.EmptyFields"));
 
-            time(5, errorMessage);
+            showErrorMessage("CreateMessageController.EmptyFields", errorMessage, "-fx-text-fill: #d54242;", 5);
 
         } else if (!toBox.getText().contains("@")) {
 
-            errorMessage.setText(StringUtils.translate("CreateMessageController.InvalidEmail"));
-
-            time(5, errorMessage);
-
+            showErrorMessage("CreateMessageController.InvalidEmail", errorMessage, "-fx-text-fill: #d54242;", 5);
 
         } else {
 
             businessLogic.sendMessage(businessLogic.getCurrentUser().getEmail(), toBox.getText(), subjectBox.getText(), messageField.getText());
-            errorMessage.setText(StringUtils.translate("CreateMessageController.MessageSent"));
+            showErrorMessage("CreateMessageController.MessageSent", errorMessage, "-fx-text-fill: #188a2e", 5);
 
             toBox.setText("");
             subjectBox.setText("");
             messageField.setText("");
 
-            time(5, errorMessage);
-
         }
-
 
     }
 
@@ -129,6 +121,15 @@ public class CreateMessageController implements Controller {
 
         thread.start();
 
+    }
+
+    @Override
+    public void showErrorMessage(String txt, Label label, String style, int t){
+
+        label.setText(StringUtils.translate(txt));
+        label.setStyle(style);
+        label.setVisible(true);
+        time(t, label);
 
     }
 

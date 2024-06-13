@@ -41,7 +41,6 @@ public class CreateRideController implements Controller {
     private TextField txtPrice;
 
     @FXML
-
     private Label arrivalCity;
 
     @FXML
@@ -71,6 +70,7 @@ public class CreateRideController implements Controller {
     void initialize() {
         btnCreateRide.setStyle("-fx-background-color: #f85774");
         lblErrorMessage.setText("");
+        changeLanguage();
 
         datePicker.setOnMouseClicked(e -> {
             DatePickerSkin skin = (DatePickerSkin) datePicker.getSkin();
@@ -131,41 +131,37 @@ public class CreateRideController implements Controller {
         LocalDate date = datePicker.getValue();
 
         if (date == null) {
-            lblErrorMessage.setText(StringUtils.translate("CreateRideGUI.FillDate"));
-            time(5, lblErrorMessage);
 
-            lblErrorMessage.setStyle("-fx-text-fill: #d54242");
+            showErrorMessage("CreateRideGUI.FillDate", lblErrorMessage, "-fx-text-fill: #d54242", 5);
+
             return;
         }
 
         if (date.isBefore(LocalDate.now())) {
-            lblErrorMessage.setText(StringUtils.translate("CreateRideGUI.DateMustBeLaterThanToday"));
-            time(5, lblErrorMessage);
 
-            lblErrorMessage.setStyle("-fx-text-fill: #d54242");
+            showErrorMessage("CreateRideGUI.DateMustBeLaterThanToday", lblErrorMessage, "-fx-text-fill: #d54242", 5);
+
             return;
         }
 
         if (from.isEmpty()) {
-            lblErrorMessage.setText(StringUtils.translate("CreateRideGUI.FillDepartureCity"));
-            time(5, lblErrorMessage);
 
-            lblErrorMessage.setStyle("-fx-text-fill: #d54242");
+            showErrorMessage("CreateRideGUI.FillDepartureCity", lblErrorMessage, "-fx-text-fill: #d54242", 5);
+
             return;
         }
 
         if (to.isEmpty()) {
-            lblErrorMessage.setStyle("-fx-text-fill: #d54242");
-            lblErrorMessage.setText(StringUtils.translate("CreateRideGUI.FillArrivalCity"));
-            time(5, lblErrorMessage);
+
+            showErrorMessage("CreateRideGUI.FillArrivalCity", lblErrorMessage,"-fx-text-fill: #d54242", 5);
 
             return;
         }
 
         if (txtNumberOfSeats.getText() == null) {
-            lblErrorMessage.setText(StringUtils.translate("CreateRideGUI.FillNumberOfSeats"));
-            lblErrorMessage.setStyle("-fx-text-fill: #d54242");
-            time(5, lblErrorMessage);
+
+            showErrorMessage("CreateRideGUI.FillNumberOfSeats", lblErrorMessage,"-fx-text-fill: #d54242", 5);
+
 
             return;
         }
@@ -174,17 +170,15 @@ public class CreateRideController implements Controller {
         try {
             numPlaces = Integer.parseInt(txtNumberOfSeats.getText());
         } catch (NumberFormatException e1) {
-            lblErrorMessage.setText(StringUtils.translate("CreateRideGUI.NumberOfSeatsMustBeANumber"));
-            lblErrorMessage.setStyle("-fx-text-fill: #d54242");
-            time(5, lblErrorMessage);
+
+            showErrorMessage("CreateRideGUI.NumberOfSeatsMustBeANumber", lblErrorMessage,"-fx-text-fill: #d54242", 5);
 
             return;
         }
 
         if (txtPrice.getText() == null) {
-            lblErrorMessage.setText(StringUtils.translate("CreateRideGUI.FillPrice"));
-            lblErrorMessage.setStyle("-fx-text-fill: #d54242");
-            time(5, lblErrorMessage);
+
+            showErrorMessage("CreateRideGUI.FillPrice", lblErrorMessage, "-fx-text-fill: #d54242", 5);
 
             return;
         }
@@ -193,26 +187,21 @@ public class CreateRideController implements Controller {
         try {
             price = Float.parseFloat(txtPrice.getText());
         } catch (NumberFormatException e1) {
-            lblErrorMessage.setText(StringUtils.translate("CreateRideGUI.PriceMustBeANumber"));
-            lblErrorMessage.setStyle("-fx-text-fill: #d54242");
-            time(5, lblErrorMessage);
+            showErrorMessage("CreateRideGUI.PriceMustBeANumber", lblErrorMessage,"-fx-text-fill: #d54242", 5);
 
             return;
         }
 
         if (numPlaces > 5) {
-            lblErrorMessage.setText(StringUtils.translate("CreateRideGUI.NumberOfSeatsMustBeLessThan5"));
-            lblErrorMessage.setStyle("-fx-text-fill: #d54242");
-            time(5, lblErrorMessage);
 
+            showErrorMessage("CreateRideGUI.NumberOfSeatsMustBeLessThan5", lblErrorMessage,"-fx-text-fill: #d54242", 5);
             return;
         }
 
         User user = businessLogic.getCurrentUser();
         businessLogic.createRideClick(from, to, Dates.convertToDate(date), numPlaces, price, user.getEmail());
-        lblErrorMessage.setText(StringUtils.translate("CreateRideGUI.RideCreated"));
-        time(5, lblErrorMessage);
 
+        showErrorMessage("CreateRideGUI.RideCreated", lblErrorMessage,"-fx-text-fill: #188a2e", 5);
 
         List<String> deptCities = businessLogic.getDepartCities();
         if (!deptCities.contains(from)) {
@@ -242,6 +231,15 @@ public class CreateRideController implements Controller {
         arrivalCity.setText(StringUtils.translate("ArrivalCity"));
     }
 
+    @Override
+    public void showErrorMessage(String txt, Label label, String style, int t){
+
+        label.setText(StringUtils.translate(txt));
+        label.setStyle(style);
+        label.setVisible(true);
+        time(t, label);
+
+    }
 
     @Override
     public void time(int s, Label msg) {

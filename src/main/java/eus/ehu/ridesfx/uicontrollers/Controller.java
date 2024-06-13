@@ -28,4 +28,6 @@ public interface Controller {
     void updateComboBoxes(String from);
 
     void clearData();
+
+    void showErrorMessage(String txt, Label label, String style, int t);
 }

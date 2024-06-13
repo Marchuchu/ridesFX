@@ -12,10 +12,10 @@
       <TextField fx:id="toBox" layoutX="100.0" layoutY="38.0" />
       <TextField fx:id="subjectBox" layoutX="100.0" layoutY="78.0" prefHeight="25.0" prefWidth="452.0" />
       <TextArea fx:id="messageField" layoutX="100.0" layoutY="125.0" prefHeight="176.0" prefWidth="452.0" />
-      <Button fx:id="sendMessageBttn" layoutX="274.0" layoutY="348.0" mnemonicParsing="false" onAction="#onClickSendMessage" text="%Send" />
-      <Text fx:id="toTXT" layoutX="67.0" layoutY="55.0" strokeType="OUTSIDE" strokeWidth="0.0" text="%To" />
-      <Text fx:id="msgTXT" layoutX="39.0" layoutY="138.0" strokeType="OUTSIDE" strokeWidth="0.0" text="%Message" />
-      <Text fx:id="subTXT" layoutX="43.0" layoutY="95.0" strokeType="OUTSIDE" strokeWidth="0.0" text="%Subject" />
-      <Label fx:id="errorMessage" alignment="CENTER" contentDisplay="CENTER" layoutX="154.0" layoutY="318.0" prefHeight="17.0" prefWidth="293.0" text="%errorMessage" textAlignment="CENTER" />
+      <Button fx:id="sendMessageBttn" alignment="CENTER" contentDisplay="CENTER" layoutX="274.0" layoutY="348.0" mnemonicParsing="false" onAction="#onClickSendMessage" text="%Send" textAlignment="CENTER" />
+      <Text fx:id="toTXT" layoutX="67.0" layoutY="55.0" strokeType="OUTSIDE" strokeWidth="0.0" text="%To" textAlignment="RIGHT" />
+      <Text fx:id="msgTXT" layoutX="39.0" layoutY="138.0" strokeType="OUTSIDE" strokeWidth="0.0" text="%Message" textAlignment="RIGHT" />
+      <Text fx:id="subTXT" layoutX="43.0" layoutY="95.0" strokeType="OUTSIDE" strokeWidth="0.0" text="%Subject" textAlignment="RIGHT" />
+      <Label fx:id="errorMessage" alignment="CENTER" contentDisplay="CENTER" layoutX="121.0" layoutY="320.0" prefHeight="17.0" prefWidth="359.0" text="%errorMessage" textAlignment="CENTER" />
    </children>
 </AnchorPane>

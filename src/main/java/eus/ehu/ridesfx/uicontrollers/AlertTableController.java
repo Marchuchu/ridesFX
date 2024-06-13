@@ -72,11 +72,12 @@ public class AlertTableController implements Controller {
         price.setText("0");
         tblAlerts.setItems(observableArray);
 
+        message.setVisible(false);
+
         setUpAlertsSelection();
         showHide();
         changeLanguage();
 
-        // Configurar las columnas de la tabla
         date.setCellValueFactory(new PropertyValueFactory<>("date"));
         from.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getFrom()));
         to.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getTo()));
@@ -93,47 +94,39 @@ public class AlertTableController implements Controller {
         takeRideBttn.setStyle("-fx-background-color: #f85774");
         cancelAlertBttn.setStyle("-fx-background-color: #f85774");
 
-        if (businessLogic.getCurrentUser() instanceof Traveler && r != null) {
-            try {
-                businessLogic.cancelAlert(r);
-                observableArray.remove(r);
-                message.setText(translate("AlertCanceledSuccessfully"));
-                time(5, message);
-            } catch (IllegalArgumentException e) {
-                message.setText(e.getMessage());
-                time(5, message);
-            }
-        } else if (r == null) {
-            message.setText(translate("YouMustSelectAnAlertToCancel"));
-            time(5, message);
-        } else if (businessLogic.getCurrentUser() instanceof Driver) {
-            message.setText("Choose the ride you want to take");
-            time(5, message);
+        if (r != null) {
+
+            businessLogic.cancelAlert(r);
+            observableArray.remove(r);
+
+            showErrorMessage("AlertCanceledSuccessfully", message, "-fx-text-fill: #188a2e", 5);
+
+        } else {
+
+            showErrorMessage("YouMustSelectAnAlertToCancel", message, "-fx-text-fill: #f85774", 5);
+
         }
 
-        takeRideBttn.setVisible(false);
-        cancelAlertBttn.setStyle("-fx-background-color: #f85774");
-        message.setText(translate("ChooseTheRideYouWantToTake"));
-        time(5, message);
     }
 
     @FXML
     void onClickTakeRide(ActionEvent event) {
+
         Alert r = tblAlerts.getSelectionModel().getSelectedItem();
 
-        if (businessLogic.getCurrentUser() instanceof Driver && r != null) {
+        if (r != null) {
             businessLogic.takeRide(r, 1, Integer.parseInt(price.getText()));
 
             cancelAlertBttn.setVisible(false);
             takeRideBttn.setStyle("-fx-background-color: #f85774");
-            message.setText(translate("RideTakenSuccessfully"));
-            time(5, message);
+
+            showErrorMessage("RideTakenSuccessfully", message, "-fx-text-fill: #188a2e", 5);
 
         } else {
-            message.setText(translate("YouMustSelectARideToTake"));
-            time(5, message);
-        }
 
+            showErrorMessage("YouMustSelectARideToTake", message, "-fx-text-fill: #f85774", 5);
+
+        }
 
     }
 
@@ -149,10 +142,6 @@ public class AlertTableController implements Controller {
         user.setText(StringUtils.translate("User"));
         date.setText(StringUtils.translate("Date"));
         price.setPromptText(StringUtils.translate("Price"));
-    }
-
-    String translate(String txt) {
-        return ResourceBundle.getBundle("Etiquetas").getString(txt);
     }
 
     public void showHide() {
@@ -208,6 +197,15 @@ public class AlertTableController implements Controller {
         return tblAlerts;
     }
 
+    @Override
+    public void showErrorMessage(String txt, Label label, String style, int t){
+
+        label.setText(StringUtils.translate(txt));
+        label.setStyle(style);
+        label.setVisible(true);
+        time(t, label);
+
+    }
 
 
     //Unused methods

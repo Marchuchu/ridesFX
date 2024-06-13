@@ -103,15 +103,7 @@ public class QueryRidesController implements Controller {
         bookButtn.setStyle("-fx-background-color: #f85774");
         createAlertBut.setStyle("-fx-background-color: #f85774");
 
-        bookButtn.setText(StringUtils.translate("Book"));
-        createAlertBut.setText(StringUtils.translate("CreateAlert"));
-        DepartCity.setText(StringUtils.translate("DepartCity"));
-        ArrivalCity.setText(StringUtils.translate("ArrivalCity"));
-        EventDate.setText(StringUtils.translate("EventDate"));
-
-        qc1.setText(StringUtils.translate("Driver"));
-        qc2.setText(StringUtils.translate("Seats"));
-        qc3.setText(StringUtils.translate("Price"));
+        changeLanguage();
 
         reservationMessage.setVisible(false);
 
@@ -151,18 +143,12 @@ public class QueryRidesController implements Controller {
 
             if (datepicker.getValue().compareTo(LocalDate.now()) < 0) {
 
-                reservationMessage.setText(StringUtils.translate("QueryRidesController.PleaseSelectFutureDate"));
-                reservationMessage.setStyle("-fx-text-fill: #d54242");
-                reservationMessage.setVisible(true);
-                time(5, reservationMessage);
-
+                showErrorMessage("QueryRidesController.PleaseSelectFutureDate", reservationMessage, "-fx-text-fill: #d54242", 5);
 
             } else {
 
                 tblRides.getItems().clear();
-                // Vector<domain.Ride> events = businessLogic.getEvents(Dates.convertToDate(datepicker.getValue()));
                 List<Ride> rides = businessLogic.getRides(comboDepartCity.getValue(), comboArrivalCity.getValue(), Dates.convertToDate(datepicker.getValue()));
-                // List<Ride> rides = Arrays.asList(new Ride("Bilbao", "Donostia", Dates.convertToDate(datepicker.getValue()), 3, 3.5f, new Driver("pepe@pepe.com", "pepe")));
                 for (Ride ride : rides) {
                     tblRides.getItems().add(ride);
                 }
@@ -217,25 +203,21 @@ public class QueryRidesController implements Controller {
 
         if (user instanceof Traveler) {
             if (from != null && to != null && date != null) {
-                businessLogic.createAlert(from, to, date, user.getEmail());
-                reservationMessage.setStyle("-fx-text-fill: #188a2e");
-                reservationMessage.setText(StringUtils.translate("AlertCreated"));
-                reservationMessage.setVisible(true);
 
-                // Añadir la nueva alerta a la tabla de alertas en la interfaz de usuario
+                businessLogic.createAlert(from, to, date, user.getEmail());
                 addAlertToTable(new Alert(from, to, date, user));
-                time(5, reservationMessage);
+
+                showErrorMessage("QueryRidesController.AlertCreated", reservationMessage, "-fx-text-fill: #188a2e", 5);
+
             } else {
-                reservationMessage.setText(StringUtils.translate("QueryRidesController.PleaseFillInAllFields"));
-                reservationMessage.setVisible(true);
-                reservationMessage.setStyle("-fx-text-fill: #d54242");
-                time(5, reservationMessage);
+
+                showErrorMessage("QueryRidesController.PleaseFillInAllFields", reservationMessage, "-fx-text-fill: #d54242", 5);
             }
+
         } else {
-            reservationMessage.setText(StringUtils.translate("QueryRidesController.PleaseLogInOrSignUp"));
-            reservationMessage.setVisible(true);
-            reservationMessage.setStyle("-fx-text-fill: #d54242");
-            time(5, reservationMessage);
+
+            showErrorMessage("QueryRidesController.PleaseLogInOrSignUp", reservationMessage, "-fx-text-fill: #d54242", 5);
+
         }
     }
 
@@ -252,36 +234,29 @@ public class QueryRidesController implements Controller {
 
             if (ride != null) {
 
-
-                reservationMessage.setText(StringUtils.translate("QueryRidesController.RideBooked"));
-                reservationMessage.setStyle("-fx-text-fill: #188a2e");
-                reservationMessage.setVisible(true);
-
-                time(5, reservationMessage);
-
+                showErrorMessage("QueryRidesController.RideBooked", reservationMessage, "-fx-text-fill: #188a2e", 5);
 
                 ride.setNumPlaces(ride.getNumPlaces() - 1);
 
+                if (ride.getNumPlaces() == 0) {
+
+                    showErrorMessage("QueryRidesController.NoPlacesLeft", reservationMessage, "-fx-text-fill: #d54242", 5);
+
+                } else {
+
+                    ride.setNumPlaces(ride.getNumPlaces() - 1);
+
+                }
+
             } else {
 
-                reservationMessage.setText(StringUtils.translate("QueryRidesController.PleaseSelectRideToBook"));
-                reservationMessage.setStyle("-fx-text-fill: #d54242");
-                reservationMessage.setVisible(true);
-
-                time(5, reservationMessage);
+                showErrorMessage("QueryRidesController.PleaseSelectRideToBook", reservationMessage, "-fx-text-fill: #d54242", 5);
 
             }
 
         } else {
 
-            reservationMessage.setText(StringUtils.translate("QueryRidesController.PleaseLogInOrSignUp"));
-
-            reservationMessage.setStyle("-fx-text-fill: #d54242");
-            reservationMessage.setVisible(true);
-
-            time(5, reservationMessage);
-
-
+            showErrorMessage("QueryRidesController.PleaseLogInOrSignUp", reservationMessage, "-fx-text-fill: #d54242",5);
             mainGUI.mGUIC.getSeeAlertsBttn().setVisible(false);
 
         }
@@ -425,6 +400,16 @@ public class QueryRidesController implements Controller {
         });
 
         thread.start();
+
+    }
+
+    @Override
+    public void showErrorMessage(String txt, Label label, String style, int t) {
+
+        label.setText(StringUtils.translate(txt));
+        label.setStyle(style);
+        label.setVisible(true);
+        time(t, label);
 
     }
 

@@ -524,7 +524,7 @@ public class DataAccess {
 
         driver3.addRide("Bilbo", "Donostia", UtilDate.newDate(year, month + 1, 14), 1, 3);
 
-        Message message = new Message(traveler2, driver1, "Hello, can i take my car with me in the car?", "Doubt");
+        Message message = new Message(traveler2, driver1, "Hello, can i take my cat with me in the car?", "Doubt");
 
         db.persist(message);
         db.persist(driver1);

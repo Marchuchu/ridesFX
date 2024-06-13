@@ -21,10 +21,10 @@
             <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
          </columnResizePolicy>
       </TableView>
-      <Button fx:id="takeRideBttn" layoutX="314.0" layoutY="375.0" mnemonicParsing="false" onAction="#onClickTakeRide" text="Take Ride" />
-      <Label fx:id="message" layoutX="347.0" layoutY="347.0" prefHeight="18.0" prefWidth="190.0" textAlignment="CENTER" />
-      <Button fx:id="cancelAlertBttn" layoutX="498.0" layoutY="375.0" mnemonicParsing="false" onAction="#onClickCancelAlert" text="Cancel Alert" />
-      <Text fx:id="setPriceTXT" layoutX="135.0" layoutY="392.0" strokeType="OUTSIDE" strokeWidth="0.0" text="%SetPrice" />
+      <Button fx:id="takeRideBttn" alignment="CENTER" contentDisplay="CENTER" layoutX="314.0" layoutY="375.0" mnemonicParsing="false" onAction="#onClickTakeRide" text="Take Ride" textAlignment="CENTER" />
+      <Label fx:id="message" alignment="CENTER" contentDisplay="CENTER" layoutX="262.0" layoutY="337.0" prefHeight="18.0" prefWidth="363.0" textAlignment="CENTER" />
+      <Button fx:id="cancelAlertBttn" alignment="CENTER" contentDisplay="CENTER" layoutX="498.0" layoutY="375.0" mnemonicParsing="false" onAction="#onClickCancelAlert" text="Cancel Alert" textAlignment="CENTER" />
+      <Text fx:id="setPriceTXT" layoutX="135.0" layoutY="392.0" strokeType="OUTSIDE" strokeWidth="0.0" text="%SetPrice" textAlignment="RIGHT" />
       <TextField fx:id="price" layoutX="198.0" layoutY="375.0" prefHeight="26.0" prefWidth="30.0" />
    </children>
 </AnchorPane>

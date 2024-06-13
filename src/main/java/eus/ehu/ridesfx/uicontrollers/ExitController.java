@@ -4,6 +4,7 @@ import eus.ehu.ridesfx.businessLogic.BlFacade;
 import eus.ehu.ridesfx.domain.Alert;
 import eus.ehu.ridesfx.domain.User;
 import eus.ehu.ridesfx.ui.MainGUI;
+import eus.ehu.ridesfx.utils.StringUtils;
 import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;
@@ -49,6 +50,17 @@ public class ExitController implements Controller {
         thread.start();
 
     }
+
+    @Override
+    public void showErrorMessage(String txt, Label label, String style, int t){
+
+        label.setText(StringUtils.translate(txt));
+        label.setStyle(style);
+        label.setVisible(true);
+        time(t, label);
+
+    }
+
 
     @Override
     public void getAlerts(User t) {

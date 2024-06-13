@@ -23,12 +23,6 @@ import java.util.ResourceBundle;
 public class MainGUIController implements Controller {
 
     @FXML
-    private Label selectOptionLbl;
-
-    @FXML
-    private Label lblDriver;
-
-    @FXML
     private Button en;
 
     @FXML
@@ -61,7 +55,6 @@ public class MainGUIController implements Controller {
     @FXML
     private Button seeAlertsBttn;
 
-
     @FXML
     private Text userNames;
 
@@ -89,7 +82,6 @@ public class MainGUIController implements Controller {
         seeAlertsBttn.setVisible(false);
         seeMessagesBttn.setVisible(false);
 
-
         exitBttn.setStyle("-fx-background-color: #f85774");
         logInButton.setStyle("-fx-background-color: #f85774");
         signUpButton.setStyle("-fx-background-color: #f85774");
@@ -102,7 +94,8 @@ public class MainGUIController implements Controller {
         eus.setStyle("-fx-background-color: #f85774");
 
         businessLogic.setCurrentUser(new User());
-        rolName.setText(ResourceBundle.getBundle("Etiquetas", Locale.getDefault()).getString("Guest"));
+
+        rolName.setText(StringUtils.translate("Guest"));
 
     }
 
@@ -164,11 +157,6 @@ public class MainGUIController implements Controller {
         this.mGUI = mainGUI;
     }
 
-
-    public BorderPane getMainWrapper1() {
-        return mainWrapper;
-    }
-
     //Buttons methods
 
     @FXML
@@ -183,17 +171,6 @@ public class MainGUIController implements Controller {
         seeMessagesBttn.setVisible(false);
         seeAlertsBttn.setVisible(false);
 
-        if (businessLogic.getCurrentUser() instanceof Traveler || businessLogic.getCurrentUser() instanceof Driver) {
-
-            rolName.setText(businessLogic.getCurrentUser().getName());
-
-        } else {
-
-            rolName.setText("Guest");
-
-        }
-
-
     }
 
     @FXML
@@ -206,18 +183,6 @@ public class MainGUIController implements Controller {
         exitBttn.setVisible(false);
         seeMessagesBttn.setVisible(false);
         seeAlertsBttn.setVisible(false);
-
-
-        if (businessLogic.getCurrentUser().getClass().equals(Traveler.class) || businessLogic.getCurrentUser().getClass().equals(Driver.class)) {
-
-            rolName.setText(businessLogic.getCurrentUser().getName());
-
-        } else {
-
-            rolName.setText("Guest");
-
-        }
-
 
     }
 
@@ -234,8 +199,7 @@ public class MainGUIController implements Controller {
         seeMessagesBttn.setVisible(false);
 
         businessLogic.setCurrentUser(new User());
-        rolName.setText("Guest");
-
+        rolName.setText(StringUtils.translate("Guest"));
 
     }
 
@@ -243,9 +207,7 @@ public class MainGUIController implements Controller {
     void queryRides(ActionEvent event) {
 
         mGUI.queryRideWin.controller.getTblAlerts();
-
         mGUI.queryRideWin.controller.clearData();
-
 
         mGUI.showScene("Query Rides");
         queryRidesBtn.setVisible(false);
@@ -366,24 +328,23 @@ public class MainGUIController implements Controller {
     @Override
     public void changeLanguage() {
 
-        signUpButton.setText(StringUtils.translate("SignUp"));
-        exitBttn.setText(StringUtils.translate("Exit"));
-        createRidesBtn.setText(StringUtils.translate("CreateRide"));
-        queryRidesBtn.setText(StringUtils.translate("QueryRides"));
         logInButton.setText(StringUtils.translate("LogIn"));
+        signUpButton.setText(StringUtils.translate("SignUp"));
+        queryRidesBtn.setText(StringUtils.translate("QueryRides"));
+        createRidesBtn.setText(StringUtils.translate("CreateRide"));
         seeAlertsBttn.setText(StringUtils.translate("SeeAlerts"));
         seeMessagesBttn.setText(StringUtils.translate("SeeMessages"));
         exitBttn.setText(StringUtils.translate("Exit"));
-        rolName.setText(StringUtils.translate("Guest"));
+        userNames.setText(StringUtils.translate("Name"));
 
+        mGUI.loginWin.controller.changeLanguage();
+        mGUI.signUWin.controller.changeLanguage();
         mGUI.queryRideWin.controller.changeLanguage();
         mGUI.createRideWin.controller.changeLanguage();
-        mGUI.signUWin.controller.changeLanguage();
-        mGUI.loginWin.controller.changeLanguage();
-        mGUI.logoutWin.controller.changeLanguage();
         mGUI.alertWin.controller.changeLanguage();
         mGUI.seeMessageWin.controller.changeLanguage();
         mGUI.createMessageWin.controller.changeLanguage();
+        mGUI.logoutWin.controller.changeLanguage();
 
 
     }
@@ -400,12 +361,12 @@ public class MainGUIController implements Controller {
     }
 
     @Override
-    public void time(int s, Label mssg) {
+    public void time(int s, Label msg) {
 
         Thread thread = new Thread(() -> {
             try {
                 Thread.sleep(s * 1000);
-                Platform.runLater(() -> mssg.setVisible(false));
+                Platform.runLater(() -> msg.setVisible(false));
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
@@ -413,6 +374,17 @@ public class MainGUIController implements Controller {
         thread.start();
 
     }
+
+    @Override
+    public void showErrorMessage(String txt, Label label, String style, int t){
+
+        label.setText(StringUtils.translate(txt));
+        label.setStyle(style);
+        label.setVisible(true);
+        time(t, label);
+
+    }
+
 
     //Unused methods
 
@@ -440,7 +412,6 @@ public class MainGUIController implements Controller {
     public void showHide() {
 
     }
-
 
     @Override
     public void clearData() {
