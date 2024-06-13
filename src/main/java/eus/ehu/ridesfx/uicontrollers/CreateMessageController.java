@@ -55,6 +55,10 @@ public class CreateMessageController implements Controller {
         sendMessageBttn.setStyle("-fx-background-color: #f85774");
         errorMessage.setVisible(false);
 
+        toBox.setText("");
+        subjectBox.setText("");
+        messageField.setText("");
+
     }
 
     @Override
@@ -69,12 +73,16 @@ public class CreateMessageController implements Controller {
     @FXML
     void onClickSendMessage(ActionEvent event) {
 
-
         if (toBox.getText().isEmpty() || subjectBox.getText().isEmpty() || messageField.getText().isEmpty()) {
 
             showErrorMessage("CreateMessageController.EmptyFields", errorMessage, "-fx-text-fill: #d54242;", 5);
 
-        } else if (!toBox.getText().contains("@")) {
+        } else if(businessLogic.getUserByEmail(toBox.getText()) == null){
+
+            showErrorMessage("CreateMessageController.UserDoesntExist", errorMessage, "-fx-text-fill: #d54242;", 5);
+
+
+        }else if (!toBox.getText().contains("@")) {
 
             showErrorMessage("CreateMessageController.InvalidEmail", errorMessage, "-fx-text-fill: #d54242;", 5);
 

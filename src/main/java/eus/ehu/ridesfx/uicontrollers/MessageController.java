@@ -14,6 +14,7 @@ import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.AnchorPane;
+
 import java.util.List;
 
 import javafx.scene.text.Text;
@@ -36,10 +37,14 @@ public class MessageController implements Controller {
     private TableView<Message> messageTable;
     @FXML
     private TableColumn<Message, String> fromColumn;
-    @FXML
-    private TableColumn<Message, String> messageColumn;
+    //    @FXML
+//    private TableColumn<Message, String> messageColumn;
     @FXML
     private TableColumn<Message, String> subjectColumn;
+
+    @FXML
+    private TableColumn<Message, String> toColumn;
+
     @FXML
     private Button seeMessageBttn;
     @FXML
@@ -61,13 +66,15 @@ public class MessageController implements Controller {
         idColumn.setCellValueFactory(new PropertyValueFactory<>("id"));
         fromColumn.setCellValueFactory(new PropertyValueFactory<>("from"));
         subjectColumn.setCellValueFactory(new PropertyValueFactory<>("subject"));
-        messageColumn.setCellValueFactory(new PropertyValueFactory<>("message"));
+//        messageColumn.setCellValueFactory(new PropertyValueFactory<>("message"));
+        toColumn.setCellValueFactory(new PropertyValueFactory<>("to"));
 
         seeMessageBttn.setStyle("-fx-background-color: #f85774");
         sendNewMessageBttn.setStyle("-fx-background-color: #f85774");
         errorMessage.setVisible(false);
 
         messageTXT.setEditable(false);
+        messageTXT.setText(" ");
 
         loadMessages();
 
@@ -85,6 +92,7 @@ public class MessageController implements Controller {
     public void loadMessages(User u) {
 
         List<Message> messages = businessLogic.getAllMessagesFromUser(u);
+        messages.addAll(businessLogic.getAllMessagesToUser(u));
         messageTable.getItems().setAll(messages);
 
     }
@@ -117,7 +125,6 @@ public class MessageController implements Controller {
     }
 
 
-
     @FXML
     void onClickSendNewMessage(ActionEvent event) {
 
@@ -128,6 +135,7 @@ public class MessageController implements Controller {
         mainGUI.mGUIC.getSeeAlertsBttn().setVisible(false);
         mainGUI.mGUIC.getQueryRidesBtn().setVisible(false);
 
+        messageTXT.setText(" ");
 
     }
 
@@ -140,8 +148,9 @@ public class MessageController implements Controller {
         sendNewMessageBttn.setText(StringUtils.translate("SendNewMessage"));
         errorMessage.setText(StringUtils.translate("MessageController.selectMessage"));
         fromColumn.setText(StringUtils.translate("From"));
-        messageColumn.setText(StringUtils.translate("Message"));
+//        messageColumn.setText(StringUtils.translate("Message"));
         subjectColumn.setText(StringUtils.translate("Subject"));
+        toColumn.setText(StringUtils.translate("To"));
 
     }
 
@@ -162,7 +171,7 @@ public class MessageController implements Controller {
     }
 
     @Override
-    public void showErrorMessage(String txt, Label label, String style, int t){
+    public void showErrorMessage(String txt, Label label, String style, int t) {
 
         label.setText(StringUtils.translate(txt));
         label.setStyle(style);

@@ -501,7 +501,7 @@ public class DataAccess {
         // Create drivers
         Driver driver1 = new Driver("driver1@gmail.com", "Aitor Fernandez", "12345", "12345");
         Driver driver2 = new Driver("driver2@gmail.com", "Ane Gaztañaga", "54321", "54321");
-        Driver driver3 = new Driver("driver3@gmail.com", "Test driver", "12345", "12345");
+        Driver driver3 = new Driver("driver3@gmail.com", "Leyre Martinez", "12345", "12345");
 
         // Create travelers
         Traveler traveler1 = new Traveler("traveler1@gmail.com", "Jose Antonio", "amorch1", "amorch");
@@ -524,9 +524,11 @@ public class DataAccess {
 
         driver3.addRide("Bilbo", "Donostia", UtilDate.newDate(year, month + 1, 14), 1, 3);
 
-        Message message = new Message(traveler2, driver1, "Hello, can i take my cat with me in the car?", "Doubt");
+        Message message1 = new Message(traveler2, driver1, "Doubt", "Hello, can i take my cat with me in the car?");
+        Message message3 = new Message(traveler1, driver1, "Doubt", "Hello, can i take my dog with me in the car?");
 
-        db.persist(message);
+        db.persist(message1);
+        db.persist(message3);
         db.persist(driver1);
         db.persist(driver2);
         db.persist(driver3);
@@ -542,10 +544,9 @@ public class DataAccess {
         return query.getResultList();
     }
 
-    public User getUserByEmail(String email) {
+    public User getUserByEmail(String e) {
 
-        TypedQuery<User> query = db.createQuery("SELECT u FROM User u WHERE u.email = :email", User.class);
-        return query.getSingleResult();
+         return db.find(User.class, e);
 
     }
 
@@ -554,4 +555,13 @@ public class DataAccess {
         query.setParameter("u", u);
         return query.getResultList();
     }
+
+    public List<Message> getMessagesToUser(User u){
+
+        TypedQuery<Message> query = db.createQuery("SELECT m FROM Message m WHERE m.from = :u", Message.class);
+        query.setParameter("u", u);
+        return query.getResultList();
+
+    }
+
 }

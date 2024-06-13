@@ -24,7 +24,7 @@ public class Message {
 
     }
 
-    public Message(User from, User to, String message, String subject) {
+    public Message(User from, User to, String subject, String message ) {
         this.from = from;
         this.to = to;
         this.message = message;

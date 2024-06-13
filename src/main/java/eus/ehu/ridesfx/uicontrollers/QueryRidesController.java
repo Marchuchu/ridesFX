@@ -236,8 +236,6 @@ public class QueryRidesController implements Controller {
 
                 showErrorMessage("QueryRidesController.RideBooked", reservationMessage, "-fx-text-fill: #188a2e", 5);
 
-                ride.setNumPlaces(ride.getNumPlaces() - 1);
-
                 if (ride.getNumPlaces() == 0) {
 
                     showErrorMessage("QueryRidesController.NoPlacesLeft", reservationMessage, "-fx-text-fill: #d54242", 5);

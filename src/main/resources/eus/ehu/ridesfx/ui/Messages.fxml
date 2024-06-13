@@ -10,18 +10,18 @@
 
 <AnchorPane fx:id="mainWrapper" prefHeight="589.0" prefWidth="815.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="eus.ehu.ridesfx.uicontrollers.MessageController">
    <children>
-      <TextArea fx:id="messageTXT" layoutX="438.0" layoutY="50.0" prefHeight="419.0" prefWidth="325.0" />
-      <TableView fx:id="messageTable" layoutX="55.0" layoutY="50.0" prefHeight="419.0" prefWidth="325.0">
+      <TextArea fx:id="messageTXT" layoutX="497.0" layoutY="50.0" prefHeight="419.0" prefWidth="266.0" />
+      <TableView fx:id="messageTable" layoutX="55.0" layoutY="50.0" prefHeight="419.0" prefWidth="397.0">
         <columns>
             <TableColumn fx:id="idColumn" prefWidth="30.0" text="ID" />
-          <TableColumn fx:id="fromColumn" prefWidth="75.0" text="%From" />
-          <TableColumn fx:id="subjectColumn" prefWidth="115.0" text="%Subject" />
-            <TableColumn fx:id="messageColumn" prefWidth="104.0" text="%Message" />
+          <TableColumn fx:id="fromColumn" prefWidth="93.0" text="%From" />
+            <TableColumn fx:id="toColumn" prefWidth="82.0" text="%To" />
+          <TableColumn fx:id="subjectColumn" prefWidth="191.0" text="%Subject" />
         </columns>
       </TableView>
-      <Button fx:id="seeMessageBttn" alignment="CENTER" contentDisplay="CENTER" layoutX="171.0" layoutY="509.0" mnemonicParsing="false" onAction="#onClickSeeMessage" text="%SeeMessage" textAlignment="CENTER" />
-      <Button fx:id="sendNewMessageBttn" alignment="CENTER" contentDisplay="CENTER" layoutX="539.0" layoutY="509.0" mnemonicParsing="false" onAction="#onClickSendNewMessage" text="%SendNewMessage" textAlignment="CENTER" />
+      <Button fx:id="seeMessageBttn" alignment="CENTER" contentDisplay="CENTER" layoutX="208.0" layoutY="509.0" mnemonicParsing="false" onAction="#onClickSeeMessage" text="%SeeMessage" textAlignment="CENTER" />
+      <Button fx:id="sendNewMessageBttn" alignment="CENTER" contentDisplay="CENTER" layoutX="569.0" layoutY="509.0" mnemonicParsing="false" onAction="#onClickSendNewMessage" text="%SendNewMessage" textAlignment="CENTER" />
       <Text fx:id="errorM" layoutX="147.0" layoutY="325.0" strokeType="OUTSIDE" strokeWidth="0.0" />
-      <Label fx:id="errorMessage" alignment="CENTER" contentDisplay="CENTER" layoutX="85.0" layoutY="480.0" prefHeight="17.0" prefWidth="266.0" text="%errorMessage" textAlignment="CENTER" />
+      <Label fx:id="errorMessage" alignment="CENTER" contentDisplay="CENTER" layoutX="56.0" layoutY="483.0" prefHeight="17.0" prefWidth="397.0" text="%errorMessage" textAlignment="CENTER" />
    </children>
 </AnchorPane>

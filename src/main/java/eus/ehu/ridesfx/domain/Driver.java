@@ -131,4 +131,11 @@ public class Driver extends User implements Serializable {
     }
 
 
+    //toString
+
+    @Override
+    public String toString() {
+        return this.getName();
+    }
+
 }

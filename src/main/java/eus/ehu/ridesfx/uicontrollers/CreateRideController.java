@@ -203,6 +203,12 @@ public class CreateRideController implements Controller {
 
         showErrorMessage("CreateRideGUI.RideCreated", lblErrorMessage,"-fx-text-fill: #188a2e", 5);
 
+        txtArrivalCity.setText("");
+        txtDepartCity.setText("");
+        txtNumberOfSeats.setText("");
+        txtPrice.setText("");
+        datePicker.setValue(null);
+
         List<String> deptCities = businessLogic.getDepartCities();
         if (!deptCities.contains(from)) {
             businessLogic.addCitie(from);

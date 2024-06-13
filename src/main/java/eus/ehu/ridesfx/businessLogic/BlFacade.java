@@ -5,6 +5,7 @@ import eus.ehu.ridesfx.exceptions.RideAlreadyExistException;
 import eus.ehu.ridesfx.exceptions.RideMustBeLaterThanTodayException;
 import eus.ehu.ridesfx.exceptions.UnknownUser;
 
+import java.util.Collection;
 import java.util.Date;
 import java.util.List;
 import java.util.Vector;
@@ -110,4 +111,6 @@ public interface BlFacade {
 
 
     List<Message> getAllMessagesFromUser(User u);
+
+    List<Message> getAllMessagesToUser(User u);
 }

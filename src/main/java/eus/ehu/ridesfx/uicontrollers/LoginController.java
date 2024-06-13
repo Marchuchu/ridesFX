@@ -78,7 +78,7 @@ public class LoginController implements Controller {
 
             try {
 
-                if ((businessLogic.logIn(email.getText(), password.getText()))) {
+               if ((businessLogic.logIn(email.getText(), password.getText()))) {
 
                     email.setText("");
                     password.setText("");

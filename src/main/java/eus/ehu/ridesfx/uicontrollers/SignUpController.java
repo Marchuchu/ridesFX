@@ -108,7 +108,11 @@ public class SignUpController implements Controller {
                 user = new Traveler(email.getText(), name.getText(), password.getText(), repPas.getText());
             }
 
-            if (password.getText().equals(repPas.getText())) {
+            if(businessLogic.getUserByEmail(email.getText()) != null){
+
+                showErrorMessage("SignUpController.ThisUSerAlreadyExists", hasLogin, "-fx-text-fill: #d54242", 5);
+
+            } else if (password.getText().equals(repPas.getText())) {
 
                 if (businessLogic.signUp(name.getText(), email.getText(), password.getText(), repPas.getText(), r)) {
 
@@ -147,10 +151,6 @@ public class SignUpController implements Controller {
                 } else if (!email.getText().contains("@")) {
 
                     showErrorMessage("SignUpController.ValidEmail", hasLogin, "-fx-text-fill: #d54242", 5);
-
-                } else {
-
-                    showErrorMessage("SignUpController.UserExists", hasLogin, "-fx-text-fill: #d54242", 5);
 
                 }
 

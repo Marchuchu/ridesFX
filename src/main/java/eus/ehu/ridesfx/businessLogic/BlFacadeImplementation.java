@@ -238,4 +238,9 @@ public class BlFacadeImplementation implements BlFacade {
     public List<Message> getAllMessagesFromUser(User u) {
         return dbManager.getMessagesFromUser(u);
     }
+
+    public List<Message> getAllMessagesToUser(User u) {
+        return dbManager.getMessagesToUser(u);
+    }
+
 }
