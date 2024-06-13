@@ -1,24 +1,22 @@
-# RidesFX: a JavaFX (modular+hibernate+h2+properties) desktop application project 
 
-A JavaFX+Hibernate+H2+JUnit template for the Software Engineering I class of the Faculty of Computer Science of Donostia. 
+RidesFX is a ridesharing management application developed in JavaFX. It allows users to offer and search for shared rides, connect drivers and passengers, and facilitate the organization and planning of trips between different destinations.
 
+Key features:
 
-* First, you need to create some Java POJO entities in the domain folder
-* Then, you can map those entities to an H2 database: 
-  * In the hibernate.cfg.xml file, edit this line:
-  
-           <property name="hibernate.hbm2ddl.auto">update</property>
+User registration: Users can register as drivers or passengers to offer or search for rideshares.
 
-    Change the value to "create" to create the database from scratch, or "update" to update the database with the new entities.
-  * In the hibernate.cfg.xml file, edit this line:
-  
-           <property name="hibernate.connection.url">jdbc:h2:~/database</property>
+Offer and search for rides: Drivers can offer rides by indicating their origin, destination, date, number of available seats and price. Passengers can search for rides based on their origin, destination and date preferences.
 
-    Change the value to the path where you want to store the database. In this case,
-  the database will be stored in the home folder of the user.
+Integrated messaging: Users can communicate with each other through an integrated messaging system to coordinate trip details.
 
-* Rename the package (from eus.ehu.ridesfx to eus.ehu.XXXXX where XXXX is your package name)
-* Rename the module (from template to XXXXX where XXXX is your module name)
-* You may need to change the controller path in the hello-view.fxml file
-* Remember that, by default, the open mode of the db is `initialize` (this property is set in the `config.properties` file. 
-Change it to `update` if you want to keep the data between executions
+Trip alerts: Users can set up alerts to receive notifications when trips matching their search criteria are offered.
+
+Intuitive interface: The user interface is designed to be intuitive and easy to use, providing a seamless experience for both drivers and passengers.
+
+Technologies used:
+
+JavaFX: The user interface is implemented using JavaFX, enabling the creation of a desktop application with a modern, dynamic look and feel.
+
+Java Persistence API (JPA): JPA is used to manage data persistence, allowing to interact with the database in an efficient and simple way.
+
+Hibernate: Hibernate is used to map Java objects to database tables and manage database operations transparently to the developer.
